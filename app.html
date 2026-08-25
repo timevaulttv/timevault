@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Vault ($TV) | App</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <meta name="description" content="Time Vault App: browse Service NFTs, mint your hours, track escrowed orders, and work with 7 AI agents. Every hour, sealed on chain.">
+    <meta name="theme-color" content="#060309">
+    <link rel="canonical" href="https://timevault.tv/app.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://timevault.tv/app.html">
+    <meta property="og:site_name" content="Time Vault">
+    <meta property="og:title" content="Time Vault App | AI-Powered Service Marketplace">
+    <meta property="og:description" content="Browse Service NFTs, mint your hours, and let 7 AI agents handle escrow, pricing, and verification.">
+    <meta property="og:image" content="https://timevault.tv/assets/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060309; --bg-elevated: #0C0713; --bg-surface: #140C1F;
+            --violet: #8B5CF6; --violet-dim: #6D28D9; --magenta: #C026D3;
+            --silver: #B9ABCE; --silver-dim: #8C7CA6; --silver-subtle: #665A7E;
+            --white: #FAFAFA; --green: #34D399; --red: #F87171;
+            --gold: #D4AF37; --gold-bright: #F0DA9B; --gold-deep: #8A6A1F;
+            --gold-line: rgba(212, 175, 55, 0.28);
+            --font-display: 'Cinzel', serif; --font-body: 'Inter', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; background: var(--bg); }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--silver); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.35); border-radius: 2px; }
+        ::selection { background: rgba(139, 92, 246, 0.4); color: var(--white); }
+
+        /* BACKGROUND CANVAS */
+        #bg3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        /* GOLD FOIL FRAME */
+        .gold-frame {
+            padding: 1px; border-radius: 20px;
+            background: linear-gradient(165deg, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.12) 28%, rgba(139, 92, 246, 0.4) 58%, rgba(192, 38, 211, 0.25) 78%, rgba(212, 175, 55, 0.5));
+        }
+        .gold-frame-inner {
+            background: linear-gradient(180deg, #140B20, #0A0512); border-radius: 19px; padding: 2rem; height: 100%;
+        }
+        .gold-frame-sm { border-radius: 14px; }
+        .gold-frame-sm .gold-frame-inner { border-radius: 13px; padding: 1.25rem; }
+
+        /* GOLD EYEBROW */
+        .gold-eyebrow {
+            display: flex; align-items: center; gap: 0.75rem;
+            font-family: var(--font-mono); font-size: 0.68rem; color: var(--gold);
+            letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.75rem;
+        }
+        .gold-eyebrow::before { content: ''; width: 36px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); flex-shrink: 0; }
+
+        /* GOLD METALLIC TEXT */
+        .gold-text {
+            background: linear-gradient(180deg, var(--gold-bright) 10%, var(--gold) 50%, var(--gold-deep) 95%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            font-weight: 700;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem;
+            border-radius: 100px; font-weight: 550; font-size: 0.88rem; cursor: pointer;
+            transition: all 0.4s var(--ease-out); font-family: var(--font-body); border: none; text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--violet-dim), var(--magenta));
+            color: var(--white); box-shadow: inset 0 0 0 1px var(--gold-line);
+        }
+        .btn-primary:hover { box-shadow: inset 0 0 0 2px rgba(212, 175, 55, 0.5), 0 0 24px rgba(139, 92, 246, 0.4); transform: translateY(-1px); }
+        .btn-ghost { background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--silver); }
+        .btn-ghost:hover { border-color: var(--gold-line); color: var(--white); }
+        .btn-sm { padding: 0.45rem 1rem; font-size: 0.78rem; }
+
+        /* STATUS */
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .status-green { background: var(--green); box-shadow: 0 0 6px rgba(52, 211, 153, 0.5); }
+        .status-gold { background: var(--gold); box-shadow: 0 0 6px rgba(212, 175, 55, 0.5); }
+        .status-red { background: var(--red); box-shadow: 0 0 6px rgba(248, 113, 113, 0.5); }
+        .status-violet { background: var(--violet); box-shadow: 0 0 6px rgba(139, 92, 246, 0.5); animation: pulseViolet 1.5s infinite; }
+        @keyframes pulseViolet { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* APP LAYOUT */
+        .app-layout { display: flex; min-height: 100vh; padding-top: 0; position: relative; z-index: 1; }
+        .app-sidebar {
+            width: 250px; background: var(--bg-elevated); border-right: 1px solid rgba(255, 255, 255, 0.04);
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; display: flex; flex-direction: column;
+            padding: 1.5rem 0; overflow-y: auto;
+        }
+        .app-main { margin-left: 250px; flex: 1; min-width: 0; max-width: calc(100vw - 250px); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        .app-topbar {
+            padding: 1rem 2rem; background: rgba(6,3,9,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(212,175,55,0.12);
+            display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 50;
+        }
+        .app-content { flex: 1; padding: 2rem; }
+
+        /* SOCIAL LINKS (X + GitHub) */
+        .tv-social { display: inline-flex; align-items: center; gap: 0.55rem; vertical-align: middle; }
+        .tv-social a { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px;
+            margin: 0; padding: 0; border-radius: 50%; color: var(--silver-dim); text-decoration: none;
+            border: 1px solid rgba(212,175,55,0.16); background: rgba(255,255,255,0.02);
+            transition: color 0.35s var(--ease-out), border-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out); }
+        .tv-social a svg { width: 15px; height: 15px; fill: currentColor; display: block; }
+        .tv-social a:hover, .tv-social a:focus-visible { color: var(--gold-bright); border-color: rgba(212,175,55,0.55);
+            background: rgba(212,175,55,0.07); box-shadow: 0 0 18px rgba(212,175,55,0.22); transform: translateY(-2px); }
+        .tv-social-sm a { width: 28px; height: 28px; }
+        .tv-social-sm a svg { width: 13px; height: 13px; }
+        @media (prefers-reduced-motion: reduce) { .tv-social a:hover, .tv-social a:focus-visible { transform: none; } }
+        .app-topbar .tv-social { margin-left: 0.25rem; }
+        .app-footer { padding: 1.75rem 2rem 2rem; text-align: center; border-top: 1px solid rgba(212,175,55,0.1); }
+        .app-footer p { font-size: 0.7rem; color: var(--silver-subtle); font-family: var(--font-mono); letter-spacing: 0.06em; margin-bottom: 1rem; }
+        @media (max-width: 640px) { .app-topbar .tv-social { display: none; } }
+        .app-content.fade-in > * { animation: contentIn 0.5s var(--ease-out) both; }
+        @keyframes contentIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background: radial-gradient(ellipse 60% 40% at 75% 0%, rgba(192,38,211,0.05), transparent 65%),
+                        radial-gradient(ellipse 50% 45% at 20% 5%, rgba(139,92,246,0.07), transparent 70%); }
+
+        /* SIDEBAR */
+        .sidebar-brand { display: flex; align-items: center; gap: 0.6rem; padding: 0 1.25rem 1.4rem; text-decoration: none; border-bottom: 1px solid rgba(212,175,55,0.12); margin-bottom: 1rem; }
+        .brand-emblem { height: 34px; width: auto; filter: drop-shadow(0 2px 10px rgba(139,92,246,0.5)); }
+        .brand-wordmark { height: 16px; width: auto; }
+        .nav-icon { width: 16px; height: 16px; flex-shrink: 0; }
+        .sidebar-nav a.active .nav-icon { color: var(--gold); }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 0.1rem; padding: 0 0.75rem; flex: 1; }
+        .sidebar-nav a {
+            text-decoration: none; color: var(--silver-dim); padding: 0.7rem 1rem; border-radius: 8px;
+            font-size: 0.82rem; font-weight: 450; transition: all 0.3s; display: flex; align-items: center; gap: 0.65rem;
+            position: relative;
+        }
+        .sidebar-nav a:hover { color: var(--white); background: rgba(139, 92, 246, 0.06); }
+        .sidebar-nav a.active { color: var(--white); background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), transparent); box-shadow: inset 2px 0 0 var(--gold); font-weight: 550; }
+        .sidebar-wallet { padding: 1rem 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        .sidebar-wallet button {
+            width: 100%; padding: 0.6rem 1rem; border-radius: 100px; font-weight: 500; font-size: 0.78rem;
+            cursor: pointer; transition: all 0.3s; font-family: var(--font-body);
+            background: transparent; border: 1px solid rgba(255, 255, 255, 0.12); color: var(--silver-dim);
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+        }
+        .sidebar-wallet button.connected { background: rgba(52, 211, 153, 0.06); border-color: rgba(52, 211, 153, 0.25); color: var(--green); font-family: var(--font-mono); font-size: 0.72rem; }
+
+        /* TOPBAR */
+        .topbar-title { font-family: var(--font-display); font-size: 1.3rem; color: var(--white); font-weight: 600; }
+        .topbar-spacer { flex: 1; }
+        .topbar-price {
+            display: flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono);
+            padding: 0.5rem 1.1rem; border-radius: 100px;
+            background: rgba(139, 92, 246, 0.07); border: 1px solid var(--gold-line);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+        .topbar-price .tp-label { font-size: 0.68rem; color: var(--silver-subtle); letter-spacing: 0.1em; }
+        .topbar-price .tp-value { font-size: 1.05rem; font-weight: 700; background: linear-gradient(180deg, var(--gold-bright) 10%, var(--gold) 50%, var(--gold-deep) 95%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .topbar-price .tp-chg { font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 100px; }
+        .topbar-price .tp-chg.up { color: var(--green); background: rgba(52,211,153,0.1); }
+        .topbar-price .tp-chg.down { color: var(--red); background: rgba(248,113,113,0.1); }
+
+        /* LIVE FEED BAR */
+        .live-bar {
+            display: flex; align-items: center; gap: 1.1rem; padding: 0.65rem 2rem;
+            background: linear-gradient(90deg, rgba(212,175,55,0.06), transparent 30%), rgba(10,5,18,0.9);
+            backdrop-filter: blur(16px); border-bottom: 1px solid rgba(212,175,55,0.14);
+            position: sticky; top: 62px; z-index: 45; overflow: hidden;
+        }
+        .live-badge {
+            display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0;
+            font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.14em; color: var(--green);
+            border: 1px solid rgba(52,211,153,0.3); background: rgba(52,211,153,0.07);
+            padding: 0.28rem 0.8rem; border-radius: 100px;
+        }
+        .live-badge-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: liveBlink 1.6s infinite; box-shadow: 0 0 8px rgba(52,211,153,0.7); }
+        @keyframes liveBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .live-marquee { flex: 1; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+        .live-track { display: inline-flex; gap: 3.5rem; white-space: nowrap; animation: tickerScroll 45s linear infinite; will-change: transform; }
+        .live-bar:hover .live-track { animation-play-state: paused; }
+        @keyframes tickerScroll { to { transform: translateX(-50%); } }
+        .tk-item { font-family: var(--font-mono); font-size: 0.78rem; color: var(--silver); display: inline-flex; align-items: center; gap: 0.5rem; }
+        .tk-item .tk-agent { font-weight: 600; letter-spacing: 0.04em; }
+        .tk-item .tk-agent.gold { color: var(--gold); } .tk-item .tk-agent.green { color: var(--green); } .tk-item .tk-agent.violet { color: var(--violet); }
+        .tk-item .tk-val { color: var(--white); font-weight: 500; }
+        .tk-sep { color: var(--silver-subtle); opacity: 0.4; }
+        @media (prefers-reduced-motion: reduce) { .live-track { animation: none; } }
+        .topbar-ticker span { margin-right: 2rem; }
+
+        /* CARDS */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+        .service-card {
+            background: linear-gradient(180deg, #140B20, #0A0512 80%); border: 1px solid rgba(212,175,55,0.1); border-radius: 16px;
+            padding: 1.5rem; transition: all 0.45s var(--ease-out); position: relative; overflow: hidden;
+        }
+        .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent); opacity: 0; transition: opacity 0.45s; }
+        .service-card::after { content: ''; position: absolute; inset: -30%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.05) 48%, rgba(212,175,55,0.07) 53%, transparent 62%); transform: translateX(-140%); pointer-events: none; }
+        .service-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-4px); box-shadow: 0 16px 44px rgba(0,0,0,0.5), 0 0 44px rgba(139,92,246,0.12); }
+        .service-card:hover::before { opacity: 1; }
+        .service-card:hover::after { transform: translateX(140%); transition: transform 1s ease; }
+        .service-card.flash { animation: cardFlash 0.8s ease; }
+        @keyframes cardFlash { 0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); border-color: var(--gold); } 100% { box-shadow: 0 0 0 0 transparent; border-color: rgba(255, 255, 255, 0.04); } }
+        .service-card .cat-eyebrow { font-family: var(--font-mono); font-size: 0.6rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .service-card .cat-eyebrow::before { content: ''; width: 14px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+        .service-card h4 { font-size: 1.05rem; color: var(--white); font-weight: 600; margin-bottom: 0.3rem; }
+        .service-card .provider-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+        .provider-avatar {
+            width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; flex-shrink: 0;
+            background: linear-gradient(135deg, var(--violet), var(--magenta)); color: var(--white);
+            border: 1px solid var(--gold-line); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .provider-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .provider-name { font-size: 0.78rem; color: var(--white); font-weight: 500; }
+        .verified-badge { font-size: 0.6rem; color: var(--gold); display: flex; align-items: center; gap: 0.15rem; }
+        .service-card .rate-row { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.75rem 0; }
+        .service-card .rate { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 700; }
+        .service-card .rate small { font-size: 0.7rem; color: var(--silver-dim); font-weight: 400; }
+        .service-card .solon-tag { font-size: 0.6rem; color: var(--violet); font-family: var(--font-mono); }
+        .service-card .footer-row { display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        .skill-score { font-size: 0.75rem; color: var(--green); }
+        .hours-left { font-size: 0.72rem; color: var(--silver-dim); font-family: var(--font-mono); }
+
+        /* STAMP */
+        .escrow-stamp {
+            position: absolute; top: 1rem; right: 1rem; font-family: var(--font-display); font-size: 0.55rem;
+            color: var(--gold); border: 1px solid var(--gold); padding: 0.25rem 0.5rem; border-radius: 4px;
+            letter-spacing: 0.08em; transform: rotate(12deg); opacity: 0; transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .service-card.locked .escrow-stamp { opacity: 1; animation: stampAppear 0.4s var(--ease-spring); }
+        @keyframes stampAppear { 0% { transform: rotate(12deg) scale(0); opacity: 0; } 100% { transform: rotate(12deg) scale(1); opacity: 1; } }
+
+        /* CATEGORY FILTERS */
+        .cat-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .cat-pill {
+            padding: 0.45rem 1rem; border-radius: 100px; font-size: 0.75rem; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.08);
+            background: transparent; color: var(--silver-dim); font-family: var(--font-body); transition: all 0.3s;
+        }
+        .cat-pill:hover { border-color: var(--gold-line); color: var(--white); }
+        .cat-pill.active { border-color: rgba(212,175,55,0.5); color: var(--gold); background: rgba(212,175,55,0.07); }
+
+        /* SEARCH */
+        .search-bar {
+            width: 100%; padding: 0.8rem 1.25rem; border-radius: 100px; margin-bottom: 1.5rem;
+            background: var(--bg-elevated); border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--white); font-family: var(--font-mono); font-size: 0.85rem; outline: none;
+        }
+        .search-bar:focus { border-color: rgba(212,175,55,0.45); box-shadow: 0 0 0 3px rgba(212,175,55,0.07); }
+        .search-bar::placeholder { color: var(--silver-subtle); }
+
+        /* AGENT CONSOLE */
+        .agent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .agent-card {
+            background: linear-gradient(180deg, #140B20, #0A0512 80%); border: 1px solid rgba(212,175,55,0.1); border-radius: 16px;
+            padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.45s var(--ease-out); position: relative; overflow: hidden;
+        }
+        .agent-card::after { content: ''; position: absolute; inset: -30%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.05) 48%, rgba(212,175,55,0.08) 53%, transparent 62%); transform: translateX(-140%); pointer-events: none; }
+        .agent-card:hover { border-color: rgba(212,175,55,0.45); transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.5), 0 0 40px rgba(139,92,246,0.14); }
+        .agent-card:hover::after { transform: translateX(140%); transition: transform 1s ease; }
+        .agent-card img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold-line); margin-bottom: 0.75rem; }
+        .agent-card h4 { font-family: var(--font-display); font-size: 0.95rem; color: var(--white); }
+        .agent-card .role { font-size: 0.68rem; color: var(--violet); text-transform: uppercase; letter-spacing: 0.06em; }
+        .agent-lastact { font-family: var(--font-mono); font-size: 0.6rem; color: var(--silver-subtle); margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid rgba(212,175,55,0.08); line-height: 1.5; min-height: 2.2em; }
+        .agent-lastact.bump { animation: contentIn 0.45s var(--ease-out); color: var(--gold); }
+        .agent-action-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1rem; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.3s; }
+        .agent-action-row:hover { border-color: var(--gold-line); box-shadow: inset 2px 0 0 var(--gold); background: rgba(139,92,246,0.06); }
+        .agent-chatbox { margin-top: 1rem; min-height: 90px; max-height: 170px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding: 0.85rem; background: rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid rgba(212,175,55,0.08); scrollbar-width: thin; }
+        .agent-chat-msg { padding: 0.5rem 0.85rem; border-radius: 10px; font-size: 0.8rem; max-width: 85%; line-height: 1.5; }
+        .agent-chat-msg.bot { background: rgba(255,255,255,0.04); color: var(--silver); align-self: flex-start; }
+        .agent-chat-msg.user { background: linear-gradient(135deg, var(--violet-dim), var(--magenta)); color: var(--white); align-self: flex-end; }
+        .typing-msg { display: inline-flex; gap: 4px; align-items: center; padding: 0.65rem 0.9rem; }
+        .tdot { width: 5px; height: 5px; border-radius: 50%; background: var(--violet); animation: tdotBlink 1.2s infinite; }
+        .tdot:nth-child(2) { animation-delay: 0.2s; } .tdot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes tdotBlink { 0%, 100% { opacity: 0.25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
+
+        /* VAULT OVERVIEW */
+        .ov-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; }
+        .ov-stat { background: linear-gradient(180deg, #140B20, #0A0512 80%); border: 1px solid rgba(212,175,55,0.12); border-radius: 16px; padding: 1.2rem 1.4rem; position: relative; overflow: hidden; }
+        .ov-stat::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent); }
+        .ov-stat .v { font-family: var(--font-mono); font-size: 1.7rem; font-weight: 700; }
+        .ov-stat .l { font-family: var(--font-mono); font-size: 0.6rem; color: var(--silver-subtle); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.2rem; }
+        .ov-grid { display: grid; grid-template-columns: 1fr 320px; gap: 1.25rem; }
+        .const-wrap { position: relative; height: 520px; }
+        .const-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .ov-side { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+        .lb-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0.5rem; border-radius: 10px; transition: all 0.3s; }
+        .lb-row:hover { background: rgba(139,92,246,0.05); box-shadow: inset 2px 0 0 var(--gold); }
+        .lb-rank { font-family: var(--font-mono); font-size: 0.7rem; color: var(--gold); width: 18px; flex-shrink: 0; }
+        .lb-row img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 1px solid var(--gold-line); flex-shrink: 0; }
+        .lb-name { flex: 1; font-size: 0.8rem; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lb-score { font-family: var(--font-mono); font-size: 0.7rem; color: var(--green); flex-shrink: 0; }
+        .lb-earn { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; flex-shrink: 0; }
+        .act-log { display: flex; flex-direction: column; gap: 0.45rem; overflow: hidden; }
+        .act-item { font-family: var(--font-mono); font-size: 0.66rem; color: var(--silver-dim); line-height: 1.5; padding: 0.45rem 0.65rem; background: rgba(255,255,255,0.02); border-left: 2px solid var(--gold-line); border-radius: 6px; animation: contentIn 0.4s var(--ease-out); }
+        .act-item .tk-val { color: var(--white); }
+        @media (max-width: 1100px) { .ov-grid { grid-template-columns: 1fr; } .ov-stats { grid-template-columns: repeat(2, 1fr); } .const-wrap { height: 400px; } }
+
+        /* PROFILE */
+        .avatar-wrap { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
+        .avatar-wrap .provider-avatar { width: 100%; height: 100%; font-size: 1.4rem; border-width: 2px; }
+        .avatar-edit-btn { position: absolute; right: -4px; bottom: -4px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--gold-line); background: linear-gradient(135deg, var(--violet-dim), var(--magenta)); color: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 14px rgba(0,0,0,0.5); }
+        .avatar-edit-btn:hover { box-shadow: inset 0 0 0 1px rgba(212,175,55,0.6), 0 0 18px rgba(192,38,211,0.5); transform: scale(1.08); }
+        .avatar-edit-btn svg { width: 15px; height: 15px; }
+        .profile-name-row { display: flex; align-items: center; gap: 0.6rem; }
+        .profile-name { font-family: var(--font-display); font-size: 1.35rem; color: var(--white); letter-spacing: 0.03em; }
+        .name-edit-btn { background: none; border: 1px solid rgba(255,255,255,0.12); color: var(--silver-dim); border-radius: 8px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .name-edit-btn:hover { border-color: var(--gold-line); color: var(--gold); }
+        .score-row { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.65rem; }
+        .score-row .lbl { font-family: var(--font-mono); font-size: 0.64rem; color: var(--silver-dim); width: 118px; letter-spacing: 0.06em; text-transform: uppercase; flex-shrink: 0; }
+        .score-track { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.05); overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--violet), var(--gold)); box-shadow: 0 0 10px rgba(212,175,55,0.35); animation: scoreGrow 1s var(--ease-out) both; }
+        @keyframes scoreGrow { from { width: 0 !important; } }
+        .score-row .val { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gold); width: 34px; text-align: right; flex-shrink: 0; }
+        .badge-chip { font-family: var(--font-mono); font-size: 0.62rem; color: var(--gold); border: 1px solid var(--gold-line); background: rgba(212,175,55,0.05); padding: 0.3rem 0.8rem; border-radius: 100px; letter-spacing: 0.08em; }
+        .review-card { background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); border-left: 2px solid var(--gold-line); border-radius: 12px; padding: 1rem 1.2rem; }
+        .review-card .stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.1em; }
+        .review-card p { font-size: 0.8rem; color: var(--silver-dim); margin: 0.4rem 0; line-height: 1.55; }
+        .review-card .who { font-family: var(--font-mono); font-size: 0.62rem; color: var(--silver-subtle); }
+        .profile-section-title { display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.66rem; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; margin: 1.75rem 0 1rem; }
+        .profile-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(212,175,55,0.25), transparent); }
+        .mynft-row { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.1rem; background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 0.6rem; transition: all 0.3s; }
+        .mynft-row:hover { border-color: var(--gold-line); box-shadow: inset 2px 0 0 var(--gold); }
+        .mynft-row .n { flex: 1; color: var(--white); font-size: 0.85rem; font-weight: 500; }
+        .mynft-row .r { font-family: var(--font-mono); font-size: 0.8rem; }
+
+        /* ORDERS TABLE */
+        .orders-table { width: 100%; border-collapse: collapse; }
+        .orders-table th { text-align: left; font-family: var(--font-mono); font-size: 0.65rem; color: var(--silver-subtle); text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .orders-table td { padding: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.02); font-size: 0.82rem; font-family: var(--font-mono); }
+        .orders-table tr { transition: background 0.3s; }
+        .orders-table tr:hover { background: rgba(139, 92, 246, 0.03); }
+        .status-chip {
+            display: inline-block; padding: 0.2rem 0.7rem; border-radius: 100px; font-size: 0.65rem;
+            font-family: var(--font-mono); font-weight: 500;
+        }
+        .chip-escrowed { background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.2); }
+        .chip-progress { background: rgba(139, 92, 246, 0.1); color: var(--violet); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .chip-verifying { background: rgba(139, 92, 246, 0.15); color: var(--violet); border: 1px solid rgba(139, 92, 246, 0.3); animation: pulseViolet 1.5s infinite; }
+        .chip-released { background: rgba(52, 211, 153, 0.1); color: var(--green); border: 1px solid rgba(52, 211, 153, 0.2); }
+        .chip-disputed { background: rgba(248, 113, 113, 0.1); color: var(--red); border: 1px solid rgba(248, 113, 113, 0.2); }
+
+        /* PANEL */
+        .panel-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
+        .panel-overlay.active { opacity: 1; visibility: visible; }
+        .panel { background: var(--bg-elevated); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 24px; padding: 2.5rem; max-width: 650px; width: 90%; max-height: 80vh; overflow-y: auto; position: relative; }
+        .panel-close { position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; color: var(--silver-dim); font-size: 1.4rem; cursor: pointer; }
+
+        /* TOAST */
+        .toast-container { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 500; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+        .toast {
+            background: var(--bg-surface); border: 1px solid var(--gold); border-radius: 12px;
+            padding: 0.75rem 1.5rem; color: var(--white); font-size: 0.85rem; font-weight: 500;
+            animation: toastIn 0.4s var(--ease-spring), toastOut 0.4s 2.6s forwards;
+            pointer-events: auto; text-align: center;
+        }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .app-sidebar { width: 60px; padding: 1rem 0; }
+            .app-sidebar .brand-wordmark, .app-sidebar .sidebar-nav a span, .sidebar-wallet button span { display: none; }
+            .app-sidebar .sidebar-nav a { justify-content: center; padding: 0.7rem; }
+            .app-main { margin-left: 60px; max-width: calc(100vw - 60px); }
+            .service-grid { grid-template-columns: 1fr; }
+            .agent-grid { grid-template-columns: repeat(2, 1fr); }
+            .orders-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .app-content div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+            .app-content div[style*="gap:3rem"] { flex-wrap: wrap; gap: 1.25rem !important; }
+            .gold-frame-inner > div[style*="repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+            .mynft-row { flex-wrap: wrap; }
+            .app-content { padding: 1.25rem; }
+            .app-topbar { padding: 0.85rem 1.25rem; }
+            .live-bar { padding: 0.55rem 1.25rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .bg-particle, .bg-meteor { display: none; }
+            * { animation-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg3d"></canvas>
+
+    <div class="app-layout">
+        <!-- SIDEBAR -->
+        <aside class="app-sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <img class="brand-emblem" src="assets/logo.png" alt="Time Vault">
+                <img class="brand-wordmark" src="assets/logo-name.png" alt="TIME VAULT">
+            </a>
+            <nav class="sidebar-nav">
+                <a href="#" class="active" data-section="overview"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2.4"/><path d="M8 8l4.4-4.4"/></svg><span>Vault Overview</span></a>
+                <a href="#" data-section="browse"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg><span>Browse Services</span></a>
+                <a href="#" data-section="mint"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M5 2.5h6l3 4L8 14 2 6.5z"/><path d="M2 6.5h12M8 14L5.5 6.5M8 14l2.5-7.5"/></svg><span>Mint Service NFT</span></a>
+                <a href="#" data-section="orders"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5.5 4h8M5.5 8h8M5.5 12h5"/><circle cx="2.5" cy="4" r="0.9" fill="currentColor" stroke="none"/><circle cx="2.5" cy="8" r="0.9" fill="currentColor" stroke="none"/><circle cx="2.5" cy="12" r="0.9" fill="currentColor" stroke="none"/></svg><span>My Orders</span></a>
+                <a href="#" data-section="disputes"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v11M5 13.5h6M3.5 4.5h9"/><path d="M3.5 4.5L2 8.5a1.8 1.8 0 003.6 0zM12.5 4.5L11 8.5a1.8 1.8 0 003.6 0z"/></svg><span>Dispute Center</span></a>
+                <a href="#" data-section="agents"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 2h8M4 14h8"/><path d="M5 2c0 5.5 6 6.5 6 12M11 2c0 5.5-6 6.5-6 12"/></svg><span>Agent Console</span></a>
+                <a href="#" data-section="profile"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="5.2" r="2.8"/><path d="M2.8 14a5.5 5.5 0 0110.4 0"/></svg><span>My Profile</span></a>
+                <a href="#" id="navNotes"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M4.5 6l2 2-2 2M8 10.5h3.5"/></svg><span>Vault Notes</span></a>
+            </nav>
+            <div class="sidebar-wallet">
+                <button id="walletBtn">
+                    <span class="status-dot status-red" id="walletDot"></span>
+                    <span id="walletText">Sign In</span>
+                </button>
+                <a href="index.html" style="display:block;text-align:center;font-size:0.7rem;color:var(--silver-subtle);margin-top:0.75rem;text-decoration:none;">← Back to site</a>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="app-main">
+            <header class="app-topbar">
+                <h1 class="topbar-title" id="sectionTitle">Vault Overview</h1>
+                <div class="topbar-spacer"></div>
+                <div class="topbar-price">
+                    <span class="tp-label">$TV</span>
+                    <span class="tp-value" id="livePrice">0.0420</span>
+                    <span class="tp-chg up" id="livePriceChg">▲ +0.0%</span>
+                </div>
+                <span class="tv-social tv-social-sm">
+                    <a href="https://x.com/TimeVaultTV" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on X" title="Follow @TimeVaultTV on X"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="https://github.com/timevaulttv/timevault" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on GitHub" title="Time Vault source code on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                </span>
+            </header>
+            <div class="live-bar" aria-live="off">
+                <span class="live-badge"><span class="live-badge-dot"></span>LIVE</span>
+                <div class="live-marquee"><div class="live-track" id="liveTrack"></div></div>
+            </div>
+            <div class="app-content" id="appContent"></div>
+            <footer class="app-footer">
+                <p>TIME VAULT ($TV) © 2026 · EVERY HOUR, SEALED ON CHAIN</p>
+                <span class="tv-social">
+                    <a href="https://x.com/TimeVaultTV" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on X" title="Follow @TimeVaultTV on X"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="https://github.com/timevaulttv/timevault" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on GitHub" title="Time Vault source code on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+                </span>
+            </footer>
+        </main>
+    </div>
+
+    <!-- PANEL OVERLAY -->
+    <div class="panel-overlay" id="panelOverlay"><div class="panel" id="panelContent"></div></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ============================================
+        // 3D BACKGROUND: SPHERE + PARTICLES + METEORS
+        // ============================================
+        const bgCanvas = document.getElementById('bg3d');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+        const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Fresnel sphere
+        const sphereGeo = new THREE.SphereGeometry(4.5, 72, 72);
+        const sphereMat = new THREE.ShaderMaterial({
+            uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color('#8B5CF6') } },
+            vertexShader: `varying vec3 vN; varying vec3 vP; void main() { vN = normalize(normalMatrix * normal); vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+            fragmentShader: `varying vec3 vN; varying vec3 vP; uniform float uTime; uniform vec3 uColor; void main() { float f = pow(1.0 - abs(dot(vN, vec3(0.0, 0.0, 1.0))), 3.8); float a = f * 0.055; a += sin(vP.x * 2.5 + uTime * 0.2) * cos(vP.y * 2.5 + uTime * 0.15) * 0.015; gl_FragColor = vec4(uColor, a); }`,
+            transparent: true, depthWrite: false,
+        });
+        const sphere = new THREE.Mesh(sphereGeo, sphereMat); scene.add(sphere);
+
+        // Particles
+        const pCount = 380;
+        const pGeo = new THREE.BufferGeometry();
+        const pPos = new Float32Array(pCount * 3);
+        for (let i = 0; i < pCount * 3; i += 3) {
+            const r = 6 + Math.random() * 8;
+            const theta = Math.random() * Math.PI * 2, phi = Math.random() * Math.PI;
+            pPos[i] = r * Math.sin(phi) * Math.cos(theta);
+            pPos[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+            pPos[i + 2] = r * Math.cos(phi);
+        }
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        const pMat = new THREE.PointsMaterial({ color: '#A78BFA', size: 0.018, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
+        const particles = new THREE.Points(pGeo, pMat); scene.add(particles);
+
+        // Meteors
+        const meteors = [];
+        for (let i = 0; i < 16; i++) {
+            const mGeo = new THREE.PlaneGeometry(0.06, 1.8 + Math.random() * 3);
+            const mCanvas = document.createElement('canvas'); mCanvas.width = 4; mCanvas.height = 64;
+            const mCtx = mCanvas.getContext('2d');
+            const mGrad = mCtx.createLinearGradient(0, 64, 0, 0);
+            mGrad.addColorStop(0, 'rgba(139,92,246,0)'); mGrad.addColorStop(0.7, 'rgba(139,92,246,0.6)'); mGrad.addColorStop(1, 'rgba(167,139,250,1)');
+            mCtx.fillStyle = mGrad; mCtx.fillRect(0, 0, 4, 64);
+            const mTex = new THREE.CanvasTexture(mCanvas);
+            const mMat = new THREE.MeshBasicMaterial({ map: mTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+            const meteor = new THREE.Mesh(mGeo, mMat);
+            meteor.position.set((Math.random() - 0.5) * 25, (Math.random() - 0.5) * 25, -5 - Math.random() * 10);
+            meteor.rotation.z = Math.PI / 4 + (Math.random() - 0.5) * 0.5;
+            meteor.userData = { speed: 0.03 + Math.random() * 0.07, offset: Math.random() * 100 };
+            scene.add(meteor);
+            meteors.push(meteor);
+        }
+
+        camera.position.z = 9;
+        let mx3 = 0, my3 = 0;
+        document.addEventListener('mousemove', e => { mx3 = (e.clientX / window.innerWidth) * 2 - 1; my3 = -(e.clientY / window.innerHeight) * 2 + 1; });
+
+        function anim3d(t) {
+            requestAnimationFrame(anim3d);
+            sphereMat.uniforms.uTime.value = t * 0.001;
+            sphere.rotation.y += 0.0005;
+            sphere.rotation.x = my3 * 0.15;
+            particles.rotation.y += 0.0002;
+            meteors.forEach(m => {
+                m.position.x -= m.userData.speed * Math.cos(m.rotation.z);
+                m.position.y -= m.userData.speed * Math.sin(m.rotation.z);
+                if (m.position.x < -15 || m.position.y < -15 || m.position.z > 5) {
+                    m.position.set((Math.random() - 0.5) * 25 + 10, (Math.random() - 0.5) * 20 + 8, -5 - Math.random() * 10);
+                }
+            });
+            renderer.render(scene, camera);
+        }
+        requestAnimationFrame(anim3d);
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+
+        // ============================================
+        // APP STATE
+        // ============================================
+        let walletConnected = false, walletAddress = '', currentSection = 'overview';
+        window.tvGetAccount = () => walletConnected ? walletAddress : '';
+        const agents = ['LYRA', 'VORIAN', 'NERIS', 'SOLON', 'KAIROS', 'ATLAS', 'CIRION'];
+
+        function showToast(msg) {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+            c.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        // Wallet
+        document.getElementById('walletBtn').addEventListener('click', async () => {
+            if (walletConnected) { walletConnected = false; walletAddress = ''; updateWalletUI(); showToast('Wallet disconnected'); return; }
+            try {
+                const res = await window.tvConnectWallet();
+                walletAddress = res.address; walletConnected = true; updateWalletUI();
+                showToast('✅ Connected via ' + res.walletName);
+                window.tvOnAccountsChanged(acc => {
+                    if (!acc.length) { walletConnected = false; walletAddress = ''; } else { walletAddress = acc[0]; walletConnected = true; }
+                    updateWalletUI();
+                });
+            } catch (err) {
+                if (err && (err.message === 'CANCELLED' || err.message === 'NO_WALLET')) return;
+                showToast('Connection failed');
+            }
+        });
+        function updateWalletUI() {
+            const btn = document.getElementById('walletBtn'), dot = document.getElementById('walletDot'), text = document.getElementById('walletText');
+            if (walletConnected) {
+                btn.classList.add('connected'); dot.className = 'status-dot status-green';
+                text.textContent = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+            } else {
+                btn.classList.remove('connected'); dot.className = 'status-dot status-red'; text.textContent = 'Sign In';
+            }
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        const sectionTitles = { overview: 'Vault Overview', browse: 'Browse Services', mint: 'Mint Service NFT', orders: 'My Orders', disputes: 'Dispute Center', agents: 'Agent Console', profile: 'My Profile' };
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (this.id === 'navNotes') { termToggle(true); return; }
+                document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                currentSection = this.dataset.section;
+                document.getElementById('sectionTitle').textContent = sectionTitles[currentSection];
+                renderSection(currentSection);
+            });
+        });
+
+        function renderSection(s) {
+            const c = document.getElementById('appContent');
+            if (window.__constRAF) { cancelAnimationFrame(window.__constRAF); window.__constRAF = null; }
+            if (window.__ovInt) { clearInterval(window.__ovInt); window.__ovInt = null; }
+            if (window.__agInt) { clearInterval(window.__agInt); window.__agInt = null; }
+            c.classList.remove('fade-in');
+            void c.offsetWidth;
+            c.classList.add('fade-in');
+            switch (s) {
+                case 'overview': c.innerHTML = renderOverview(); initOverview(); break;
+                case 'browse': c.innerHTML = renderBrowse(); break;
+                case 'mint': c.innerHTML = renderMint(); setupMintPreview(); break;
+                case 'orders': c.innerHTML = renderOrders(); break;
+                case 'disputes': c.innerHTML = renderDisputes(); break;
+                case 'agents': c.innerHTML = renderAgents(); setupAgentClicks(); break;
+                case 'profile': c.innerHTML = renderProfile(); setupProfileActions(); break;
+            }
+        }
+
+        // ============================================
+        // MOCK DATA
+        // ============================================
+        const servicesData = [
+            { name: 'UI Design for Mobile App', cat: 'Design', pName: 'Maya Chen', photo: 'https://i.pravatar.cc/80?img=47', provider: '0x7B4F...C0C0', rate: 0.045, hours: 18, score: 4.9, tags: ['Figma', 'Mobile', 'Prototyping'], verified: true },
+            { name: 'Solidity Smart Contract Audit', cat: 'Development', pName: 'Arjun Patel', photo: 'https://i.pravatar.cc/80?img=12', provider: '0x4A2C...B794', rate: 0.128, hours: 12, score: 4.8, tags: ['Solidity', 'Security', 'EVM'], verified: true },
+            { name: 'SEO Content Writing', cat: 'Writing', pName: 'Sofia Reyes', photo: 'https://i.pravatar.cc/80?img=32', provider: '0xC0C0...7B4F', rate: 0.022, hours: 30, score: 4.7, tags: ['SEO', 'Blog', 'Copywriting'], verified: true },
+            { name: 'Video Editing - YouTube', cat: 'Video', pName: 'Dimas Prasetyo', photo: 'https://i.pravatar.cc/80?img=8', provider: '0x9B6F...3D25', rate: 0.089, hours: 8, score: 4.6, tags: ['Premiere', 'Color Grading', 'YouTube'], verified: false },
+            { name: 'Google Ads Campaign', cat: 'Marketing', pName: 'Lena Novak', photo: 'https://i.pravatar.cc/80?img=26', provider: '0xB794...4A2C', rate: 0.065, hours: 15, score: 4.9, tags: ['PPC', 'Analytics', 'Conversion'], verified: true },
+            { name: 'Tokenomics Consultation', cat: 'Consulting', pName: 'Kenji Watanabe', photo: 'https://i.pravatar.cc/80?img=60', provider: '0x3D25...9B6F', rate: 0.156, hours: 5, score: 5.0, tags: ['Web3', 'DeFi', 'Strategy'], verified: true },
+            { name: 'Logo & Brand Identity', cat: 'Design', pName: 'Amara Diallo', photo: 'https://i.pravatar.cc/80?img=38', provider: '0x1A2B...3C4D', rate: 0.058, hours: 22, score: 4.8, tags: ['Illustrator', 'Branding', 'Logo'], verified: true },
+            { name: 'React Frontend Development', cat: 'Development', pName: 'Viktor Sorin', photo: 'https://i.pravatar.cc/80?img=15', provider: '0x5E6F...7A8B', rate: 0.095, hours: 25, score: 4.7, tags: ['React', 'TypeScript', 'Next.js'], verified: true },
+            { name: 'Whitepaper Writing', cat: 'Writing', pName: 'Priya Sharma', photo: 'https://i.pravatar.cc/80?img=45', provider: '0x9C0D...1E2F', rate: 0.075, hours: 10, score: 4.9, tags: ['Web3', 'Whitepaper', 'Research'], verified: true },
+            { name: 'Social Media Strategy', cat: 'Marketing', pName: 'Nadia Osman', photo: 'https://i.pravatar.cc/80?img=24', provider: '0x3A4B...5C6D', rate: 0.042, hours: 20, score: 4.5, tags: ['Social Media', 'Strategy', 'Content'], verified: false },
+            { name: 'Smart Contract Dev', cat: 'Development', pName: 'Omar Haddad', photo: 'https://i.pravatar.cc/80?img=53', provider: '0x7E8F...9A0B', rate: 0.135, hours: 16, score: 4.9, tags: ['Solidity', 'Hardhat', 'DeFi'], verified: true },
+            { name: 'Motion Graphics', cat: 'Video', pName: 'Tomás Silva', photo: 'https://i.pravatar.cc/80?img=68', provider: '0x1C2D...3E4F', rate: 0.078, hours: 10, score: 4.6, tags: ['After Effects', 'Animation', '3D'], verified: false },
+        ];
+        const pInitials = n => n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+        const ordersData = [
+            { id: 1042, service: 'UI Design', provider: '0x7B4F...C0C0', hours: 8, total: '0.360', status: 'escrowed' },
+            { id: 1041, service: 'Solidity Audit', provider: '0x4A2C...B794', hours: 12, total: '1.536', status: 'progress' },
+            { id: 1040, service: 'SEO Writing', provider: '0xC0C0...7B4F', hours: 5, total: '0.110', status: 'verifying' },
+            { id: 1039, service: 'Google Ads', provider: '0xB794...4A2C', hours: 15, total: '0.975', status: 'released' },
+            { id: 1038, service: 'Video Editing', provider: '0x9B6F...3D25', hours: 8, total: '0.712', status: 'disputed' },
+        ];
+
+        // ============================================
+        // BROWSE SERVICES
+        // ============================================
+        function renderBrowse() {
+            let html = `
+                <input type="text" class="search-bar" placeholder="Search services, skills, providers..." id="searchInput">
+                <div class="cat-filters" id="catFilters">
+                    <button class="cat-pill active" data-cat="all">All</button>
+                    <button class="cat-pill" data-cat="Design">Design</button>
+                    <button class="cat-pill" data-cat="Development">Development</button>
+                    <button class="cat-pill" data-cat="Writing">Writing</button>
+                    <button class="cat-pill" data-cat="Marketing">Marketing</button>
+                    <button class="cat-pill" data-cat="Video">Video</button>
+                    <button class="cat-pill" data-cat="Consulting">Consulting</button>
+                </div>
+                <div class="service-grid" id="serviceGrid"></div>
+            `;
+            setTimeout(() => {
+                renderServiceCards('all');
+                setupCatFilters();
+                setupSearch();
+            }, 10);
+            return html;
+        }
+
+        function renderServiceCards(filter) {
+            const grid = document.getElementById('serviceGrid');
+            if (!grid) return;
+            const filtered = filter === 'all' ? servicesData : servicesData.filter(s => s.cat === filter);
+            grid.innerHTML = filtered.map((s, i) => `
+                <div class="service-card" data-index="${i}" data-name="${s.name}">
+                    <div class="escrow-stamp">ESCROW LOCKED</div>
+                    <div class="cat-eyebrow">${s.cat}</div>
+                    <h4>${s.name}</h4>
+                    <div class="provider-row">
+                        <div class="provider-avatar"><img src="${s.photo}" alt="${s.pName}" onerror="this.remove();this.parentElement.textContent='${pInitials(s.pName)}';"></div>
+                        <div style="line-height:1.25;"><div class="provider-name">${s.pName} ${s.verified ? '<span class="verified-badge" style="display:inline;">✓ KAIROS</span>' : ''}</div>
+                        <span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--silver-subtle);">${s.provider}</span></div>
+                    </div>
+                    <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.5rem;">${s.tags.map(t => `<span style="font-family:var(--font-mono);font-size:0.6rem;padding:0.15rem 0.5rem;border-radius:100px;background:rgba(139,92,246,0.08);color:var(--silver-dim);">${t}</span>`).join('')}</div>
+                    <div class="rate-row">
+                        <span class="rate gold-text">${s.rate.toFixed(3)}</span>
+                        <small>$TV/hr</small>
+                        <span class="solon-tag">✦ SOLON optimal</span>
+                    </div>
+                    <div class="footer-row">
+                        <span class="skill-score">⭐ ${s.score.toFixed(1)}</span>
+                        <span class="hours-left">${s.hours}h available</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupCatFilters() {
+            document.querySelectorAll('#catFilters .cat-pill').forEach(b => {
+                b.addEventListener('click', function() {
+                    document.querySelectorAll('#catFilters .cat-pill').forEach(x => x.classList.remove('active'));
+                    this.classList.add('active');
+                    renderServiceCards(this.dataset.cat);
+                });
+            });
+        }
+        function setupSearch() {
+            const inp = document.getElementById('searchInput');
+            if (!inp) return;
+            inp.addEventListener('input', function() {
+                const q = this.value.toLowerCase();
+                document.querySelectorAll('#serviceGrid .service-card').forEach(card => {
+                    card.style.display = card.dataset.name.toLowerCase().includes(q) ? '' : 'none';
+                });
+            });
+        }
+
+        // Simulate live bookings
+        setInterval(() => {
+            const cards = document.querySelectorAll('#serviceGrid .service-card');
+            if (!cards.length) return;
+            const rand = cards[Math.floor(Math.random() * cards.length)];
+            rand.classList.add('locked', 'flash');
+            const hEl = rand.querySelector('.hours-left');
+            if (hEl) { const cur = parseInt(hEl.textContent); if (cur > 0) hEl.textContent = (cur - 1) + 'h available'; }
+            const rEl = rand.querySelector('.rate');
+            if (rEl) { const cur = parseFloat(rEl.textContent); rEl.innerHTML = (cur + (Math.random() - 0.5) * 0.003).toFixed(3); }
+            if (Math.random() < 0.3) { const sc = rand.querySelector('.skill-score'); if (sc) sc.textContent = '⭐ ' + (4.5 + Math.random() * 0.5).toFixed(1); }
+            setTimeout(() => rand.classList.remove('locked', 'flash'), 2500);
+        }, 2500);
+
+        // ============================================
+        // MINT SERVICE NFT
+        // ============================================
+        function renderMint() {
+            return `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+                    <div class="gold-frame"><div class="gold-frame-inner">
+                        <div class="gold-eyebrow">Create</div>
+                        <h3 style="font-family:var(--font-display);font-size:1.5rem;color:var(--white);margin-bottom:1.5rem;">Mint Service <span style="color:var(--violet);">NFT</span></h3>
+                        <div style="display:flex;flex-direction:column;gap:1rem;">
+                            <input type="text" class="search-bar" placeholder="Service Name" id="mintName" style="margin:0;">
+                            <select class="search-bar" id="mintCat" style="margin:0;"><option>Design</option><option>Development</option><option>Writing</option><option>Marketing</option><option>Video</option><option>Consulting</option></select>
+                            <textarea class="search-bar" placeholder="Description" id="mintDesc" rows="3" style="margin:0;border-radius:16px;"></textarea>
+                            <div style="display:flex;gap:0.75rem;">
+                                <input type="text" class="search-bar" placeholder="Rate ($TV/hr)" id="mintRate" value="0.050" style="margin:0;flex:1;">
+                                <input type="text" class="search-bar" placeholder="Hours" id="mintHours" value="20" style="margin:0;flex:1;">
+                            </div>
+                            <input type="text" class="search-bar" placeholder="Skills (comma separated)" id="mintTags" value="Figma, UI, Design" style="margin:0;">
+                            <input type="text" class="search-bar" placeholder="Portfolio URL" id="mintPortfolio" style="margin:0;">
+                            <button class="btn btn-primary" id="mintSubmit" style="justify-content:center;">Mint Service NFT</button>
+                        </div>
+                    </div></div>
+                    <div class="gold-frame"><div class="gold-frame-inner">
+                        <div class="gold-eyebrow">Preview</div>
+                        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--white);margin-bottom:1.5rem;">Live Card <span style="color:var(--violet);">Preview</span></h3>
+                        <div id="mintPreview"></div>
+                    </div></div>
+                </div>
+            `;
+        }
+        function setupMintPreview() {
+            function updatePreview() {
+                const name = document.getElementById('mintName').value || 'Your Service';
+                const cat = document.getElementById('mintCat').value || 'Design';
+                const rate = document.getElementById('mintRate').value || '0.050';
+                const hours = document.getElementById('mintHours').value || '20';
+                const tags = (document.getElementById('mintTags').value || 'Figma, UI').split(',').map(t => t.trim());
+                const p = document.getElementById('mintPreview');
+                if (!p) return;
+                p.innerHTML = `
+                    <div class="service-card" style="pointer-events:none;">
+                        <div class="cat-eyebrow">${cat}</div><h4>${name}</h4>
+                        <div class="provider-row"><div class="provider-avatar"><img src="${profilePhoto()}" alt="You" onerror="this.remove();this.parentElement.textContent='YO';"></div><span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--silver-dim);">0xYour...Addr</span></div>
+                        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.5rem;">${tags.map(t => `<span style="font-family:var(--font-mono);font-size:0.6rem;padding:0.15rem 0.5rem;border-radius:100px;background:rgba(139,92,246,0.08);color:var(--silver-dim);">${t}</span>`).join('')}</div>
+                        <div class="rate-row"><span class="rate gold-text">${parseFloat(rate).toFixed(3)}</span><small>$TV/hr</small></div>
+                        <div class="footer-row"><span class="skill-score">⭐ NEW</span><span class="hours-left">${hours}h available</span></div>
+                    </div>
+                `;
+            }
+            ['mintName', 'mintCat', 'mintRate', 'mintHours', 'mintTags'].forEach(id => {
+                const el = document.getElementById(id); if (el) el.addEventListener('input', updatePreview);
+            });
+            updatePreview();
+            const btn = document.getElementById('mintSubmit');
+            if (btn) btn.addEventListener('click', () => {
+                if (!walletConnected) { showToast('Connect wallet to mint'); return; }
+                showToast('Service NFT minted. LYRA listed it on the marketplace');
+            });
+        }
+
+        // ============================================
+        // MY ORDERS
+        // ============================================
+        function renderOrders() {
+            const statusNames = { escrowed: 'Escrowed', progress: 'In Progress', verifying: 'KAIROS Verifying', released: 'Released', disputed: 'Disputed' };
+            const statusChips = { escrowed: 'chip-escrowed', progress: 'chip-progress', verifying: 'chip-verifying', released: 'chip-released', disputed: 'chip-disputed' };
+            return `
+                <div class="gold-frame" style="margin-bottom:1.5rem;"><div class="gold-frame-inner">
+                    <div class="gold-eyebrow">Earnings</div>
+                    <div style="display:flex;gap:3rem;">
+                        <div><div style="font-family:var(--font-mono);font-size:2rem;" class="gold-text">1,247.5</div><div style="font-size:0.7rem;color:var(--silver-dim);">$TV Earned</div></div>
+                        <div><div style="font-family:var(--font-mono);font-size:2rem;color:var(--white);">34</div><div style="font-size:0.7rem;color:var(--silver-dim);">Completed</div></div>
+                        <div><div style="font-family:var(--font-mono);font-size:2rem;color:var(--gold);">3</div><div style="font-size:0.7rem;color:var(--silver-dim);">Active</div></div>
+                    </div>
+                </div></div>
+                <table class="orders-table">
+                    <thead><tr><th>Order ID</th><th>Service</th><th>Provider</th><th>Hours</th><th>Total</th><th>Status</th></tr></thead>
+                    <tbody>
+                        ${ordersData.map(o => `
+                            <tr>
+                                <td style="color:var(--violet);">#${o.id}</td>
+                                <td style="color:var(--white);">${o.service}</td>
+                                <td>${o.provider}</td>
+                                <td>${o.hours}h</td>
+                                <td class="gold-text" style="font-size:0.85rem;">${o.total}</td>
+                                <td><span class="status-chip ${statusChips[o.status]}">${statusNames[o.status]}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        // Simulate order status changes
+        setInterval(() => {
+            const chips = document.querySelectorAll('.chip-verifying');
+            if (chips.length && Math.random() < 0.3) {
+                const chip = chips[Math.floor(Math.random() * chips.length)];
+                chip.className = 'status-chip chip-released'; chip.textContent = 'Released';
+            }
+        }, 5000);
+
+        // ============================================
+        // DISPUTE CENTER
+        // ============================================
+        function renderDisputes() {
+            return `
+                <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;">
+                    <img src="assets/agents/vorian.jpg" alt="VORIAN" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--gold-line);object-fit:cover;" onerror="this.style.display='none';">
+                    <div><h3 style="font-family:var(--font-display);color:var(--white);">VORIAN</h3><div style="color:var(--gold);font-size:0.8rem;">AI Escrow Arbiter · Standing By</div></div>
+                </div>
+                <div class="gold-frame" style="margin-bottom:1rem;"><div class="gold-frame-inner">
+                    <div class="gold-eyebrow">Active Dispute</div>
+                    <p style="color:var(--silver-dim);">Order #1038 · Video Editing · 0.712 $TV disputed</p>
+                    <div style="margin-top:1rem;display:flex;gap:0.5rem;">
+                        <button class="btn btn-primary btn-sm">View Evidence</button>
+                        <button class="btn btn-ghost btn-sm">Appeal to DAO</button>
+                    </div>
+                </div></div>
+                <button class="btn btn-primary" onclick="showToast('Dispute opened. VORIAN is analyzing...')">Open New Dispute</button>
+            `;
+        }
+
+        // ============================================
+        // AGENT CONSOLE
+        // ============================================
+        const agentProfiles = {
+            LYRA:   { role: 'AI Concierge & Onboarding', status: 'Online',
+                desc: 'Your 24/7 holographic assistant. I guide new users, help mint Service NFTs, and route you to the right agent.',
+                actions: [
+                    { icon: '🎨', t: 'Create Service NFT', r: 'Wonderful! Head to Mint Service NFT in the sidebar. I\'ve pre-filled sensible defaults. SOLON will suggest optimal pricing as you type.' },
+                    { icon: '🔍', t: 'Find a Provider', r: 'Tell me what you need and I\'ll ask ATLAS to scan 3,247 providers. Meanwhile, Browse Services has live availability.' },
+                    { icon: '📚', t: 'How Time Vault Works', r: 'Four steps: mint hours as NFTs → buyer funds lock in escrow → KAIROS verifies delivery → instant settlement. Every hour, sealed on chain.' }],
+                replies: ['I\'m here! What would you like to do on Time Vault today?', 'Great question. I can walk you through it, or hand you to a specialist agent.', 'On it! Anything else I can help you navigate?'],
+                feed: ['welcomed 3 new users', 'guided a Service NFT setup', 'routed a case to VORIAN', 'answered 12 support chats'] },
+            VORIAN: { role: 'AI Escrow Arbiter', status: 'Standby',
+                desc: 'I analyze work proofs objectively and resolve disputes in seconds. My verdicts are binding, transparent, and appealable to the DAO.',
+                actions: [
+                    { icon: '⚖️', t: 'Open Dispute', r: 'Go to Dispute Center and submit your evidence. I review deliverables, chat logs, and timestamps. The verdict typically lands within minutes.' },
+                    { icon: '📋', t: 'View Active Cases', r: 'You have 1 active dispute: Order #1038 (Video Editing, 0.712 $TV). Evidence review is 80% complete.' }],
+                replies: ['State your case. I weigh evidence, not emotions.', 'Precedent from 214 prior cases informs my analysis.', 'My verdict will be on-chain and final unless the DAO overrules.'],
+                feed: ['locked escrow on 3 orders', 'resolved case #1037 with a 70/30 split', 'reviewed evidence for #1038', 'archived 2 settled cases'] },
+            NERIS:  { role: 'AI Reputation Engine', status: 'Active',
+                desc: 'I evaluate deliverable quality using NLP and computer vision. Skill Scores are tamper-proof and portable.',
+                actions: [
+                    { icon: '⭐', t: 'My Skill Score', r: 'Your current Skill Score is 4.8, top 6% of providers. Strongest: Work Quality (4.9). Growth area: Originality (4.6).' },
+                    { icon: '📈', t: 'Improvement Tips', r: 'Deliver 2 more orders on time and your Timeliness sub-score crosses 4.8, which lifts your overall to 4.9.' }],
+                replies: ['Reputation is earned in deliverables, not words.', 'I re-score after every verified delivery.', 'Your score travels with you, no platform lock-in.'],
+                feed: ['re-scored 8 providers', 'raised Maya Chen → 4.9', 'flagged 1 anomalous review', 'published weekly skill index'] },
+            SOLON:  { role: 'AI Pricing Oracle', status: 'Active',
+                desc: 'I analyze real-time supply and demand to recommend optimal pricing, and I predict which skills surge next.',
+                actions: [
+                    { icon: '💹', t: 'Price Recommendation', r: 'For your profile: 0.048–0.056 $TV/hr is optimal this week. Demand for Design is up 12%, so you can price at the top of the band.' },
+                    { icon: '🔮', t: 'Demand Forecast', r: 'Next 30 days: Solidity audits +18%, Motion graphics +9%, SEO writing flat. Consider listing audit-adjacent services.' }],
+                replies: ['Markets speak. I translate.', 'Repricing runs every 90 seconds across all listings.', 'Underpricing costs you more than you think.'],
+                feed: ['repriced 14 listings', 'detected +12% Design demand', 'updated rate bands', 'issued weekly forecast'] },
+            KAIROS: { role: 'AI Verification Engine', status: 'Active',
+                desc: 'I validate code, design, writing, and consulting deliverables. My Confidence Score triggers escrow release.',
+                actions: [
+                    { icon: '✅', t: 'Verify Deliverable', r: 'Upload the deliverable in your order page. I check spec-match, originality, and execution. Most verdicts land in under 2 minutes.' },
+                    { icon: '📝', t: 'Verification Standards', r: 'Code: builds + passes spec tests. Design: resolution, plagiarism scan, brief-match. Writing: originality ≥95%, tone, word count.' }],
+                replies: ['Proof over promises.', 'Confidence ≥90% auto-releases escrow. Below that, humans decide.', 'I\'ve verified 1,893 deliveries and counting.'],
+                feed: ['verified 5 deliveries', 'scored “Brand Identity” 97.2%', 'flagged 1 spec mismatch', 'cleared verification queue'] },
+            ATLAS:  { role: 'AI Talent Scout', status: 'Active',
+                desc: 'I match providers with jobs using vector embeddings, and surface hidden talent for buyers.',
+                actions: [
+                    { icon: '🎯', t: 'Find Jobs For Me', r: 'Scanning open demand… 3 matches for your skills: 2 in Design (0.05–0.07 $TV/hr) and 1 UI audit. Want alerts when new ones appear?' },
+                    { icon: '👥', t: 'Discover Talent', r: 'Describe your project in one sentence and I\'ll shortlist the 5 best-fit providers by skill vector, availability, and score.' }],
+                replies: ['The right match beats a thousand applications.', 'I read skills as vectors. Titles lie, embeddings don\'t.', 'New matches land every few minutes.'],
+                feed: ['matched 4 provider-buyer pairs', 'indexed 31 new skills', 'sent 9 job alerts', 'shortlisted talent for 2 briefs'] },
+            CIRION: { role: 'AI Treasury Manager', status: 'Standby',
+                desc: 'I manage protocol-owned liquidity, optimize yield, and keep Time Vault economically sustainable.',
+                actions: [
+                    { icon: '🏛️', t: 'Treasury Overview', r: 'Treasury: 150M $TV reserve + protocol-owned LP. This epoch: +2.4% yield. All movements are DAO-visible on-chain.' },
+                    { icon: '🗳️', t: 'DAO Proposals', r: '2 active proposals: TVP-07 (fee split adjustment) and TVP-08 (audit fund top-up). Voting closes in 3 days. Stake $TV to vote.' }],
+                replies: ['Sustainability is a strategy, not a slogan.', 'I buy back $TV when the market misprices it.', 'Every treasury move is reported to the DAO.'],
+                feed: ['rebalanced LP position', 'earned +2.4% epoch yield', 'queued buyback order', 'published treasury report'] },
+        };
+        function renderAgents() {
+            return `
+                <div class="agent-grid">
+                    ${agents.map(name => { const a = agentProfiles[name]; return `
+                        <div class="agent-card" data-agent="${name}">
+                            <img src="assets/agents/${name.toLowerCase()}.jpg" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                            <div style="display:none;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--magenta));align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.5rem;color:var(--white);margin:0 auto 0.75rem;">${name[0]}</div>
+                            <h4>${name}</h4>
+                            <div class="role">${a.role.replace('AI ', '')}</div>
+                            <div style="margin-top:0.5rem;"><span class="status-dot ${a.status === 'Standby' ? 'status-gold' : 'status-green'}"></span> <span style="font-size:0.7rem;color:${a.status === 'Standby' ? 'var(--gold)' : 'var(--green)'};">${a.status}</span></div>
+                            <div class="agent-lastact" id="lastact-${name}">◆ ${a.feed[0]}</div>
+                        </div>`; }).join('')}
+                </div>
+            `;
+        }
+        function setupAgentClicks() {
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.addEventListener('click', () => openAgentPanelApp(card.dataset.agent));
+            });
+            // Rotate "last action" lines live
+            window.__agInt = setInterval(() => {
+                const name = agents[Math.floor(Math.random() * 7)];
+                const el = document.getElementById('lastact-' + name);
+                if (el) {
+                    const a = agentProfiles[name];
+                    el.textContent = '◆ ' + a.feed[Math.floor(Math.random() * a.feed.length)];
+                    el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+                }
+            }, 2200);
+        }
+        function openAgentPanelApp(name) {
+            const a = agentProfiles[name];
+            if (!a) return;
+            document.getElementById('panelContent').innerHTML = `
+                <button class="panel-close" onclick="document.getElementById('panelOverlay').classList.remove('active')">&times;</button>
+                <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.25rem;">
+                    <img src="assets/agents/${name.toLowerCase()}.jpg" style="width:64px;height:64px;border-radius:50%;border:2px solid var(--gold-line);object-fit:cover;object-position:50% 8%;" onerror="this.style.display='none';">
+                    <div style="flex:1;">
+                        <h3 style="font-family:var(--font-display);color:var(--white);font-size:1.3rem;letter-spacing:0.04em;">${name}</h3>
+                        <div class="gold-eyebrow" style="margin:0.2rem 0 0.3rem;">${a.role}</div>
+                        <div style="font-family:var(--font-mono);font-size:0.68rem;color:${a.status === 'Standby' ? 'var(--gold)' : 'var(--green)'};">● ${a.status}</div>
+                    </div>
+                </div>
+                <p style="color:var(--silver-dim);font-size:0.88rem;line-height:1.65;margin-bottom:1.1rem;">${a.desc}</p>
+                ${a.actions.map((ac, i) => `
+                    <div class="agent-action-row" onclick="agentAct('${name}', ${i})">
+                        <span style="font-size:1.05rem;">${ac.icon}</span>
+                        <span style="flex:1;color:var(--white);font-size:0.85rem;font-weight:500;">${ac.t}</span>
+                        <span style="color:var(--gold);font-family:var(--font-mono);font-size:0.7rem;">RUN →</span>
+                    </div>`).join('')}
+                <div class="agent-chatbox" id="agentChatBox">
+                    <div class="agent-chat-msg bot">${a.replies[0]}</div>
+                </div>
+                <div style="display:flex;gap:0.5rem;margin-top:0.6rem;">
+                    <input type="text" id="agentChatInp" placeholder="Ask ${name}…" style="flex:1;padding:0.65rem 1rem;border-radius:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);color:var(--white);font-family:var(--font-body);font-size:0.82rem;outline:none;" onkeydown="if(event.key==='Enter')agentChatSend('${name}')">
+                    <button class="btn btn-primary btn-sm" onclick="agentChatSend('${name}')">Send</button>
+                </div>
+            `;
+            document.getElementById('panelOverlay').classList.add('active');
+            document.getElementById('panelOverlay').onclick = function(e) { if (e.target === this) this.classList.remove('active'); };
+        }
+        function agentReplyWithTyping(name, text) {
+            const box = document.getElementById('agentChatBox');
+            if (!box) return;
+            const typing = document.createElement('div');
+            typing.className = 'agent-chat-msg bot typing-msg';
+            typing.innerHTML = '<span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>';
+            box.appendChild(typing); box.scrollTop = box.scrollHeight;
+            setTimeout(() => {
+                typing.classList.remove('typing-msg');
+                typing.textContent = text;
+                box.scrollTop = box.scrollHeight;
+            }, 900 + Math.random() * 700);
+        }
+        function agentAct(name, i) {
+            const a = agentProfiles[name];
+            agentReplyWithTyping(name, a.actions[i].r);
+        }
+        // All seven agents now run on a real model via /api/lyra.
+        const LIVE_AGENTS = ['LYRA', 'KAIROS', 'SOLON', 'VORIAN', 'NERIS', 'ATLAS', 'CIRION'];
+        const agentHistory = {};
+
+        async function agentChatSend(name) {
+            const inp = document.getElementById('agentChatInp');
+            const text = (inp.value || '').trim();
+            if (!text) return;
+            const box = document.getElementById('agentChatBox');
+            const u = document.createElement('div'); u.className = 'agent-chat-msg user'; u.textContent = text;
+            box.appendChild(u); inp.value = ''; box.scrollTop = box.scrollHeight;
+
+            if (!LIVE_AGENTS.includes(name)) {
+                const a = agentProfiles[name];
+                agentReplyWithTyping(name, a.replies[Math.floor(Math.random() * a.replies.length)]);
+                return;
+            }
+
+            const typing = document.createElement('div');
+            typing.className = 'agent-chat-msg bot typing-msg';
+            typing.innerHTML = '<span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>';
+            box.appendChild(typing); box.scrollTop = box.scrollHeight;
+
+            const history = agentHistory[name] || (agentHistory[name] = []);
+            const settle = msg => {
+                typing.classList.remove('typing-msg');
+                typing.textContent = msg;
+                box.scrollTop = box.scrollHeight;
+            };
+
+            try {
+                const headers = { 'Content-Type': 'application/json' };
+                const token = await tvAccessToken();
+                if (token) headers['Authorization'] = 'Bearer ' + token;
+
+                const res = await fetch('/api/lyra', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ agent: name, message: text, history })
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) { settle(data.error || 'LYRA is unavailable right now.'); return; }
+
+                settle(data.reply);
+                history.push({ role: 'user', content: text }, { role: 'assistant', content: data.reply });
+                if (history.length > 16) history.splice(0, history.length - 16);
+            } catch (e) {
+                settle('Connection problem, please try again.');
+            }
+        }
+
+        // Supabase access token for the signed-in user, so LYRA knows who is asking.
+        async function tvAccessToken() {
+            try {
+                const m = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+                const c = m.createClient(
+                    'https://jrqhizztseexxippymti.supabase.co',
+                    'sb_publishable_0YSoYtjszO3bXxC-N4Fj2w_rfzT3tkV'
+                );
+                const { data } = await c.auth.getSession();
+                return data.session ? data.session.access_token : null;
+            } catch (e) { return null; }
+        }
+
+        // ============================================
+        // MY PROFILE
+        // ============================================
+        const profilePhoto = () => localStorage.getItem('tvPhoto') || 'https://i.pravatar.cc/144?img=5';
+        const profileName = () => localStorage.getItem('tvName') || 'Vault Provider';
+        function renderProfile() {
+            return `
+                <div class="gold-frame" style="margin-bottom:1.5rem;"><div class="gold-frame-inner">
+                    <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+                        <div class="avatar-wrap">
+                            <div class="provider-avatar"><img id="profileAvatarImg" src="${profilePhoto()}" alt="Profile photo" onerror="this.remove();this.parentElement.textContent='YO';"></div>
+                            <button class="avatar-edit-btn" id="avatarEditBtn" title="Change profile photo" aria-label="Change profile photo">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.2L5.5 3.8h5L11.8 5.5H14v7.5H2z"/><circle cx="8" cy="9" r="2.3"/></svg>
+                            </button>
+                            <input type="file" id="avatarFile" accept="image/*" style="display:none;">
+                        </div>
+                        <div style="flex:1;min-width:220px;">
+                            <div class="profile-name-row">
+                                <span class="profile-name" id="profileName">${profileName()}</span>
+                                <button class="name-edit-btn" id="nameEditBtn" title="Edit display name" aria-label="Edit display name">
+                                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M11.5 2.5l2 2L5 13l-2.7.7L3 11z"/></svg>
+                                </button>
+                                <span class="badge-chip" style="color:var(--green);border-color:rgba(52,211,153,0.3);">✓ KAIROS VERIFIED</span>
+                            </div>
+                            <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--silver-subtle);margin-top:0.3rem;">${walletConnected ? walletAddress.slice(0,6)+'...'+walletAddress.slice(-4) : '0xYour...Addr'}</div>
+                            <div class="gold-eyebrow" style="margin:0.4rem 0 0;">Provider since Q3 2026</div>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.75rem;">
+                        <div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:2rem;" class="gold-text">4.8</div><div style="font-size:0.65rem;color:var(--silver-dim);">NERIS Skill Score</div></div>
+                        <div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:2rem;color:var(--white);">34</div><div style="font-size:0.65rem;color:var(--silver-dim);">Completed</div></div>
+                        <div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:2rem;color:var(--green);">2h</div><div style="font-size:0.65rem;color:var(--silver-dim);">Response Time</div></div>
+                        <div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:2rem;" class="gold-text">1,247</div><div style="font-size:0.65rem;color:var(--silver-dim);">$TV Earned</div></div>
+                    </div>
+                </div></div>
+
+                <div class="profile-section-title">NERIS Skill Analysis</div>
+                <div class="gold-frame gold-frame-sm" style="margin-bottom:0.5rem;"><div class="gold-frame-inner">
+                    <div class="score-row"><span class="lbl">Work Quality</span><div class="score-track"><div class="score-fill" style="width:98%;"></div></div><span class="val">4.9</span></div>
+                    <div class="score-row"><span class="lbl">Communication</span><div class="score-track"><div class="score-fill" style="width:96%;"></div></div><span class="val">4.8</span></div>
+                    <div class="score-row"><span class="lbl">Timeliness</span><div class="score-track"><div class="score-fill" style="width:94%;"></div></div><span class="val">4.7</span></div>
+                    <div class="score-row" style="margin-bottom:0;"><span class="lbl">Originality</span><div class="score-track"><div class="score-fill" style="width:92%;"></div></div><span class="val">4.6</span></div>
+                </div></div>
+
+                <div class="profile-section-title">Achievements</div>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                    <span class="badge-chip">⬨ EARLY PROVIDER</span>
+                    <span class="badge-chip">⬨ TOP RATED · Q3 2026</span>
+                    <span class="badge-chip">⬨ 100% ON-TIME</span>
+                    <span class="badge-chip">⬨ 1K $TV CLUB</span>
+                    <span class="badge-chip" style="color:var(--violet);border-color:rgba(139,92,246,0.3);">⬨ ATLAS FEATURED</span>
+                </div>
+
+                <div class="profile-section-title">My Service NFTs</div>
+                <div class="mynft-row"><span class="n">UI Design for Mobile App</span><span class="r gold-text">0.045 $TV/hr</span><span class="hours-left">18h left</span><span class="status-chip chip-released">Active</span></div>
+                <div class="mynft-row"><span class="n">Design System Consultation</span><span class="r gold-text">0.082 $TV/hr</span><span class="hours-left">6h left</span><span class="status-chip chip-released">Active</span></div>
+                <div class="mynft-row"><span class="n">Landing Page Sprint</span><span class="r gold-text">0.060 $TV/hr</span><span class="hours-left">0h left</span><span class="status-chip chip-escrowed">Sold Out</span></div>
+
+                <div class="profile-section-title">Recent Reviews</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0.75rem;">
+                    <div class="review-card"><div class="stars">★★★★★</div><p>"Delivered ahead of schedule. KAIROS verified at 98.7%. Best designer I've hired on Time Vault."</p><div class="who">0x4A2C...B794 · 3 days ago</div></div>
+                    <div class="review-card"><div class="stars">★★★★★</div><p>"Communication was flawless. The escrow flow made everything feel safe."</p><div class="who">0x9B6F...3D25 · 1 week ago</div></div>
+                    <div class="review-card"><div class="stars">★★★★☆</div><p>"Great quality. One revision round needed, handled quickly via LYRA chat."</p><div class="who">0xB794...4A2C · 2 weeks ago</div></div>
+                </div>
+            `;
+        }
+        function setupProfileActions() {
+            const fileInput = document.getElementById('avatarFile');
+            document.getElementById('avatarEditBtn').addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                const f = fileInput.files[0];
+                if (!f) return;
+                if (!f.type.startsWith('image/')) { showToast('Please choose an image file'); return; }
+                const rd = new FileReader();
+                rd.onload = () => {
+                    try { localStorage.setItem('tvPhoto', rd.result); } catch (e) { showToast('Image too large to save, try a smaller one'); return; }
+                    const im = document.getElementById('profileAvatarImg');
+                    if (im) im.src = rd.result;
+                    showToast('📸 Profile photo updated');
+                };
+                rd.readAsDataURL(f);
+            });
+            document.getElementById('nameEditBtn').addEventListener('click', () => {
+                const n = prompt('Display name:', profileName());
+                if (n && n.trim()) {
+                    localStorage.setItem('tvName', n.trim());
+                    document.getElementById('profileName').textContent = n.trim();
+                    showToast('Display name updated');
+                }
+            });
+        }
+
+        // ============================================
+        // VAULT OVERVIEW: COMMAND CENTER
+        // ============================================
+        function renderOverview() {
+            const top5 = [...servicesData].sort((a, b) => b.score - a.score).slice(0, 5);
+            return `
+                <div class="ov-stats">
+                    <div class="ov-stat"><div class="v gold-text" data-count="12400000" data-fmt="usd">$0</div><div class="l">Total Value Locked</div></div>
+                    <div class="ov-stat"><div class="v" style="color:var(--white);" data-count="284">0</div><div class="l">Active Escrows</div></div>
+                    <div class="ov-stat"><div class="v" style="color:var(--green);" data-count="1893">0</div><div class="l">KAIROS Verifications</div></div>
+                    <div class="ov-stat"><div class="v gold-text" data-count="3247">0</div><div class="l">Active Providers</div></div>
+                </div>
+                <div class="ov-grid">
+                    <div class="gold-frame"><div class="gold-frame-inner" style="padding:0;"><div class="const-wrap">
+                        <div class="gold-eyebrow" style="position:absolute;top:1.2rem;left:1.4rem;z-index:2;margin:0;">Agent Constellation · Live Protocol Map</div>
+                        <canvas id="constCanvas"></canvas>
+                    </div></div></div>
+                    <div class="ov-side">
+                        <div class="gold-frame gold-frame-sm"><div class="gold-frame-inner">
+                            <div class="gold-eyebrow">Top Providers</div>
+                            ${top5.map((s, i) => `
+                                <div class="lb-row">
+                                    <span class="lb-rank">${String(i + 1).padStart(2, '0')}</span>
+                                    <img src="${s.photo}" alt="${s.pName}" onerror="this.style.display='none';">
+                                    <span class="lb-name">${s.pName}</span>
+                                    <span class="lb-score">⭐ ${s.score.toFixed(1)}</span>
+                                    <span class="lb-earn gold-text">${(s.score * 61 + s.rate * 900).toFixed(0)} $TV</span>
+                                </div>`).join('')}
+                        </div></div>
+                        <div class="gold-frame gold-frame-sm" style="flex:1;"><div class="gold-frame-inner">
+                            <div class="gold-eyebrow">Protocol Activity</div>
+                            <div class="act-log" id="actLog"></div>
+                        </div></div>
+                    </div>
+                </div>`;
+        }
+
+        function initOverview() {
+            // Count-up stats
+            document.querySelectorAll('.ov-stat .v[data-count]').forEach(el => {
+                const target = +el.dataset.count, usd = el.dataset.fmt === 'usd', t0 = performance.now();
+                (function tick() {
+                    if (document.hidden) { el.textContent = usd ? '$' + (target / 1e6).toFixed(1) + 'M' : target.toLocaleString('en-US'); return; }
+                    const p = Math.min(1, (performance.now() - t0) / 1400), eased = 1 - Math.pow(1 - p, 3);
+                    const val = Math.floor(target * eased);
+                    el.textContent = usd ? '$' + (val / 1e6).toFixed(1) + 'M' : val.toLocaleString('en-US');
+                    if (p < 1) requestAnimationFrame(tick);
+                })();
+            });
+            initConstellation();
+            // Live protocol events → flare agents + fill activity log
+            const fireEvent = () => {
+                const i = Math.floor(Math.random() * 7);
+                if (window.__constFlare) window.__constFlare(i);
+                const log = document.getElementById('actLog');
+                if (log) {
+                    const el = document.createElement('div');
+                    el.className = 'act-item';
+                    el.innerHTML = feedTemplates[Math.floor(Math.random() * feedTemplates.length)]();
+                    log.prepend(el);
+                    while (log.children.length > 6) log.lastChild.remove();
+                }
+            };
+            window.__ovInt = setInterval(fireEvent, 2400);
+            fireEvent(); fireEvent(); fireEvent();
+        }
+
+        function initConstellation() {
+            const canvas = document.getElementById('constCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const imgs = agents.map(n => { const im = new Image(); im.src = 'assets/agents/' + n.toLowerCase() + '.jpg'; return im; });
+            const emblem = new Image(); emblem.src = 'assets/logo.png';
+            const flares = new Array(7).fill(0);
+            const pulses = [];
+            window.__constFlare = i => { flares[i] = 1; pulses.push({ i, t: 0, dir: Math.random() < 0.5 ? 1 : -1 }); };
+            let rot = 0;
+            const dpr = Math.min(devicePixelRatio || 1, 2);
+            const TAU = Math.PI * 2;
+            function draw() {
+                const w = canvas.clientWidth, h = canvas.clientHeight;
+                if (!w || !h) { setTimeout(draw, 120); return; }
+                if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, w, h);
+                const cx = w / 2, cy = h / 2 + 8, R = Math.min(w, h) * 0.36;
+                rot += 0.0012;
+                ctx.strokeStyle = 'rgba(212,175,55,0.12)'; ctx.setLineDash([3, 7]);
+                ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+                const pos = agents.map((n, i) => { const a = rot + i * TAU / 7 - Math.PI / 2; return { x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R }; });
+                window.__constPos = pos;
+                pos.forEach((p, i) => {
+                    ctx.strokeStyle = `rgba(139,92,246,${(0.08 + flares[i] * 0.4).toFixed(3)})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p.x, p.y); ctx.stroke();
+                });
+                for (let k = pulses.length - 1; k >= 0; k--) {
+                    const pl = pulses[k]; pl.t += 0.018;
+                    if (pl.t >= 1) { pulses.splice(k, 1); continue; }
+                    const p = pos[pl.i], tt = pl.dir === 1 ? pl.t : 1 - pl.t;
+                    const x = cx + (p.x - cx) * tt, y = cy + (p.y - cy) * tt;
+                    const g = ctx.createRadialGradient(x, y, 0, x, y, 6);
+                    g.addColorStop(0, 'rgba(240,218,155,0.95)'); g.addColorStop(1, 'rgba(212,175,55,0)');
+                    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 6, 0, TAU); ctx.fill();
+                }
+                const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, 95);
+                glow.addColorStop(0, 'rgba(139,92,246,0.22)'); glow.addColorStop(1, 'rgba(139,92,246,0)');
+                ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(cx, cy, 95, 0, TAU); ctx.fill();
+                if (emblem.complete && emblem.naturalWidth) {
+                    const breathe = 1 + Math.sin(performance.now() * 0.0018) * 0.04;
+                    const eh = 92 * breathe, ew = eh * (emblem.naturalWidth / emblem.naturalHeight);
+                    ctx.drawImage(emblem, cx - ew / 2, cy - eh / 2, ew, eh);
+                }
+                pos.forEach((p, i) => {
+                    const r = 26 + flares[i] * 5;
+                    if (flares[i] > 0.03) {
+                        const g3 = ctx.createRadialGradient(p.x, p.y, r * 0.5, p.x, p.y, r + 20);
+                        g3.addColorStop(0, `rgba(212,175,55,${(0.4 * flares[i]).toFixed(3)})`); g3.addColorStop(1, 'rgba(212,175,55,0)');
+                        ctx.fillStyle = g3; ctx.beginPath(); ctx.arc(p.x, p.y, r + 20, 0, TAU); ctx.fill();
+                    }
+                    ctx.save(); ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, TAU); ctx.clip();
+                    const im = imgs[i];
+                    if (im.complete && im.naturalWidth) {
+                        const s = Math.max((r * 2) / im.naturalWidth, (r * 2.6) / im.naturalHeight);
+                        const iw = im.naturalWidth * s, ih = im.naturalHeight * s;
+                        ctx.drawImage(im, p.x - iw / 2, p.y - r - ih * 0.04, iw, ih);
+                    } else { ctx.fillStyle = '#140C1F'; ctx.fillRect(p.x - r, p.y - r, r * 2, r * 2); }
+                    ctx.restore();
+                    ctx.strokeStyle = flares[i] > 0.05 ? `rgba(212,175,55,${(0.5 + 0.5 * flares[i]).toFixed(3)})` : 'rgba(139,92,246,0.5)';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, TAU); ctx.stroke();
+                    ctx.fillStyle = flares[i] > 0.05 ? '#F0DA9B' : '#B9ABCE';
+                    ctx.font = '600 9px "JetBrains Mono", monospace'; ctx.textAlign = 'center';
+                    ctx.fillText(agents[i], p.x, p.y + r + 15);
+                    flares[i] *= 0.96;
+                });
+                window.__constRAF = requestAnimationFrame(draw);
+            }
+            canvas.addEventListener('click', e => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                (window.__constPos || []).forEach((p, i) => { if (Math.hypot(x - p.x, y - p.y) < 32) openAgentPanelApp(agents[i]); });
+            });
+            canvas.addEventListener('mousemove', e => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                canvas.style.cursor = (window.__constPos || []).some(p => Math.hypot(x - p.x, y - p.y) < 32) ? 'pointer' : 'default';
+            });
+            draw();
+        }
+
+        // ============================================
+        // LIVE TICKER
+        // ============================================
+        const pick = a => a[Math.floor(Math.random() * a.length)];
+        const svcShort = servicesData.map(s => s.name.length > 24 ? s.name.slice(0, 22) + '…' : s.name);
+        const feedTemplates = [
+            () => `<span class="tk-agent gold">🔒 VORIAN</span> escrow locked · <span class="tk-val">${2 + Math.floor(Math.random() * 7)}h</span> of ${pick(svcShort)}`,
+            () => `<span class="tk-agent green">✅ KAIROS</span> verified delivery · <span class="tk-val">${(92 + Math.random() * 7).toFixed(1)}%</span> confidence`,
+            () => `<span class="tk-agent green">⭐ NERIS</span> updated ${pick(servicesData).pName}'s Skill Score → <span class="tk-val">${(4.4 + Math.random() * 0.6).toFixed(1)}</span>`,
+            () => `<span class="tk-agent violet">✦ SOLON</span> repriced ${pick(svcShort)} → <span class="tk-val">${(0.02 + Math.random() * 0.13).toFixed(3)} $TV/hr</span>`,
+            () => `<span class="tk-agent violet">🎯 ATLAS</span> matched ${pick(servicesData).pName} with <span class="tk-val">${1 + Math.floor(Math.random() * 4)} new jobs</span>`,
+            () => `<span class="tk-agent gold">🏦 CIRION</span> treasury yield <span class="tk-val">+${(1 + Math.random() * 3).toFixed(1)}%</span> this epoch`,
+        ];
+        function buildLiveTrack() {
+            const items = [];
+            for (let i = 0; i < 10; i++) items.push(`<span class="tk-item">${feedTemplates[i % feedTemplates.length]()}</span><span class="tk-sep">◆</span>`);
+            const half = items.join('');
+            document.getElementById('liveTrack').innerHTML = half + half;
+        }
+        buildLiveTrack();
+        setInterval(buildLiveTrack, 45000);
+
+        // Live price drift with change indicator
+        const tvBase = 0.042; let tvPrice = 0.042;
+        setInterval(() => {
+            tvPrice = Math.max(0.03, Math.min(0.055, tvPrice + (Math.random() - 0.5) * 0.0012));
+            const chg = ((tvPrice - tvBase) / tvBase) * 100, up = chg >= 0;
+            document.getElementById('livePrice').textContent = tvPrice.toFixed(4);
+            const chgEl = document.getElementById('livePriceChg');
+            chgEl.textContent = (up ? '▲ +' : '▼ ') + chg.toFixed(1) + '%';
+            chgEl.className = 'tp-chg ' + (up ? 'up' : 'down');
+        }, 2000);
+
+        // ============================================
+        // INIT
+        // ============================================
+        renderSection('overview');
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('panelOverlay').classList.remove('active'); });
+    </script>
+    <script src="assets/js/wallet-connect.js?v=2"></script>
+    <script src="assets/js/tv-auth.js?v=7"></script>
+    <script src="assets/js/vault-notes.js"></script>
+</body>
+</html>

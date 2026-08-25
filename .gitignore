@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+timevault-site.tar.gz
+__pycache__/
+*.pyc
+.claude/
+timevault-deploy/

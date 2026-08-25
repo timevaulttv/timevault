@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Time Vault | X Header Banner</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+        --bg:#060309; --violet:#8B5CF6; --magenta:#C026D3; --silver:#B9ABCE; --silver-dim:#8C7CA6;
+        --white:#FAFAFA; --gold:#D4AF37; --gold-bright:#F0DA9B; --gold-deep:#8A6A1F; --gold-line:rgba(212,175,55,0.32);
+        --fd:'Cinzel',serif; --fb:'Inter',sans-serif; --fm:'JetBrains Mono',monospace;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#111;display:flex;justify-content:center;padding:26px;font-family:var(--fb);}
+    .xb{position:relative;width:1500px;height:500px;overflow:hidden;flex-shrink:0;
+        background:
+            radial-gradient(ellipse 45% 90% at 84% 8%, rgba(192,38,211,0.16), transparent 60%),
+            radial-gradient(ellipse 50% 100% at 16% 6%, rgba(139,92,246,0.18), transparent 66%),
+            radial-gradient(ellipse 60% 70% at 50% 120%, rgba(74,44,110,0.35), transparent 70%),
+            linear-gradient(180deg,#0A0512,#060309);}
+    .mtr{position:absolute;height:1.5px;background:linear-gradient(90deg,transparent,rgba(155,110,255,0.75),#F0DA9B);transform:rotate(33deg);border-radius:2px;filter:blur(.3px);}
+    .star{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(180,150,255,0.5);}
+    .frame{position:absolute;inset:18px;border:1px solid var(--gold-line);border-radius:16px;pointer-events:none;box-shadow:inset 0 0 80px rgba(74,44,110,0.3);}
+    .corner{position:absolute;width:30px;height:30px;border:2px solid var(--gold);opacity:.7;}
+    .c1{top:12px;left:12px;border-right:0;border-bottom:0;border-radius:14px 0 0 0;}
+    .c2{top:12px;right:12px;border-left:0;border-bottom:0;border-radius:0 14px 0 0;}
+    .c3{bottom:12px;left:12px;border-right:0;border-top:0;border-radius:0 0 0 14px;}
+    .c4{bottom:12px;right:12px;border-left:0;border-top:0;border-radius:0 0 14px 0;}
+
+    /* centered brand lockup */
+    .lockup{position:absolute;top:118px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:26px;z-index:4;}
+    .lockup .emblem{height:150px;width:auto;filter:drop-shadow(0 6px 30px rgba(139,92,246,0.5)) drop-shadow(0 2px 10px rgba(192,38,211,0.4));}
+    .lockup .wordmark{height:82px;width:auto;}
+
+    .tagline{position:absolute;top:290px;left:50%;transform:translateX(-50%);z-index:4;white-space:nowrap;
+        font-family:var(--fd);font-weight:700;font-size:2.35rem;letter-spacing:0.06em;color:var(--white);
+        text-shadow:0 0 40px rgba(139,92,246,0.5);}
+    .tagline .g{background:linear-gradient(180deg,var(--gold-bright) 10%,var(--gold) 52%,var(--gold-deep) 95%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+        filter:drop-shadow(0 0 18px rgba(212,175,55,0.4));}
+
+    .subline{position:absolute;top:352px;left:50%;transform:translateX(-50%);z-index:4;white-space:nowrap;
+        font-family:var(--fm);font-size:0.82rem;letter-spacing:0.24em;color:var(--silver-dim);text-transform:uppercase;}
+    .subline b{color:var(--gold);}
+    .subline .dot{color:var(--violet);margin:0 10px;}
+
+    /* $TV chip */
+    .tvchip{position:absolute;top:44px;left:50%;transform:translateX(-50%);z-index:4;display:flex;align-items:center;gap:9px;
+        font-family:var(--fm);font-size:0.66rem;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;
+        border:1px solid var(--gold-line);background:rgba(212,175,55,0.05);padding:0.4rem 1.15rem;border-radius:100px;}
+    .tvchip .live{width:7px;height:7px;border-radius:50%;background:#34D399;box-shadow:0 0 8px rgba(52,211,153,0.8);}
+
+    /* 7 agents row: bottom, away from avatar (which sits bottom-left) */
+    .agents{position:absolute;bottom:34px;right:52px;z-index:4;display:flex;align-items:center;gap:16px;}
+    .agents .lbl{font-family:var(--fm);font-size:0.6rem;letter-spacing:0.2em;color:var(--silver-subtle,#665A7E);text-transform:uppercase;margin-right:6px;color:#7C6E96;}
+    .agents .face{width:46px;height:46px;border-radius:50%;overflow:hidden;border:1px solid var(--gold-line);box-shadow:0 4px 14px rgba(0,0,0,0.5),0 0 14px rgba(139,92,246,0.25);}
+    .agents .face img{width:100%;height:100%;object-fit:cover;object-position:50% 8%;filter:saturate(1.15);}
+    /* soft glow anchor bottom-left where avatar overlaps (kept clean) */
+    .avatar-safe{position:absolute;bottom:0;left:0;width:320px;height:220px;z-index:2;background:radial-gradient(ellipse at 30% 90%, rgba(139,92,246,0.12), transparent 70%);}
+</style>
+</head>
+<body>
+<div class="xb" id="xb">
+    <span class="mtr" style="width:180px;top:80px;left:56%;"></span>
+    <span class="mtr" style="width:120px;top:180px;left:66%;opacity:.5;"></span>
+    <span class="mtr" style="width:140px;top:250px;left:30%;opacity:.45;"></span>
+    <span class="star" style="top:70px;left:78%;"></span><span class="star" style="top:140px;left:88%;"></span>
+    <span class="star" style="top:200px;left:24%;"></span><span class="star" style="top:300px;left:82%;"></span>
+    <span class="star" style="top:110px;left:40%;opacity:.6;"></span><span class="star" style="top:330px;left:70%;opacity:.6;"></span>
+
+    <div class="avatar-safe"></div>
+
+    <div class="tvchip"><span class="live"></span>$TV · Pre-Launch</div>
+
+    <div class="lockup">
+        <img class="emblem" src="/assets/logo.png" alt="">
+        <img class="wordmark" src="/assets/logo-name.png" alt="TIME VAULT">
+    </div>
+
+    <div class="tagline">Every Hour, <span class="g">Sealed on Chain.</span></div>
+    <div class="subline">AI-Powered Proof-of-Service Marketplace <span class="dot">◆</span> <b>Launching on letscash.fun</b></div>
+
+    <div class="agents">
+        <span class="lbl">7 AI Agents</span>
+        <span class="face"><img src="/assets/agents/lyra.jpg"></span>
+        <span class="face"><img src="/assets/agents/vorian.jpg"></span>
+        <span class="face"><img src="/assets/agents/neris.jpg"></span>
+        <span class="face"><img src="/assets/agents/solon.jpg"></span>
+        <span class="face"><img src="/assets/agents/kairos.jpg"></span>
+        <span class="face"><img src="/assets/agents/atlas.jpg"></span>
+        <span class="face"><img src="/assets/agents/cirion.jpg"></span>
+    </div>
+
+    <div class="frame"></div><div class="corner c1"></div><div class="corner c2"></div><div class="corner c3"></div><div class="corner c4"></div>
+</div>
+</body>
+</html>

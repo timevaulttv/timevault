@@ -1,0 +1,33 @@
+[Unit]
+Description=Time Vault — LYRA agent backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Secrets live here, root-only (chmod 600). Never in the repo.
+EnvironmentFile=/etc/timevault-lyra.env
+# ProtectHome + DynamicUser leave the process without a home directory, which
+# some SDK code paths probe. Point HOME at the private /tmp this unit gets.
+Environment=HOME=/tmp
+ExecStart=/opt/timevault-lyra/venv/bin/python /opt/timevault-lyra/agents.py
+WorkingDirectory=/opt/timevault-lyra
+Restart=always
+RestartSec=3
+
+# Least privilege — this service only needs to talk to the network.
+DynamicUser=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+MemoryMax=512M
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
