@@ -1,5 +1,5 @@
 [Unit]
-Description=Time Vault — LYRA agent backend
+Description=Time Vault LYRA agent backend
 After=network-online.target
 Wants=network-online.target
 
@@ -15,7 +15,7 @@ WorkingDirectory=/opt/timevault-lyra
 Restart=always
 RestartSec=3
 
-# Least privilege — this service only needs to talk to the network.
+# Least privilege: this service only needs to talk to the network.
 DynamicUser=yes
 NoNewPrivileges=yes
 PrivateTmp=yes
