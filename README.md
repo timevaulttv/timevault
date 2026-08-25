@@ -70,7 +70,7 @@ No build step. Everything is vanilla HTML/CSS/JS (Three.js and Google Fonts from
 │   ├── og.png            # Social share image (1200x630)
 │   ├── agents/           # 7 agent portraits (web-optimized)
 │   ├── video/            # Compressed brand animations (H.264)
-│   └── js/agent-menu.js  # Landing agent-panel system
+│   └── js/               # agent-menu, vault-notes, wallet-connect, tv-auth
 ├── marketing/            # Social banner templates + render scripts
 ├── deploy/               # nginx vhost + deployment guide
 ├── server/               # LYRA agent backend (Python, stdlib HTTP)
