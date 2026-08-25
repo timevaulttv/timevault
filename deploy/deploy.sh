@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================
-# TIME VAULT — VPS deploy script (run ON the VPS as root/sudo)
+# TIME VAULT: VPS deploy script (run ON the VPS as root/sudo)
 # Idempotent. Isolated to /var/www/timevault + one nginx vhost.
 # Usage: bash deploy.sh /path/to/timevault-site.tar.gz
 # ============================================
@@ -16,7 +16,7 @@ mkdir -p "$SITE_DIR"
 tar -xzf "$TAR" -C "$SITE_DIR"
 chown -R www-data:www-data "$SITE_DIR" 2>/dev/null || chown -R nginx:nginx "$SITE_DIR" 2>/dev/null || true
 
-echo "==> Installing nginx vhost (isolated — other sites untouched)"
+echo "==> Installing nginx vhost (isolated, other sites untouched)"
 cp "$VHOST_SRC" "$VHOST_DST"
 ln -sf "$VHOST_DST" /etc/nginx/sites-enabled/timevault
 

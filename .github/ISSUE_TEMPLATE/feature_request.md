@@ -15,4 +15,4 @@ What can't users do today?
 How you imagine it working.
 
 **Design notes**
-Anything about how it should look — remember: gold is trim, not paint.
+Anything about how it should look. Remember: gold is trim, not paint.

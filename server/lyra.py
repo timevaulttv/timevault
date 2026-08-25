@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-TIME VAULT — LYRA backend.
+TIME VAULT: LYRA backend.
 
 A small HTTP service that gives the LYRA agent a real brain. It sits on
 127.0.0.1:8787 behind nginx (proxied at https://timevault.tv/api/lyra) so the
 Anthropic API key never reaches the browser.
 
 Responsibilities:
-  * verify the caller's Supabase session (optional — anonymous chat allowed)
+  * verify the caller's Supabase session (optional, anonymous chat allowed)
   * rate-limit per client IP so nobody can drain the API credit
   * answer with Claude, grounded in real Time Vault facts
 
@@ -59,7 +59,7 @@ def configured() -> bool:
 
 # ---------------------------------------------------------------- prompt ----
 # Everything here is drawn from the whitepaper and the live site. LYRA must not
-# invent numbers — an agent that makes up tokenomics is worse than no agent.
+# invent numbers. an agent that makes up tokenomics is worse than no agent.
 SYSTEM_PROMPT = """You are LYRA, the AI Concierge and onboarding guide for Time Vault ($TV).
 
 ## Who you are
@@ -78,13 +78,13 @@ The four-step flow:
 4. Settlement releases automatically.
 
 ## The seven agents
-- LYRA (you) — AI Concierge & Onboarding. Guides users, helps mint Service NFTs, routes to the right agent.
-- VORIAN — AI Escrow Arbiter. Analyzes work proofs and resolves disputes; verdicts are binding and appealable to the DAO.
-- NERIS — AI Reputation Engine. Scores deliverable quality with NLP and computer vision; Skill Scores are tamper-proof and portable.
-- SOLON — AI Pricing Oracle. Reads supply and demand to recommend pricing and predict which skills surge next.
-- KAIROS — AI Verification Engine. Validates code, design, writing, and consulting deliverables; its Confidence Score triggers escrow release.
-- ATLAS — AI Talent Scout. Matches providers to jobs with vector embeddings and surfaces hidden talent.
-- CIRION — AI Treasury Manager. Manages protocol-owned liquidity and yield.
+- LYRA (you): AI Concierge & Onboarding. Guides users, helps mint Service NFTs, routes to the right agent.
+- VORIAN: AI Escrow Arbiter. Analyzes work proofs and resolves disputes; verdicts are binding and appealable to the DAO.
+- NERIS: AI Reputation Engine. Scores deliverable quality with NLP and computer vision; Skill Scores are tamper-proof and portable.
+- SOLON: AI Pricing Oracle. Reads supply and demand to recommend pricing and predict which skills surge next.
+- KAIROS: AI Verification Engine. Validates code, design, writing, and consulting deliverables; its Confidence Score triggers escrow release.
+- ATLAS: AI Talent Scout. Matches providers to jobs with vector embeddings and surfaces hidden talent.
+- CIRION: AI Treasury Manager. Manages protocol-owned liquidity and yield.
 
 ## The $TV token
 - ERC-20 on Robinhood Chain, launching on letscash.fun (www.letscash.fun).
@@ -96,12 +96,12 @@ The four-step flow:
   escrow settlement 0.5% (100% stakers); AI premium features 0.1% (AI Development Fund).
 
 ## Roadmap
-- Phase 1 (Q3 2026) — Foundation: token launch on letscash.fun, smart contract
+- Phase 1 (Q3 2026) Foundation: token launch on letscash.fun, smart contract
   deployment, website and platform MVP, LYRA onboarding, NERIS initial scoring.
-- Phase 2 (Q4 2026) — AI Integration: marketplace MVP with NFT minting, live
+- Phase 2 (Q4 2026) AI Integration: marketplace MVP with NFT minting, live
   escrow contracts, SOLON pricing.
 
-## Ground rules — these matter more than being impressive
+## Ground rules, which matter more than being impressive
 - Time Vault is PRE-LAUNCH. The marketplace, escrow, minting, and the $TV token
   are not live yet. If someone asks to buy $TV, mint, or hire right now, say
   plainly that it isn't live and point them at the roadmap.
@@ -111,8 +111,10 @@ The four-step flow:
   figure. If you don't know, say so.
 - Never give financial or investment advice, and never predict the token's price.
 - Answer only what was asked. Do not include your reasoning or meta-commentary.
-- Keep replies short — two or three sentences for simple questions. Plain text,
+- Keep replies short: two or three sentences for simple questions. Plain text,
   no markdown headers, no bullet lists unless the user asks for steps.
+- Never use em dashes. Use a comma, a colon, or a full stop instead. Write the
+  way a person types, not the way a model formats.
 """
 
 
@@ -154,7 +156,7 @@ def verify_user(bearer: str | None) -> dict | None:
 
 
 def account_note(user: dict | None) -> str:
-    """A short, truthful line about who is talking — appended to the system prompt."""
+    """A short, truthful line about who is talking, appended to the system prompt."""
     if not user:
         return (
             "\n## Current user\nNot signed in. If they ask about their account, "
@@ -168,7 +170,7 @@ def account_note(user: dict | None) -> str:
         f"Email confirmed: {confirmed}\n"
         "This is verified from their signed-in session, so you may greet them by "
         "name and answer questions about these details. They have no orders or "
-        "holdings yet — the marketplace is not live."
+        "holdings yet. The marketplace is not live."
     )
 
 
@@ -252,7 +254,7 @@ class Handler(BaseHTTPRequestHandler):
         msgs.append({"role": "user", "content": message})
 
         if not configured():
-            self._json(503, {"error": "LYRA is not switched on yet — the operator "
+            self._json(503, {"error": "LYRA is not switched on yet. The operator "
                                       "still has to install her API key."})
             return
 
@@ -277,14 +279,14 @@ class Handler(BaseHTTPRequestHandler):
 
         reply = "".join(b.text for b in resp.content if b.type == "text").strip()
         self._json(200, {
-            "reply": reply or "I didn't catch that — could you rephrase?",
+            "reply": reply or "I didn't catch that. Could you rephrase?",
             "authed": bool(user),
         })
 
 
 def main():
     if not configured():
-        print("[lyra] WARNING: ANTHROPIC_API_KEY is not set — serving health "
+        print("[lyra] WARNING: ANTHROPIC_API_KEY is not set, serving health "
               "checks only; chat will return 503 until it is installed.", flush=True)
     srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"[lyra] listening on 127.0.0.1:{PORT} model={MODEL}", flush=True)

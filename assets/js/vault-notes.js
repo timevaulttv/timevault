@@ -1,5 +1,5 @@
 // ============================================
-// VAULT NOTES — shared terminal notepad
+// VAULT NOTES: shared terminal notepad
 // Self-contained: injects its own CSS + markup.
 // Works on every page; per-account when the host
 // page defines window.tvGetAccount().
@@ -73,7 +73,7 @@
 
         const fab = document.createElement('button');
         fab.className = 'term-fab'; fab.id = 'termFab';
-        fab.title = 'Vault Notes — press ` to open';
+        fab.title = 'Vault Notes: press ` to open';
         fab.innerHTML = '<span class="term-fab-icon">&gt;<span class="term-caret">_</span></span><span class="term-fab-label">NOTES</span>';
         const win = document.createElement('div');
         win.className = 'term-window'; win.id = 'termWin';
@@ -107,7 +107,7 @@
         const key = () => 'tvNotes:' + (rawAcct() ? rawAcct().toLowerCase() : 'guest');
         const toast = m => { if (typeof window.showToast === 'function') window.showToast(m); };
         const load = () => { try { return JSON.parse(localStorage.getItem(key())) || []; } catch (e) { return []; } };
-        const saveAll = lines => { try { localStorage.setItem(key(), JSON.stringify(lines.slice(-500))); } catch (e) { toast('Storage full — /export then /clear to continue'); } };
+        const saveAll = lines => { try { localStorage.setItem(key(), JSON.stringify(lines.slice(-500))); } catch (e) { toast('Storage full. Run /export then /clear to continue'); } };
         const push = entry => { const l = load(); l.push(entry); saveAll(l); };
         const stamp = () => { const d = new Date(); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ' ' + d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }); };
 
@@ -133,7 +133,7 @@
             termBody.innerHTML = '';
             win.querySelector('#termAcct').textContent = '· ' + acctLabel();
             win.querySelector('#termPrompt').textContent = acctLabel() + '@vault:~$';
-            typeLine(print('', 'sys'), 'VAULT NOTES v1.0 — a terminal for your thoughts, saved per account');
+            typeLine(print('', 'sys'), 'VAULT NOTES v1.0: a terminal for your thoughts, saved per account');
             print('type anything to save a note · <b>/ai</b> &lt;question&gt; to discuss · <b>/help</b>', 'sys');
             print('', 'sys');
             load().forEach(l => {
@@ -145,15 +145,15 @@
         function notesAI(q) {
             const s = q.toLowerCase();
             if (s.includes('idea') || s.includes('concept')) return 'Interesting. Try splitting the idea into three note lines: the problem it solves, who it serves, and the smallest step you can test this week.';
-            if (s.includes('todo') || s.includes('task') || s.includes('list')) return 'Tip: start each task note with [ ] — then search and mark it [x] when done. Want me to break that task into sub-steps?';
+            if (s.includes('todo') || s.includes('task') || s.includes('list')) return 'Tip: start each task note with [ ], then search and mark it [x] when done. Want me to break that task into sub-steps?';
             if (s.includes('price') || s.includes('pricing') || s.includes('$tv')) return 'For pricing I defer to SOLON: anchor within the optimal band and note your reasoning here, so the decision can be audited later.';
             if (s.includes('plan') || s.includes('strategy') || s.includes('roadmap')) return 'A good plan fits in five lines. Note the end goal first, then work backwards: what must be true by month 3, month 1, this week?';
             if (s.includes('summar') || s.includes('recap') || s.includes('tldr')) return 'The thread across your notes this session: staged execution with proof at every step. Save a one-line conclusion so tomorrow picks up easily.';
             const generic = [
                 'Good point to let settle. Write one more sentence: what decision follows from this?',
-                'Context noted. Consider the opposite side too — what would make this assumption wrong?',
+                'Context noted. Consider the opposite side too. What would make this assumption wrong?',
                 'That idea deserves a small test first. What is the 1-hour version of it?',
-                'Interesting — connect it to your earlier notes; the pattern that emerges is usually worth more than any single point.',
+                'Interesting. Connect it to your earlier notes; the pattern that emerges is usually worth more than any single point.',
             ];
             return generic[Math.floor(Math.random() * generic.length)];
         }
@@ -264,7 +264,7 @@
             if (e.key === 'Enter') { exec(termInput.value); termInput.value = ''; }
             if (e.key === 'Escape') toggle(false);
         });
-        // Summon: backtick — or just start typing outside any input
+        // Summon: backtick, or just start typing outside any input
         document.addEventListener('keydown', e => {
             const ae = document.activeElement;
             const tag = (ae?.tagName || '').toLowerCase();

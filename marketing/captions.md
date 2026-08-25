@@ -61,11 +61,11 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 ## LAUNCH POST · The Service Record
 **Banner:** `banners/x-post.jpg` (2400x1350) · source: `x-post.html`
 
-A printed service record rather than a poster — manila card stock, ledger rules, and a
+A printed service record rather than a poster: manila card stock, ledger rules, and a
 rubber stamp. Deliberately the opposite of the dark-neon look every other crypto account
 posts, so it stops the scroll by not looking like an ad.
 
-### Short version (253 chars — fits the 280 limit)
+### Short version (253 chars, fits the 280 limit)
 
 > Every freelancer knows the silence. You deliver, then the client stops replying.
 >
@@ -74,7 +74,7 @@ posts, so it stops the scroll by not looking like an ad.
 > $TV launching on letscash.fun
 > timevault.tv
 
-### Long version (679 chars — needs X Premium)
+### Long version (679 chars, needs X Premium)
 
 > Every freelancer knows the silence.
 >
@@ -83,7 +83,7 @@ posts, so it stops the scroll by not looking like an ad.
 > than the job paid.
 >
 > Time Vault takes that move off the table. The buyer's payment locks in escrow before you
-> start the work — not after you deliver, not when they feel like it. KAIROS verifies the
+> start the work, not after you deliver, not when they feel like it. KAIROS verifies the
 > delivery on chain, and the funds release on their own. Nobody has to approve anything.
 > Nobody can go quiet.
 >

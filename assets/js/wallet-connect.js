@@ -1,5 +1,5 @@
 // ============================================
-// TIME VAULT — Universal EVM Wallet Connector
+// TIME VAULT: Universal EVM Wallet Connector
 // EIP-6963 multi-wallet discovery (MetaMask, Rabby,
 // OKX, Bitget, Coinbase, Trust, Brave, Phantom, …)
 // with legacy window.ethereum fallback.
@@ -100,7 +100,7 @@
             <div class="wc-modal"><div class="wc-inner">
                 <div class="wc-title">No Wallet Found</div>
                 <div class="wc-sub">EVM wallet required</div>
-                <div class="wc-empty">Install any EVM wallet extension to continue —<br>
+                <div class="wc-empty">Install any EVM wallet extension to continue.<br>
                     <a href="https://metamask.io" target="_blank" rel="noopener">MetaMask</a> ·
                     <a href="https://rabby.io" target="_blank" rel="noopener">Rabby</a> ·
                     <a href="https://www.okx.com/web3" target="_blank" rel="noopener">OKX</a> ·

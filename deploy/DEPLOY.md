@@ -1,16 +1,16 @@
-# Deploying timevault.tv — Namecheap VPS runbook
+# Deploying timevault.tv: Namecheap VPS runbook
 
 Everything deploy-related lives in this `deploy/` folder, fully separate from the site source.
 The site on the VPS lives in **its own directory** (`/var/www/timevault`) with **its own nginx
-vhost** — other projects on the server are never touched.
+vhost**, so other projects on the server are never touched.
 
 ## Live architecture (as deployed)
 
 - **VPS**: Ubuntu 24.04, nginx serving `/var/www/timevault`. The origin IP is deliberately
-  kept out of this repo — publishing it lets attackers bypass Cloudflare. Keep it in your
+  kept out of this repo, because publishing it lets attackers bypass Cloudflare. Keep it in your
   own notes or an `~/.ssh/config` host alias.
 - **DNS + edge**: domain is on **Cloudflare** (proxied / orange cloud) → free CDN + DDoS + edge TLS
-- **Cloudflare SSL mode**: Full — CF connects to the origin over HTTPS (443)
+- **Cloudflare SSL mode**: Full, so CF connects to the origin over HTTPS (443)
 - **Origin TLS**: Let's Encrypt cert (`certbot --nginx`), auto-renewing
 - **Firewall (ufw)**: 22 open to all; **80/443 open only to Cloudflare IP ranges** so the origin
   can't be reached by bypassing Cloudflare. Refresh the CF ranges periodically from
@@ -22,7 +22,7 @@ vhost** — other projects on the server are never touched.
 ## What gets deployed
 
 `timevault-site.tar.gz` (built from the repo root):
-`index.html · app.html · whitepaper.html · robots.txt · sitemap.xml · assets/` — ~5.3 MB total.
+`index.html · app.html · whitepaper.html · robots.txt · sitemap.xml · assets/`, around 5.3 MB total.
 
 Rebuild it any time with:
 
@@ -66,7 +66,7 @@ Certbot auto-renews; verify with `sudo certbot renew --dry-run`.
 
 - [ ] `https://timevault.tv` loads, padlock valid, `www.` redirects to apex
 - [ ] `/app.html` and `/whitepaper.html` load; no console errors
-- [ ] Share preview: paste the URL into X/Discord — gold banner card appears
+- [ ] Share preview: paste the URL into X/Discord, gold banner card appears
 - [ ] `https://timevault.tv/sitemap.xml` reachable → submit in Google Search Console
 
 ## If the VPS runs cPanel instead of plain nginx
@@ -82,7 +82,7 @@ create the account/domain in WHM, then upload the tar via cPanel File Manager in
 > vhost, which deletes the `listen 443 ssl` block certbot added and takes HTTPS down.
 > Cloudflare keeps serving cached pages, so the outage is easy to miss.
 
-For a content update, rebuild the tar and extract it — nginx needs no reload for static files:
+For a content update, rebuild the tar and extract it. nginx needs no reload for static files:
 
 ```bash
 scp timevault-site.tar.gz <user>@<vps>:/tmp/

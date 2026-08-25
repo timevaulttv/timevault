@@ -1,5 +1,5 @@
 // ============================================
-// AI AGENT PANELS — Time Vault
+// AI AGENT PANELS: Time Vault
 // Shared agent-panel system for the landing page,
 // built on the gold/violet TCG design system.
 // ============================================
@@ -116,7 +116,7 @@ function openAgentPanel(agentName) {
                 </div>
             `).join('')}
             <div class="agent-chat-area" id="agentChatArea-${agentName}">
-                <div class="agent-chat-placeholder">Chat with ${agentName} — ask anything!</div>
+                <div class="agent-chat-placeholder">Chat with ${agentName}, ask anything!</div>
             </div>
             <div class="agent-chat-input-row">
                 <input type="text" placeholder="Ask ${agentName}..." id="agentChatInput-${agentName}"

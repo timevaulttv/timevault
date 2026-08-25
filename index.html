@@ -490,6 +490,29 @@
         .footer .tv-social { margin: 1.5rem 0 0.5rem; }
         .nav-links .tv-social { gap: 0.5rem; }
         @media (max-width: 900px) { .nav-links .tv-social { justify-content: center; margin: 0.35rem 0; } }
+        /* ============================================
+           HERO PARTICLE FIELD
+           A cursor-reactive field behind the hourglass. It sits earlier in
+           the DOM than .vault-porthole, so the emblem paints over it without
+           needing to touch that rule. pointer-events stay off so the hero
+           buttons keep working.
+           ============================================ */
+        .hero-field { position: fixed; inset: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; transition: none; }
+        @media (prefers-reduced-motion: reduce) { .hero-field { display: none; } }
+
+        /* ============================================
+           TOUCH TARGETS
+           Footer links sit at 15px tall, which is fine for a mouse and awkward
+           for a thumb. Apple and Google both ask for 44px. Padding is added
+           only on touch layouts so the desktop footer is unchanged.
+           ============================================ */
+        @media (max-width: 820px) {
+            .footer a { display: inline-block; padding: 0.7rem 0.25rem; margin: 0 0.6rem; }
+            .footer .tv-social { gap: 0.8rem; }
+            .footer .tv-social a { width: 44px; height: 44px; }
+        }
+
 
         @media (max-width: 1024px) {
             .hero-grid { grid-template-columns: 1fr; }
@@ -566,6 +589,7 @@
     })();
     </script>
     <canvas id="bg3d"></canvas>
+    <canvas class="hero-field" data-hero-field aria-hidden="true"></canvas>
     <div class="bg-gradient-top"></div>
     <div class="bg-gradient-bottom"></div>
 
@@ -706,7 +730,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">KAIROS</span><span class="tcg-stat">SCORE 0–100</span></div>
+                        <div class="tcg-head"><span class="tcg-name">KAIROS</span><span class="tcg-stat">SCORE 0-100</span></div>
                         <div class="tcg-art"><img src="assets/agents/kairos.jpg" alt="KAIROS"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Verification Engine</div>
@@ -1227,7 +1251,7 @@
         });
         renderMarketplace();
     </script>
-    <script src="assets/js/agent-menu.js"></script>
+    <script src="assets/js/agent-menu.js?v=2"></script>
     <script>
     (() => {
         if (!('IntersectionObserver' in window)) return;
@@ -1273,8 +1297,184 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
     })();
     </script>
-    <script src="assets/js/wallet-connect.js?v=2"></script>
-    <script src="assets/js/tv-auth.js?v=7"></script>
-    <script src="assets/js/vault-notes.js"></script>
+    <script src="assets/js/wallet-connect.js?v=3"></script>
+    <script src="assets/js/tv-auth.js?v=8"></script>
+    <script src="assets/js/vault-notes.js?v=2"></script>
+<script>
+// ============================================
+// HERO PARTICLE FIELD
+// Reuses the three.js r128 already loaded above rather than shipping a
+// second copy of the library. Tuning values are taken from the source
+// design: noise .48, speed .76, spin .3, push 2, glow .2, psize 3.
+//
+// Count is the one number scaled: 120,000 was sized for a full-screen
+// canvas (~2M px). This canvas is roughly 850x850 (~720k px), so 40,000
+// reproduces the same visual density instead of burying the hourglass.
+// ============================================
+(() => {
+    const canvas = document.querySelector('canvas[data-hero-field]');
+    if (!canvas || typeof THREE === 'undefined') return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Phones get a lighter field. A handset renders the same canvas at a
+    // higher pixel ratio over a smaller area, so the full count would cost far
+    // more per visible particle while looking no denser.
+    const SMALL = matchMedia('(pointer: coarse)').matches || innerWidth < 820;
+    const CFG = { count: SMALL ? 24000 : 70000, noise:0.48, speed:0.76, spin:0.3,
+                  push:2, glow: SMALL ? 0.62 : 0.55, psize: SMALL ? 3.0 : 3.4, burst:2 };
+    const ACC_A = '#D4AF37', ACC_B = '#8B5CF6';   // Time Vault's own accents
+
+    const VERT = `
+uniform float uTime,uSize,uNoise,uSpeed,uPush,uRadius,uPR,uScroll,uBurst; uniform vec3 uMouse;
+attribute float aRnd; varying float vMix; varying float vA;
+vec3 hash3(vec3 p){p=vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6)));
+return fract(sin(p)*43758.5453)*2.0-1.0;}
+float noise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+return mix(mix(mix(dot(hash3(i),f),dot(hash3(i+vec3(1,0,0)),f-vec3(1,0,0)),f.x),
+mix(dot(hash3(i+vec3(0,1,0)),f-vec3(0,1,0)),dot(hash3(i+vec3(1,1,0)),f-vec3(1,1,0)),f.x),f.y),
+mix(mix(dot(hash3(i+vec3(0,0,1)),f-vec3(0,0,1)),dot(hash3(i+vec3(1,0,1)),f-vec3(1,0,1)),f.x),
+mix(dot(hash3(i+vec3(0,1,1)),f-vec3(0,1,1)),dot(hash3(i+vec3(1,1,1)),f-vec3(1,1,1)),f.x),f.y),f.z);}
+void main(){vec3 p=position*uRadius;float n=noise(p*1.6+uTime*uSpeed);p*=1.0+n*uNoise;
+float b=smoothstep(0.0,1.0,uScroll)*uBurst;
+p+=normalize(position+0.0001)*b*(1.6+aRnd*4.5);p.y-=b*0.6;
+float d=distance(p,uMouse);p+=normalize(p-uMouse+0.0001)*smoothstep(1.6,0.0,d)*uPush;
+vMix=clamp(n*0.5+0.5+b*0.35,0.0,1.0);vA=(1.0-b*0.4)*(0.35+aRnd*0.65);
+vec4 mv=modelViewMatrix*vec4(p,1.0);
+gl_PointSize=(1.0+aRnd*1.6)*uSize*uPR*(3.2/-mv.z);gl_Position=projectionMatrix*mv;}`;
+
+    const FRAG = `
+uniform vec3 uA,uB;uniform float uGlow;varying float vMix;varying float vA;
+void main(){vec2 uv=gl_PointCoord-0.5;float a=smoothstep(0.5,0.0,length(uv))*vA*uGlow;
+if(a<0.01)discard;gl_FragColor=vec4(mix(uA,uB,vMix),a);}`;
+
+    // fibonacci sphere
+    const N = CFG.count;
+    const pos = new Float32Array(N*3), rnd = new Float32Array(N);
+    const g = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < N; i++) {
+        const y = 1 - (i/(N-1))*2;
+        const r = Math.sqrt(Math.max(0, 1 - y*y)), t = g*i;
+        pos[i*3] = Math.cos(t)*r; pos[i*3+1] = y; pos[i*3+2] = Math.sin(t)*r;
+        rnd[i] = Math.random();
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1));
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, SMALL ? 1.5 : 2));
+    const scene = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(52, 1, 0.1, 100);
+    cam.position.z = 6;
+
+    const U = {
+        uTime:{value:0}, uMouse:{value:new THREE.Vector3(99,99,0)},
+        uSize:{value:CFG.psize}, uNoise:{value:CFG.noise}, uSpeed:{value:CFG.speed},
+        uPush:{value:CFG.push}, uGlow:{value:CFG.glow}, uRadius:{value:1.9},
+        uScroll:{value:0}, uBurst:{value:CFG.burst},
+        uA:{value:new THREE.Color(ACC_A)}, uB:{value:new THREE.Color(ACC_B)},
+        uPR:{value:renderer.getPixelRatio()}
+    };
+    const mat = new THREE.ShaderMaterial({
+        uniforms:U, vertexShader:VERT, fragmentShader:FRAG,
+        transparent:true, depthWrite:false,
+        blending: THREE.AdditiveBlending      // Time Vault's background is dark
+    });
+    const pts = new THREE.Points(geo, mat);
+    scene.add(pts);
+
+    // The cursor pushes the field aside. The canvas is pointer-events:none, so
+    // this listens on the window and converts to canvas-local coordinates.
+    const mT = new THREE.Vector3(99,99,0);
+    let pNdcX = 0, pNdcY = 0, pointerIn = false;
+    addEventListener('pointermove', e => {
+        const b = canvas.getBoundingClientRect();
+        pNdcX = ((e.clientX - b.left) / b.width) * 2 - 1;
+        pNdcY = -((e.clientY - b.top) / b.height) * 2 + 1;
+        pointerIn = true;
+    }, { passive:true });
+
+    // The field is centred on the hourglass, so the emblem reads as the
+    // origin the particles orbit and burst out of. The porthole drifts (it
+    // has a float animation) and moves with scroll, so this is measured
+    // every frame - one getBoundingClientRect, which is cheap.
+    const porthole = document.querySelector('.vault-porthole');
+    const centreOnHourglass = () => {
+        if (!porthole) return;
+        const halfH = Math.tan(52 * Math.PI / 360) * cam.position.z;
+        const halfW = halfH * cam.aspect;
+        const pb = porthole.getBoundingClientRect();
+        const cb = canvas.getBoundingClientRect();
+        const nx = ((pb.left + pb.width / 2 - cb.left) / cb.width) * 2 - 1;
+        const ny = -((pb.top + pb.height / 2 - cb.top) / cb.height) * 2 + 1;
+        pts.position.set(nx * halfW, ny * halfH, 0);
+        // the pointer has to be expressed in the field's own space now
+        if (pointerIn) mT.set(pNdcX * halfW - pts.position.x,
+                              pNdcY * halfH - pts.position.y, 0);
+        else mT.set(99, 99, 0);
+    };
+
+    function size() {
+        const b = canvas.getBoundingClientRect();
+        if (b.width < 2) return;
+        renderer.setSize(b.width, b.height, false);
+        cam.aspect = b.width/b.height; cam.updateProjectionMatrix();
+    }
+    new ResizeObserver(size).observe(canvas);
+    size();
+
+    // Scroll drives the burst: 0 while the hero fills the screen, 1 once it
+    // has scrolled its own height away. Particles fly outward as you leave.
+    // The canvas lives at body level now, so find the hero directly rather
+    // than walking up from the canvas.
+    const hero = document.querySelector('section.hero');
+    let sT = 0, sC = 0;
+    const updScroll = () => {
+        if (!hero) return;
+        const b = hero.getBoundingClientRect();
+        sT = Math.min(1, Math.max(0, (-b.top) / (b.height || 1)));
+    };
+    addEventListener('scroll', updScroll, { passive:true });
+    updScroll();
+
+    // The canvas is full-screen and fixed, so it is always "visible". Instead
+    // it fades out as the burst finishes, and rendering stops once it is clear
+    // - no point burning GPU behind the rest of the page.
+    const smoothstep = (a, b, x) => {
+        const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+        return t * t * (3 - 2 * t);
+    };
+    let shown = 1;
+
+    const clock = new THREE.Clock();
+    let running = true;
+    (function loop() {
+        if (!running) return;
+        requestAnimationFrame(loop);
+        const dt = Math.min(clock.getDelta(), 0.05);
+        // Scroll state is updated even while the canvas is off screen, so the
+        // burst is already correct the moment the hero scrolls back into view.
+        sC += (sT - sC) * 0.07;
+        U.uScroll.value = sC;
+        // hold the field through the burst, then let it clear
+        shown = 1 - smoothstep(0.58, 1.0, sC);
+        canvas.style.opacity = shown.toFixed(3);
+        if (shown < 0.01) return;
+        U.uTime.value += dt;
+        centreOnHourglass();
+        U.uMouse.value.lerp(mT, 0.07);
+        pts.rotation.y += dt * CFG.spin;
+        renderer.render(scene, cam);
+    })();
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) { running = false; }
+        else if (!running) { running = true; clock.getDelta(); requestAnimationFrame(loop); }
+    });
+    addEventListener('pagehide', () => { geo.dispose(); mat.dispose(); renderer.dispose(); });
+
+    window.__tvHeroField = { U, cfg: CFG, pts, get shown(){ return shown; }, get scroll(){ return sC; } };
+})();
+</script>
 </body>
 </html>

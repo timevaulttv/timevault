@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================
-# TIME VAULT — enable extensionless URLs on a LIVE server
+# TIME VAULT: enable extensionless URLs on a LIVE server
 #
 # Patches the certbot-managed vhost IN PLACE (never overwrites it), so the
 # `listen 443 ssl` block certbot owns is preserved:

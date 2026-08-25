@@ -1,8 +1,8 @@
 // ============================================
-// TIME VAULT — Login / Sign-up modal (DESIGN PREVIEW)
+// TIME VAULT: Login / Sign-up modal (DESIGN PREVIEW)
 // Two paths: Connect Wallet (all EVM, via tv-auth-connect) and
 // Email + Time Vault password with a verification-code step.
-// UI/flow only — no backend yet. Wire to Privy/Supabase later.
+// UI/flow only. No backend yet. Wire to Privy/Supabase later.
 // ============================================
 (function () {
     const G = '#D4AF37', GB = '#F0DA9B';
@@ -63,7 +63,7 @@
 
     function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
     function toast(m) { if (window.showToast) window.showToast(m); }
-    // Errors must be readable inside the modal — a page toast can sit behind the overlay.
+    // Errors must be readable inside the modal, since a page toast can sit behind the overlay.
     function showErr(m) {
         const e = overlay && overlay.querySelector('#tvaErr');
         if (e) { e.textContent = m; e.classList.add('show'); }
@@ -128,7 +128,7 @@
 
             <div class="tva-panel active" id="tvaWallet">
               <button class="tva-wallet-btn" id="tvaConnect">◇ Connect Wallet</button>
-              <div class="tva-hint">Works with <b>every EVM wallet</b> — MetaMask, Rabby, OKX, Coinbase, Trust, Brave &amp; more.</div>
+              <div class="tva-hint">Works with <b>every EVM wallet</b>: MetaMask, Rabby, OKX, Coinbase, Trust, Brave &amp; more.</div>
             </div>
 
             <div class="tva-panel" id="tvaEmail">
@@ -150,7 +150,7 @@
                   <span data-r="sym">symbol</span>
                 </div>
                 <button class="tva-go" id="tvaSubmit" style="width:100%;">Create account</button>
-                <div class="tva-hint" style="margin-top:.5rem;">Your password is for <b>Time Vault only</b> — never your email provider's.</div>
+                <div class="tva-hint" style="margin-top:.5rem;">Your password is for <b>Time Vault only</b>, never your email provider's.</div>
               </div>
               <div id="tvaCode" style="display:none;">
                 <div class="tva-sent">We sent a 6-digit code to<br><b id="tvaSentTo">your email</b></div>
@@ -212,7 +212,7 @@
                     // sending no code. Detect it so we don't show a code screen that never fills.
                     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
                         setEmailMode('signin');
-                        showErr('This email is already registered — enter your password to sign in.');
+                        showErr('This email is already registered. Enter your password to sign in.');
                         overlay.querySelector('#tvaEmailInp').value = email;
                         overlay.querySelector('#tvaPassInp').value = '';
                         overlay.querySelector('#tvaPassInp').focus();
@@ -233,7 +233,7 @@
                 }
             } catch (e) {
                 const msg = (e && e.message) || 'Something went wrong';
-                showErr(/already registered/i.test(msg) ? 'This email is already registered — sign in instead.' : msg);
+                showErr(/already registered/i.test(msg) ? 'This email is already registered. Sign in instead.' : msg);
             } finally { btn.disabled = false; btn.textContent = orig; }
         });
 
