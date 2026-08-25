@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Time Vault — X post banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     TIME VAULT — X post banner
+     A service record, not a poster. Manila card stock, ledger
+     rules, ink. Brand gold and violet are rendered as printing
+     pigment (darker than the screen values) so they read as ink
+     sitting on paper rather than light shining through it.
+     ============================================================ */
+  :root {
+    --stock:        #E7E0CF;   /* manila time-card stock */
+    --stock-edge:   #DAD1BC;   /* shaded edge of the card   */
+    --ink:          #1B1917;   /* warm black printing ink   */
+    --ink-soft:     #5A5348;   /* secondary text            */
+    --ink-faint:    #8B8271;   /* form furniture            */
+    --rule:         #8FA4B5;   /* pale blue ledger rule     */
+    --gold-ink:     #A8801F;   /* #D4AF37 as pigment        */
+    --violet-ink:   #5B4490;   /* #8B5CF6 as pigment        */
+    --row: 27px;               /* ledger rule pitch         */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #6E6656;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh;
+  }
+
+  .card {
+    position: relative;
+    width: 1200px; height: 675px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: var(--stock);
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    color: var(--ink);
+    display: flex; flex-direction: column;
+  }
+
+  /* Ruled paper. Sits under everything; body copy is set to the
+     same 27px pitch so lines land on the rules like real writing. */
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0, transparent calc(var(--row) - 1px),
+      rgba(143,164,181,0.30) calc(var(--row) - 1px), rgba(143,164,181,0.30) var(--row)
+    );
+    pointer-events: none;
+  }
+
+  /* Paper grain + a soft vignette so the stock reads as physical. */
+  .card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(90,80,60,0.13) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  /* ---------- header ---------- */
+  .head {
+    position: relative; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 40px 56px 14px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .brand { display: flex; align-items: center; gap: 13px; }
+  .brand svg { display: block; }
+  .brand .wm {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 600; font-size: 27px;
+    letter-spacing: 0.13em; text-transform: uppercase;
+    line-height: 1;
+  }
+  .brand .wm em { font-style: normal; color: var(--violet-ink); }
+
+  .docref { text-align: right; line-height: 1.45; }
+  .docref .k {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .docref .v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  /* second hairline — a printed form always doubles its top rule */
+  .head-underline {
+    position: relative; z-index: 2;
+    height: 3px; margin: 0 56px;
+    border-top: 1px solid var(--ink);
+  }
+
+  /* ---------- body ---------- */
+  .body {
+    position: relative; z-index: 2;
+    flex: 1;
+    display: grid; grid-template-columns: 1fr 352px;
+    padding: 30px 56px 0;
+  }
+
+  .left { padding-right: 46px; display: flex; flex-direction: column; }
+
+  .fieldlabel {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--ink-faint);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+  }
+  .fieldlabel::after {
+    content: ''; flex: 1; height: 1px; background: var(--ink-faint); opacity: 0.45;
+  }
+
+  h1 {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 600;
+    font-size: 67px; line-height: 81px;   /* 3 × 27px rules */
+    letter-spacing: -0.021em;
+    margin-bottom: 27px;
+  }
+  h1 .q {
+    font-style: italic;
+    color: var(--violet-ink);
+  }
+
+  .copy {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 18px; line-height: 27px;   /* on the rules */
+    color: var(--ink-soft);
+    max-width: 47ch;
+    margin-bottom: 27px;
+  }
+  .copy strong { color: var(--ink); font-weight: 600; }
+
+  .kicker {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 600; font-style: italic;
+    font-size: 20px; line-height: 27px;
+    color: var(--ink);
+  }
+
+  /* Routing strip: the four states a record passes through. This is a
+     real sequence, so the form shows it as one — a routing box, the way
+     a work order tracks which desk it is sitting on. */
+  .routing { margin-top: auto; padding-bottom: 30px; }
+  .routing .k {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 9px;
+  }
+  .routing .steps {
+    display: flex; align-items: center; gap: 11px;
+    border-top: 1px solid rgba(27,25,23,0.3);
+    padding-top: 9px;
+  }
+  .routing .s {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500; font-size: 13.5px; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .routing .s.done { color: var(--gold-ink); }
+  .routing .arw { color: var(--ink-faint); font-size: 12px; }
+
+  /* ---------- right: the record ---------- */
+  .right {
+    border-left: 1.5px solid var(--violet-ink);
+    padding-left: 34px;
+    position: relative;
+  }
+  .rowset { display: flex; flex-direction: column; gap: 19px; }
+  .rec .k {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ink-faint);
+    margin-bottom: 3px;
+  }
+  .rec .v {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500; font-size: 21px; letter-spacing: 0.01em;
+    color: var(--ink);
+    border-bottom: 1px solid rgba(27,25,23,0.26);
+    padding-bottom: 5px;
+  }
+  .rec .v.big { font-size: 39px; font-weight: 600; letter-spacing: -0.015em; }
+  .rec .v .u {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.16em;
+    color: var(--ink-faint); margin-left: 8px;
+  }
+  .rec .v.gold { color: var(--gold-ink); }
+
+  /* ---------- the stamp: the one loud thing ---------- */
+  .stamp {
+    position: absolute;
+    right: -14px; bottom: 30px;
+    transform: rotate(-9.5deg);
+    border: 3px solid var(--gold-ink);
+    border-radius: 4px;
+    padding: 11px 20px 9px;
+    text-align: center;
+    color: var(--gold-ink);
+    filter: url(#inkbreak);
+    opacity: 0.88;
+  }
+  .stamp .l1 {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 700; font-size: 27px;
+    letter-spacing: 0.11em; text-transform: uppercase; line-height: 1;
+  }
+  .stamp .l2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500; font-size: 10px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-top: 6px; padding-top: 6px;
+    border-top: 1.5px solid var(--gold-ink);
+  }
+
+  /* ---------- footer ---------- */
+  .foot {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 0 56px; padding: 15px 0 34px;
+    border-top: 2px solid var(--ink);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.17em; text-transform: uppercase;
+  }
+  .foot .site { color: var(--ink); }
+  .foot .mid  { color: var(--ink-soft); }
+  .foot .mid b { color: var(--gold-ink); font-weight: 700; }
+  .foot .handle {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.06em; text-transform: none;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<!-- ink-break filter: roughens the stamp edge the way a rubber
+     stamp lifts unevenly off paper -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="inkbreak">
+    <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.1" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="card" id="xp">
+
+  <div class="head">
+    <div class="brand">
+      <!-- hourglass drawn as a printer's mark, not the 3D emblem -->
+      <svg width="27" height="38" viewBox="0 0 27 38" fill="none">
+        <path d="M3 2h21M3 36h21" stroke="#1B1917" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M5.5 2.5v6.2c0 4.2 8 7.6 8 10.3 0 2.7-8 6.1-8 10.3v6.2" stroke="#1B1917" stroke-width="2.1"/>
+        <path d="M21.5 2.5v6.2c0 4.2-8 7.6-8 10.3 0 2.7 8 6.1 8 10.3v6.2" stroke="#1B1917" stroke-width="2.1"/>
+        <path d="M13.5 19c0 2.7-6.6 5.6-7.7 9.6h15.4c-1.1-4-7.7-6.9-7.7-9.6z" fill="#A8801F"/>
+      </svg>
+      <div class="wm">Time<em>Vault</em></div>
+    </div>
+    <div class="docref">
+      <div class="k">Service Record</div>
+      <div class="v">No. 0001 &nbsp;·&nbsp; ROBINHOOD CHAIN</div>
+    </div>
+  </div>
+  <div class="head-underline"></div>
+
+  <div class="body">
+    <div class="left">
+      <div class="fieldlabel">Terms of the protocol</div>
+
+      <h1>The client<br>can't <span class="q">go quiet.</span></h1>
+
+      <p class="copy">
+        Your hours mint as a Service NFT. The buyer's payment locks in
+        <strong>escrow before the work starts</strong>. Delivery is verified on
+        chain, then the funds release on their own.
+      </p>
+
+      <p class="kicker">No chasing. No silence.</p>
+
+      <div class="routing">
+        <div class="k">Every record moves</div>
+        <div class="steps">
+          <span class="s done">Mint</span><span class="arw">&rarr;</span>
+          <span class="s done">Escrow</span><span class="arw">&rarr;</span>
+          <span class="s">Verify</span><span class="arw">&rarr;</span>
+          <span class="s">Release</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="rowset">
+        <div class="rec">
+          <div class="k">Hours minted</div>
+          <div class="v big">40.0<span class="u">HRS</span></div>
+        </div>
+        <div class="rec">
+          <div class="k">Escrow</div>
+          <div class="v gold">LOCKED</div>
+        </div>
+        <div class="rec">
+          <div class="k">Verified by</div>
+          <div class="v">KAIROS · AI</div>
+        </div>
+      </div>
+
+      <div class="stamp">
+        <div class="l1">Sealed</div>
+        <div class="l1">On&nbsp;Chain</div>
+        <div class="l2">Every hour</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="site">timevault.tv</div>
+    <div class="mid"><b>$TV</b> &nbsp;launching on letscash.fun</div>
+    <div class="handle">@TimeVaultTV</div>
+  </div>
+
+</div>
+</body>
+</html>

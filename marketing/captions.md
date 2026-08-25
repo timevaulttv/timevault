@@ -55,3 +55,46 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 - Add letscash.fun's official X handle once you have it, and tag @TimeVaultTV where it fits.
 - Cadence: Post 1 (T-7), Post 2 (T-4), Post 3 (launch day).
 - Banners are JPG, 2400x1350, crisp for X, LinkedIn, Discord.
+
+---
+
+## LAUNCH POST · The Service Record
+**Banner:** `banners/x-post.jpg` (2400x1350) · source: `x-post.html`
+
+A printed service record rather than a poster — manila card stock, ledger rules, and a
+rubber stamp. Deliberately the opposite of the dark-neon look every other crypto account
+posts, so it stops the scroll by not looking like an ad.
+
+### Short version (253 chars — fits the 280 limit)
+
+> Every freelancer knows the silence. You deliver, then the client stops replying.
+>
+> Time Vault locks their payment in escrow before you start. The work gets verified on chain, and the funds release on their own.
+>
+> $TV launching on letscash.fun
+> timevault.tv
+
+### Long version (679 chars — needs X Premium)
+
+> Every freelancer knows the silence.
+>
+> You deliver. Then nothing. The invoice sits there. You send the polite follow-up, then
+> the less polite one, and you start doing the math on whether chasing it is worth more
+> than the job paid.
+>
+> Time Vault takes that move off the table. The buyer's payment locks in escrow before you
+> start the work — not after you deliver, not when they feel like it. KAIROS verifies the
+> delivery on chain, and the funds release on their own. Nobody has to approve anything.
+> Nobody can go quiet.
+>
+> Seven AI agents run the protocol. This is what one of its records looks like.
+>
+> Not open yet. Close. $TV launches on letscash.fun, on Robinhood Chain.
+>
+> timevault.tv
+
+**Posting notes**
+- Lead with the image. The headline does the work in-feed; the caption is for people who stop.
+- No hashtags. They read as reach-chasing and this account is going for credibility.
+- Alt text: "A printed service record on manila paper. Headline: The client can't go quiet.
+  A gold rubber stamp reads SEALED ON CHAIN."
