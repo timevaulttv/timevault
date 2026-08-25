@@ -6,7 +6,9 @@ vhost** — other projects on the server are never touched.
 
 ## Live architecture (as deployed)
 
-- **VPS**: Ubuntu 24.04, `66.29.139.128`, nginx serving `/var/www/timevault`
+- **VPS**: Ubuntu 24.04, nginx serving `/var/www/timevault`. The origin IP is deliberately
+  kept out of this repo — publishing it lets attackers bypass Cloudflare. Keep it in your
+  own notes or an `~/.ssh/config` host alias.
 - **DNS + edge**: domain is on **Cloudflare** (proxied / orange cloud) → free CDN + DDoS + edge TLS
 - **Cloudflare SSL mode**: Full — CF connects to the origin over HTTPS (443)
 - **Origin TLS**: Let's Encrypt cert (`certbot --nginx`), auto-renewing
@@ -76,5 +78,15 @@ create the account/domain in WHM, then upload the tar via cPanel File Manager in
 
 ## Updating the live site later
 
-Rebuild the tar (command above), upload, and re-run step 2's script — it overwrites
-`/var/www/timevault` in place. Nothing else on the server changes.
+> **Do not re-run `deploy.sh` on a live server.** It copies `nginx-timevault.conf` over the
+> vhost, which deletes the `listen 443 ssl` block certbot added and takes HTTPS down.
+> Cloudflare keeps serving cached pages, so the outage is easy to miss.
+
+For a content update, rebuild the tar and extract it — nginx needs no reload for static files:
+
+```bash
+scp timevault-site.tar.gz <user>@<vps>:/tmp/
+ssh <user>@<vps> 'tar -xzf /tmp/timevault-site.tar.gz -C /var/www/timevault \n  && chown -R www-data:www-data /var/www/timevault \n  && rm /tmp/timevault-site.tar.gz'
+```
+
+Then hard-refresh, and purge the Cloudflare cache if a change does not appear.
