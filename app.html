@@ -875,7 +875,7 @@
                 desc: 'Your 24/7 holographic assistant. I guide new users, help mint Service NFTs, and route you to the right agent.',
                 actions: [
                     { icon: '🎨', t: 'Create Service NFT', r: 'Wonderful! Head to Mint Service NFT in the sidebar. I\'ve pre-filled sensible defaults. SOLON will suggest optimal pricing as you type.' },
-                    { icon: '🔍', t: 'Find a Provider', r: 'Tell me what you need and I\'ll ask ATLAS to scan 3,247 providers. Meanwhile, Browse Services has live availability.' },
+                    { icon: '🔍', t: 'Find a Provider', r: 'Tell me what you need and I\'ll ask ATLAS to match you once the marketplace opens in Phase 2. Browse Services shows how listings will look.' },
                     { icon: '📚', t: 'How Time Vault Works', r: 'Four steps: mint hours as NFTs → buyer funds lock in escrow → KAIROS verifies delivery → instant settlement. Every hour, sealed on chain.' }],
                 replies: ['I\'m here! What would you like to do on Time Vault today?', 'Great question. I can walk you through it, or hand you to a specialist agent.', 'On it! Anything else I can help you navigate?'],
                 feed: ['welcomed 3 new users', 'guided a Service NFT setup', 'routed a case to VORIAN', 'answered 12 support chats'] },
@@ -905,7 +905,7 @@
                 actions: [
                     { icon: '✅', t: 'Verify Deliverable', r: 'Upload the deliverable in your order page. I check spec-match, originality, and execution. Most verdicts land in under 2 minutes.' },
                     { icon: '📝', t: 'Verification Standards', r: 'Code: builds + passes spec tests. Design: resolution, plagiarism scan, brief-match. Writing: originality ≥95%, tone, word count.' }],
-                replies: ['Proof over promises.', 'Confidence ≥90% auto-releases escrow. Below that, humans decide.', 'I\'ve verified 1,893 deliveries and counting.'],
+                replies: ['Proof over promises.', 'Confidence ≥90% auto-releases escrow. Below that, humans decide.', 'Verification goes live in Phase 3. Until then I can explain how the Confidence Score is built.'],
                 feed: ['verified 5 deliveries', 'scored “Brand Identity” 97.2%', 'flagged 1 spec mismatch', 'cleared verification queue'] },
             ATLAS:  { role: 'AI Talent Scout', status: 'Active',
                 desc: 'I match providers with jobs using vector embeddings, and surface hidden talent for buyers.',
@@ -1170,10 +1170,10 @@
             const top5 = [...servicesData].sort((a, b) => b.score - a.score).slice(0, 5);
             return `
                 <div class="ov-stats">
-                    <div class="ov-stat"><div class="v gold-text" data-count="12400000" data-fmt="usd">$0</div><div class="l">Total Value Locked</div></div>
-                    <div class="ov-stat"><div class="v" style="color:var(--white);" data-count="284">0</div><div class="l">Active Escrows</div></div>
-                    <div class="ov-stat"><div class="v" style="color:var(--green);" data-count="1893">0</div><div class="l">KAIROS Verifications</div></div>
-                    <div class="ov-stat"><div class="v gold-text" data-count="3247">0</div><div class="l">Active Providers</div></div>
+                    <div class="ov-stat"><div class="v gold-text" data-tv-live="mcap" data-tv-live-fallback="n/a">Loading</div><div class="l">$TV Market Cap</div></div>
+                    <div class="ov-stat"><div class="v" style="color:var(--white);" data-tv-live="holders" data-tv-live-fallback="n/a">Loading</div><div class="l">Token Holders</div></div>
+                    <div class="ov-stat"><div class="v" style="color:var(--green);" data-tv-live="vol24" data-tv-live-fallback="n/a">Loading</div><div class="l">24h Volume</div></div>
+                    <div class="ov-stat"><div class="v gold-text" data-tv-live="top10" data-tv-live-fallback="n/a">Loading</div><div class="l">Top 10 Hold</div></div>
                 </div>
                 <div class="ov-grid">
                     <div class="gold-frame"><div class="gold-frame-inner" style="padding:0;"><div class="const-wrap">
@@ -1356,5 +1356,6 @@
     <script src="assets/js/wallet-connect.js?v=3"></script>
     <script src="assets/js/tv-auth.js?v=8"></script>
     <script src="assets/js/vault-notes.js?v=2"></script>
+    <script src="assets/js/tv-live.js?v=1"></script>
 </body>
 </html>
