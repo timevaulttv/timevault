@@ -21,18 +21,30 @@ vhost**, so other projects on the server are never touched.
 
 ## What gets deployed
 
-`timevault-site.tar.gz` (built from the repo root): every `*.html` page,
-`robots.txt`, `sitemap.xml` and `assets/`, around 5.3 MB total.
+`timevault-site.tar.gz`: the pages at the repo root, `robots.txt`,
+`sitemap.xml` and `assets/`, around 5.3 MB total.
 
 Rebuild it any time with:
 
 ```bash
-rm -rf ../timevault-deploy && mkdir -p ../timevault-deploy && cp *.html robots.txt sitemap.xml ../timevault-deploy/ && cp -r assets ../timevault-deploy/ && tar -czf timevault-site.tar.gz -C ../timevault-deploy .
+git ls-files -z -- ':(glob)*.html' robots.txt sitemap.xml assets | xargs -0 tar -czf timevault-site.tar.gz
 ```
 
-The glob is deliberate. An earlier version of this line named each page, and
-`proof.html` was added to the site without being added here, so a rebuild would
-have shipped without it. Add a page, and it goes out on its own.
+Read that as: ship what the repo tracks. It matters in both directions.
+
+An earlier version of this line named every page by hand, and `proof.html` was
+added to the site without being added here, so a rebuild would have shipped
+without it. A plain `cp *.html` fixes that and breaks the other end, because it
+also sweeps up whatever untracked files happen to be sitting in the folder.
+Asking git avoids both: a new page ships on its own, and anything gitignored
+cannot reach the server. `:(glob)` keeps `*` from crossing a slash, so the
+render templates in `marketing/` stay out of it.
+
+Check before you send:
+
+```bash
+tar -tzf timevault-site.tar.gz | grep -v '^assets/'
+```
 
 ## 1. DNS (Namecheap dashboard)
 
