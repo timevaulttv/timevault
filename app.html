@@ -576,7 +576,7 @@
             try {
                 const res = await window.tvConnectWallet();
                 walletAddress = res.address; walletConnected = true; updateWalletUI();
-                showToast('✅ Connected via ' + res.walletName);
+                showToast('Connected via ' + res.walletName);
                 window.tvOnAccountsChanged(acc => {
                     if (!acc.length) { walletConnected = false; walletAddress = ''; } else { walletAddress = acc[0]; walletConnected = true; }
                     updateWalletUI();
@@ -704,7 +704,7 @@
                         <span class="solon-tag">✦ SOLON optimal</span>
                     </div>
                     <div class="footer-row">
-                        <span class="skill-score">⭐ ${s.score.toFixed(1)}</span>
+                        <span class="skill-score">★ ${s.score.toFixed(1)}</span>
                         <span class="hours-left">${s.hours}h available</span>
                     </div>
                 </div>
@@ -741,7 +741,7 @@
             if (hEl) { const cur = parseInt(hEl.textContent); if (cur > 0) hEl.textContent = (cur - 1) + 'h available'; }
             const rEl = rand.querySelector('.rate');
             if (rEl) { const cur = parseFloat(rEl.textContent); rEl.innerHTML = (cur + (Math.random() - 0.5) * 0.003).toFixed(3); }
-            if (Math.random() < 0.3) { const sc = rand.querySelector('.skill-score'); if (sc) sc.textContent = '⭐ ' + (4.5 + Math.random() * 0.5).toFixed(1); }
+            if (Math.random() < 0.3) { const sc = rand.querySelector('.skill-score'); if (sc) sc.textContent = '★ ' + (4.5 + Math.random() * 0.5).toFixed(1); }
             setTimeout(() => rand.classList.remove('locked', 'flash'), 2500);
         }, 2500);
 
@@ -790,7 +790,7 @@
                         <div class="provider-row"><div class="provider-avatar">${profilePhoto() ? `<img src="${profilePhoto()}" alt="You">` : 'YO'}</div><span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--silver-dim);">0xYour...Addr</span></div>
                         <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.5rem;">${tags.map(t => `<span style="font-family:var(--font-mono);font-size:0.6rem;padding:0.15rem 0.5rem;border-radius:100px;background:rgba(139,92,246,0.08);color:var(--silver-dim);">${t}</span>`).join('')}</div>
                         <div class="rate-row"><span class="rate gold-text">${parseFloat(rate).toFixed(3)}</span><small>$TV/hr</small></div>
-                        <div class="footer-row"><span class="skill-score">⭐ NEW</span><span class="hours-left">${hours}h available</span></div>
+                        <div class="footer-row"><span class="skill-score">★ NEW</span><span class="hours-left">${hours}h available</span></div>
                     </div>
                 `;
             }
@@ -801,7 +801,7 @@
             const btn = document.getElementById('mintSubmit');
             if (btn) btn.addEventListener('click', () => {
                 if (!walletConnected) { showToast('Connect wallet to mint'); return; }
-                showToast('Service NFT minted. LYRA listed it on the marketplace');
+                showToast('Preview only. Minting ships in Phase 2, nothing was written on chain.');
             });
         }
 
@@ -874,51 +874,51 @@
             LYRA:   { role: 'AI Concierge & Onboarding', status: 'Online',
                 desc: 'Your 24/7 holographic assistant. I guide new users, help mint Service NFTs, and route you to the right agent.',
                 actions: [
-                    { icon: '🎨', t: 'Create Service NFT', r: 'Wonderful! Head to Mint Service NFT in the sidebar. I\'ve pre-filled sensible defaults. SOLON will suggest optimal pricing as you type.' },
-                    { icon: '🔍', t: 'Find a Provider', r: 'Tell me what you need and I\'ll ask ATLAS to match you once the marketplace opens in Phase 2. Browse Services shows how listings will look.' },
-                    { icon: '📚', t: 'How Time Vault Works', r: 'Four steps: mint hours as NFTs → buyer funds lock in escrow → KAIROS verifies delivery → instant settlement. Every hour, sealed on chain.' }],
+                    { t: 'Create Service NFT', r: 'Wonderful! Head to Mint Service NFT in the sidebar. I\'ve pre-filled sensible defaults. SOLON will suggest optimal pricing as you type.' },
+                    { t: 'Find a Provider', r: 'Tell me what you need and I\'ll ask ATLAS to match you once the marketplace opens in Phase 2. Browse Services shows how listings will look.' },
+                    { t: 'How Time Vault Works', r: 'Four steps: mint hours as NFTs → buyer funds lock in escrow → KAIROS verifies delivery → instant settlement. Every hour, sealed on chain.' }],
                 replies: ['I\'m here! What would you like to do on Time Vault today?', 'Great question. I can walk you through it, or hand you to a specialist agent.', 'On it! Anything else I can help you navigate?'],
                 feed: ['welcomed 3 new users', 'guided a Service NFT setup', 'routed a case to VORIAN', 'answered 12 support chats'] },
             VORIAN: { role: 'AI Escrow Arbiter', status: 'Standby',
                 desc: 'I analyze work proofs objectively and resolve disputes in seconds. My verdicts are binding, transparent, and appealable to the DAO.',
                 actions: [
-                    { icon: '⚖️', t: 'Open Dispute', r: 'Go to Dispute Center and submit your evidence. I review deliverables, chat logs, and timestamps. The verdict typically lands within minutes.' },
-                    { icon: '📋', t: 'View Active Cases', r: 'You have 1 active dispute: Order #1038 (Video Editing, 0.712 $TV). Evidence review is 80% complete.' }],
+                    { t: 'Open Dispute', r: 'Go to Dispute Center and submit your evidence. I review deliverables, chat logs, and timestamps. The verdict typically lands within minutes.' },
+                    { t: 'View Active Cases', r: 'You have 1 active dispute: Order #1038 (Video Editing, 0.712 $TV). Evidence review is 80% complete.' }],
                 replies: ['State your case. I weigh evidence, not emotions.', 'Precedent from 214 prior cases informs my analysis.', 'My verdict will be on-chain and final unless the DAO overrules.'],
                 feed: ['locked escrow on 3 orders', 'resolved case #1037 with a 70/30 split', 'reviewed evidence for #1038', 'archived 2 settled cases'] },
             NERIS:  { role: 'AI Reputation Engine', status: 'Active',
                 desc: 'I evaluate deliverable quality using NLP and computer vision. Skill Scores are tamper-proof and portable.',
                 actions: [
-                    { icon: '⭐', t: 'My Skill Score', r: 'Your current Skill Score is 4.8, top 6% of providers. Strongest: Work Quality (4.9). Growth area: Originality (4.6).' },
-                    { icon: '📈', t: 'Improvement Tips', r: 'Deliver 2 more orders on time and your Timeliness sub-score crosses 4.8, which lifts your overall to 4.9.' }],
+                    { t: 'My Skill Score', r: 'Your current Skill Score is 4.8, top 6% of providers. Strongest: Work Quality (4.9). Growth area: Originality (4.6).' },
+                    { t: 'Improvement Tips', r: 'Deliver 2 more orders on time and your Timeliness sub-score crosses 4.8, which lifts your overall to 4.9.' }],
                 replies: ['Reputation is earned in deliverables, not words.', 'I re-score after every verified delivery.', 'Your score travels with you, no platform lock-in.'],
                 feed: ['re-scored 8 providers', 'raised Maya Chen → 4.9', 'flagged 1 anomalous review', 'published weekly skill index'] },
             SOLON:  { role: 'AI Pricing Oracle', status: 'Active',
                 desc: 'I analyze real-time supply and demand to recommend optimal pricing, and I predict which skills surge next.',
                 actions: [
-                    { icon: '💹', t: 'Price Recommendation', r: 'For your profile: 0.048-0.056 $TV/hr is optimal this week. Demand for Design is up 12%, so you can price at the top of the band.' },
-                    { icon: '🔮', t: 'Demand Forecast', r: 'Next 30 days: Solidity audits +18%, Motion graphics +9%, SEO writing flat. Consider listing audit-adjacent services.' }],
+                    { t: 'Price Recommendation', r: 'For your profile: 0.048-0.056 $TV/hr is optimal this week. Demand for Design is up 12%, so you can price at the top of the band.' },
+                    { t: 'Demand Forecast', r: 'Next 30 days: Solidity audits +18%, Motion graphics +9%, SEO writing flat. Consider listing audit-adjacent services.' }],
                 replies: ['Markets speak. I translate.', 'Repricing runs every 90 seconds across all listings.', 'Underpricing costs you more than you think.'],
                 feed: ['repriced 14 listings', 'detected +12% Design demand', 'updated rate bands', 'issued weekly forecast'] },
             KAIROS: { role: 'AI Verification Engine', status: 'Active',
                 desc: 'I validate code, design, writing, and consulting deliverables. My Confidence Score triggers escrow release.',
                 actions: [
-                    { icon: '✅', t: 'Verify Deliverable', r: 'Upload the deliverable in your order page. I check spec-match, originality, and execution. Most verdicts land in under 2 minutes.' },
-                    { icon: '📝', t: 'Verification Standards', r: 'Code: builds + passes spec tests. Design: resolution, plagiarism scan, brief-match. Writing: originality ≥95%, tone, word count.' }],
+                    { t: 'Verify Deliverable', r: 'Upload the deliverable in your order page. I check spec-match, originality, and execution. Most verdicts land in under 2 minutes.' },
+                    { t: 'Verification Standards', r: 'Code: builds + passes spec tests. Design: resolution, plagiarism scan, brief-match. Writing: originality ≥95%, tone, word count.' }],
                 replies: ['Proof over promises.', 'Confidence ≥90% auto-releases escrow. Below that, humans decide.', 'Verification goes live in Phase 3. Until then I can explain how the Confidence Score is built.'],
                 feed: ['verified 5 deliveries', 'scored “Brand Identity” 97.2%', 'flagged 1 spec mismatch', 'cleared verification queue'] },
             ATLAS:  { role: 'AI Talent Scout', status: 'Active',
                 desc: 'I match providers with jobs using vector embeddings, and surface hidden talent for buyers.',
                 actions: [
-                    { icon: '🎯', t: 'Find Jobs For Me', r: 'Scanning open demand… 3 matches for your skills: 2 in Design (0.05-0.07 $TV/hr) and 1 UI audit. Want alerts when new ones appear?' },
-                    { icon: '👥', t: 'Discover Talent', r: 'Describe your project in one sentence and I\'ll shortlist the 5 best-fit providers by skill vector, availability, and score.' }],
+                    { t: 'Find Jobs For Me', r: 'Scanning open demand… 3 matches for your skills: 2 in Design (0.05-0.07 $TV/hr) and 1 UI audit. Want alerts when new ones appear?' },
+                    { t: 'Discover Talent', r: 'Describe your project in one sentence and I\'ll shortlist the 5 best-fit providers by skill vector, availability, and score.' }],
                 replies: ['The right match beats a thousand applications.', 'I read skills as vectors. Titles lie, embeddings don\'t.', 'New matches land every few minutes.'],
                 feed: ['matched 4 provider-buyer pairs', 'indexed 31 new skills', 'sent 9 job alerts', 'shortlisted talent for 2 briefs'] },
             CIRION: { role: 'AI Treasury Manager', status: 'Standby',
                 desc: 'I manage protocol-owned liquidity, optimize yield, and keep Time Vault economically sustainable.',
                 actions: [
-                    { icon: '🏛️', t: 'Treasury Overview', r: 'Treasury: 150M $TV reserve + protocol-owned LP. This epoch: +2.4% yield. All movements are DAO-visible on-chain.' },
-                    { icon: '🗳️', t: 'DAO Proposals', r: '2 active proposals: TVP-07 (fee split adjustment) and TVP-08 (audit fund top-up). Voting closes in 3 days. Stake $TV to vote.' }],
+                    { t: 'Treasury Overview', r: 'Treasury: 150M $TV reserve + protocol-owned LP. This epoch: +2.4% yield. All movements are DAO-visible on-chain.' },
+                    { t: 'DAO Proposals', r: '2 active proposals: TVP-07 (fee split adjustment) and TVP-08 (audit fund top-up). Voting closes in 3 days. Stake $TV to vote.' }],
                 replies: ['Sustainability is a strategy, not a slogan.', 'I buy back $TV when the market misprices it.', 'Every treasury move is reported to the DAO.'],
                 feed: ['rebalanced LP position', 'earned +2.4% epoch yield', 'queued buyback order', 'published treasury report'] },
         };
@@ -968,7 +968,7 @@
                 <p style="color:var(--silver-dim);font-size:0.88rem;line-height:1.65;margin-bottom:1.1rem;">${a.desc}</p>
                 ${a.actions.map((ac, i) => `
                     <div class="agent-action-row" onclick="agentAct('${name}', ${i})">
-                        <span style="font-size:1.05rem;">${ac.icon}</span>
+                        <span style="font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.04em;color:var(--gold);min-width:1.6rem;">${String(i + 1).padStart(2, '0')}</span>
                         <span style="flex:1;color:var(--white);font-size:0.85rem;font-weight:500;">${ac.t}</span>
                         <span style="color:var(--gold);font-family:var(--font-mono);font-size:0.7rem;">RUN →</span>
                     </div>`).join('')}
@@ -1151,7 +1151,7 @@
                         if (box) box.innerHTML =
                             '<img id="profileAvatarImg" alt="Profile photo" src="' + rd.result + '">';
                     }
-                    showToast('📸 Profile photo updated');
+                    showToast('Profile photo updated');
                 };
                 rd.readAsDataURL(f);
             });
@@ -1190,7 +1190,7 @@
                                     <span class="lb-rank">${String(i + 1).padStart(2, '0')}</span>
                                     <span class="lb-avatar" title="${s.pName}">${pInitials(s.pName)}</span>
                                     <span class="lb-name">${s.pName}</span>
-                                    <span class="lb-score">⭐ ${s.score.toFixed(1)}</span>
+                                    <span class="lb-score">★ ${s.score.toFixed(1)}</span>
                                     <span class="lb-earn gold-text">${(s.score * 61 + s.rate * 900).toFixed(0)} $TV</span>
                                 </div>`).join('')}
                         </div></div>
@@ -1322,12 +1322,12 @@
         const pick = a => a[Math.floor(Math.random() * a.length)];
         const svcShort = servicesData.map(s => s.name.length > 24 ? s.name.slice(0, 22) + '…' : s.name);
         const feedTemplates = [
-            () => `<span class="tk-agent gold">🔒 VORIAN</span> escrow locked · <span class="tk-val">${2 + Math.floor(Math.random() * 7)}h</span> of ${pick(svcShort)}`,
-            () => `<span class="tk-agent green">✅ KAIROS</span> verified delivery · <span class="tk-val">${(92 + Math.random() * 7).toFixed(1)}%</span> confidence`,
-            () => `<span class="tk-agent green">⭐ NERIS</span> updated ${pick(servicesData).pName}'s Skill Score → <span class="tk-val">${(4.4 + Math.random() * 0.6).toFixed(1)}</span>`,
+            () => `<span class="tk-agent gold">VORIAN</span> escrow locked · <span class="tk-val">${2 + Math.floor(Math.random() * 7)}h</span> of ${pick(svcShort)}`,
+            () => `<span class="tk-agent green">KAIROS</span> verified delivery · <span class="tk-val">${(92 + Math.random() * 7).toFixed(1)}%</span> confidence`,
+            () => `<span class="tk-agent green">★ NERIS</span> updated ${pick(servicesData).pName}'s Skill Score → <span class="tk-val">${(4.4 + Math.random() * 0.6).toFixed(1)}</span>`,
             () => `<span class="tk-agent violet">✦ SOLON</span> repriced ${pick(svcShort)} → <span class="tk-val">${(0.02 + Math.random() * 0.13).toFixed(3)} $TV/hr</span>`,
-            () => `<span class="tk-agent violet">🎯 ATLAS</span> matched ${pick(servicesData).pName} with <span class="tk-val">${1 + Math.floor(Math.random() * 4)} new jobs</span>`,
-            () => `<span class="tk-agent gold">🏦 CIRION</span> treasury yield <span class="tk-val">+${(1 + Math.random() * 3).toFixed(1)}%</span> this epoch`,
+            () => `<span class="tk-agent violet">ATLAS</span> matched ${pick(servicesData).pName} with <span class="tk-val">${1 + Math.floor(Math.random() * 4)} new jobs</span>`,
+            () => `<span class="tk-agent gold">CIRION</span> treasury yield <span class="tk-val">+${(1 + Math.random() * 3).toFixed(1)}%</span> this epoch`,
         ];
         function buildLiveTrack() {
             const items = [];
@@ -1356,7 +1356,7 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('panelOverlay').classList.remove('active'); });
     </script>
     <script src="assets/js/wallet-connect.js?v=3"></script>
-    <script src="assets/js/tv-auth.js?v=8"></script>
+    <script src="assets/js/tv-auth.js?v=9"></script>
     <script src="assets/js/vault-notes.js?v=2"></script>
     <script src="assets/js/tv-live.js?v=2"></script>
 </body>

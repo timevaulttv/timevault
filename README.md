@@ -1,61 +1,96 @@
-# ⏳ Time Vault ($TV)
+# Time Vault ($TV)
 
 **Every Hour, Sealed on Chain.** · [**timevault.tv**](https://timevault.tv)
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-D4AF37?labelColor=0A0512)
-![Status](https://img.shields.io/badge/status-pre--launch-8B5CF6?labelColor=0A0512)
-![Launch](https://img.shields.io/badge/launch-letscash.fun-C026D3?labelColor=0A0512)
+![Token](https://img.shields.io/badge/%24TV-live%20on%20letscash.fun-34D399?labelColor=0A0512)
 ![Stack](https://img.shields.io/badge/stack-vanilla%20HTML%2FCSS%2FJS-FAFAFA?labelColor=0A0512)
-![Wallets](https://img.shields.io/badge/wallets-all%20EVM%20(EIP--6963)-34D399?labelColor=0A0512)
-![PRs](https://img.shields.io/badge/PRs-welcome-F0DA9B?labelColor=0A0512)
+![Wallets](https://img.shields.io/badge/wallets-all%20EVM%20(EIP--6963)-8B5CF6?labelColor=0A0512)
 
-Time Vault is an AI-powered **tokenized proof-of-service marketplace** concept built for
-Robinhood Chain, launching on letscash.fun (www.letscash.fun). Freelance hours become tradable NFTs, buyer funds
-lock in smart-contract escrow, and **7 specialized AI agents** handle pricing, verification,
-matching, reputation, and disputes.
+Time Vault is an AI-powered tokenized proof-of-service marketplace. Freelance
+hours become tradable Service NFTs, buyer funds lock in escrow before work
+begins, and seven AI agents handle pricing, verification, matching, reputation,
+and disputes.
 
 ![Time Vault](assets/og.png)
 
-## Highlights
+## The token
 
-- 🎬 **Cinematic landing**: brand intro, TCG-style agent cards with 3D tilt + holo glare, purple meteor sky
-- 🛰️ **Vault Overview**: live protocol command center with an agent constellation map, streaming activity feed, counting stats
-- 🛒 **Service marketplace**: 12 providers with photos, KAIROS-verified badges, live escrow/repricing simulation
-- 🤖 **7 AI agents**: each with a portrait, personality, working action panel, and chat (typing indicators included)
-- 📟 **Vault Notes**: a draggable terminal notepad on every page, per-wallet storage, `/ai` discussion built in
-- 👛 **Universal EVM wallet connect**: EIP-6963 discovery picks up MetaMask, Rabby, OKX, Coinbase, Trust, and friends
-- 📜 **Full whitepaper**: SVG technical flow diagrams, tokenomics donut, printable to PDF
+```
+0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc
+```
+
+[View on the explorer](https://www.letscash.fun/token/0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc)
+· 100% of supply into the liquidity pool · 0% held by the creator · liquidity
+locked · 3% trading tax.
+
+That is the only address. Every figure on the site is read from the chain at page
+load rather than typed into the HTML, so it can be checked against the explorer
+at any time. [timevault.tv/proof](https://timevault.tv/proof) lays out each claim
+next to the thing that proves it.
+
+## What is built, and what is not
+
+The token is live. The protocol around it is not, and the site says so in the
+same breath rather than in a footnote.
+
+**Working today**
+
+- Seven agents answering on a real model, through a backend that keeps the API
+  key server-side. Ask them anything; the replies are generated, not scripted.
+- Live chain figures across the landing page, the app and the proof page: market
+  cap, holders, 24h volume, recent trades, and a price chart, all from the
+  letscash.fun public API.
+- The full interface: browse, mint, orders, disputes, agent console, profile.
+
+**Not built yet**
+
+- The escrow contract. No user funds move anywhere in this project.
+- Service NFT minting. The mint form builds a live card preview and stops there.
+- Settlement, dispute resolution, and verification contracts.
+
+The marketplace is a demonstration of the interface. Skill Scores and order
+history in the app are demo data and are labelled as such.
 
 ## Pages
 
-| Page | File | Description |
-|------|------|-------------|
-| **Landing** | `index.html` | Cinematic intro, TCG-style agent cards, live marketplace, purple meteor background |
-| **App** | `app.html` | dApp shell: Vault Overview (live agent constellation), Browse, Mint Service NFT, My Orders, Dispute Center, Agent Console, My Profile |
-| **Whitepaper** | `whitepaper.html` | Full whitepaper with SVG technical flow diagrams, tokenomics, and roadmap (printable to PDF) |
+| Page | File | What it is |
+|------|------|------------|
+| Landing | `index.html` | Brand intro, agent cards, cursor-reactive particle field, live token figures |
+| App | `app.html` | Vault Overview, Browse, Mint, My Orders, Dispute Center, Agent Console, My Profile |
+| Whitepaper | `whitepaper.html` | Protocol architecture, Service NFT lifecycle, tokenomics, roadmap |
+| Proof | `proof.html` | Every claim next to what verifies it, including what is not built |
+| Not found | `404.html` | Branded 404, served by nginx for any wrong address |
 
-## The 7 AI Agents
+The live site serves these without the `.html`: `/app`, `/whitepaper`, `/proof`.
+
+## The seven agents
 
 | Agent | Role |
 |-------|------|
-| 💬 **LYRA** | Concierge & onboarding |
-| 🛡️ **VORIAN** | Escrow arbiter & dispute resolution |
-| ⭐ **NERIS** | Reputation engine (Skill Score) |
-| ✦ **SOLON** | Pricing oracle |
-| 🔍 **KAIROS** | Delivery verification (Confidence Score) |
-| 🎯 **ATLAS** | Talent scout & matching |
-| 🏦 **CIRION** | Treasury manager |
+| LYRA | Concierge and onboarding |
+| VORIAN | Escrow arbiter and dispute resolution |
+| NERIS | Reputation engine (Skill Score) |
+| SOLON | Pricing oracle |
+| KAIROS | Delivery verification (Confidence Score) |
+| ATLAS | Talent scout and matching |
+| CIRION | Treasury manager |
+
+All seven answer live. `server/agents.py` holds their personas and the facts they
+are allowed to state; an agent that invents tokenomics is worse than no agent, so
+the prompt pins them to what is on the site.
 
 ## Run locally
 
-Any static server works:
+Any static server works. There is no build step.
 
 ```bash
 npx http-server . -p 8080
-# open http://localhost:8080
 ```
 
-No build step. Everything is vanilla HTML/CSS/JS (Three.js and Google Fonts from CDN).
+Everything is vanilla HTML, CSS and JS. Three.js and Google Fonts load from CDN.
+The agent console and the live figures need the backend, so locally they fail
+gracefully rather than showing anything invented.
 
 ## Project structure
 
@@ -63,33 +98,53 @@ No build step. Everything is vanilla HTML/CSS/JS (Three.js and Google Fonts from
 ├── index.html            # Landing page
 ├── app.html              # dApp interface
 ├── whitepaper.html       # Whitepaper
+├── proof.html            # What is verifiable, and what is not built
+├── 404.html              # Branded not-found page
 ├── assets/
 │   ├── logo.png          # Emblem (web-optimized)
 │   ├── logo-name.png     # Wordmark
 │   ├── favicon.png       # Square favicon
 │   ├── og.png            # Social share image (1200x630)
-│   ├── agents/           # 7 agent portraits (web-optimized)
+│   ├── agents/           # Seven agent portraits (web-optimized)
 │   ├── video/            # Compressed brand animations (H.264)
-│   └── js/               # agent-menu, vault-notes, wallet-connect, tv-auth
-├── marketing/            # Social banner templates + render scripts
-├── deploy/               # nginx vhost + deployment guide
-├── server/               # LYRA agent backend (Python, stdlib HTTP)
+│   └── js/               # agent-menu, vault-notes, wallet-connect, tv-auth, tv-live
+├── server/               # Agent backend (Python, stdlib HTTP) + systemd unit
+├── deploy/               # nginx vhost, deploy runbook, vhost patches, smoke test
+├── marketing/            # Social banner templates, render and video scripts
 └── source/
     ├── brand/            # Original brand masters (uncompressed)
     └── agents/           # Original agent art masters
 ```
 
-## Status
+## Deploying
 
-**In active development toward launch on letscash.fun.** The frontend platform is complete.
-marketplace data currently runs client-side while the on-chain layer is built out. Next
-milestones, with the full roadmap in the [whitepaper](whitepaper.html):
+`deploy/DEPLOY.md` is the runbook. Two things in it are worth knowing before you
+touch a live server:
 
-1. **Smart contracts**: $TV (ERC-20), Service NFT (ERC-721), Escrow Vault to testnet, then audit
-2. **Backend API**: persistent marketplace, orders, and disputes (Node/Express + MongoDB)
-3. **$TV launch** on letscash.fun · Robinhood Chain integration as the network becomes publicly available
+- `deploy.sh` is first-install only. On a running server it overwrites the vhost
+  and deletes the `listen 443 ssl` block certbot owns, taking HTTPS down while
+  Cloudflare keeps serving cached pages, so the outage is easy to miss. Use the
+  `patch-*.sh` scripts instead; they edit in place, test, and roll back.
+- `bash deploy/smoke.sh` checks the live site end to end afterwards, including
+  asking an agent a real question, and exits non-zero if anything is wrong.
 
-> **Disclaimer:** nothing here is financial advice. Always DYOR before participating in any token sale.
+## Roadmap
+
+The full version is in the [whitepaper](whitepaper.html). In short:
+
+1. **Smart contracts**: Service NFT (ERC-721) and Escrow Vault to testnet, then audit
+2. **Backend**: persistent marketplace, orders, and disputes
+3. **Robinhood Chain** integration as the network becomes publicly available
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Security issues go through the private
+channel described in [SECURITY.md](SECURITY.md), not a public issue.
 
 ---
+
+**Nothing here is financial advice.** $TV is a token with a live market and real
+downside. Read [the proof page](https://timevault.tv/proof), check the contract
+yourself, and decide for yourself.
+
 © 2026 Time Vault. Every Hour, Sealed on Chain.

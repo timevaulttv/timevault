@@ -530,7 +530,8 @@
         .agent-panel-desc { color: var(--silver-dim); line-height: 1.7; font-size: 0.9rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(212,175,55,0.1); margin-bottom: 0.3rem; }
         .agent-action-card { display: flex; gap: 0.9rem; align-items: center; padding: 0.9rem 1rem; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; background: var(--bg-surface); cursor: pointer; transition: all 0.3s; }
         .agent-action-card:hover { border-color: var(--gold-line); background: rgba(139,92,246,0.07); box-shadow: inset 2px 0 0 var(--gold); }
-        .action-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(139,92,246,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0; }
+        .action-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(139,92,246,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--gold); }
         .action-info h4 { color: var(--white); font-size: 0.88rem; font-weight: 600; margin-bottom: 0.15rem; }
         .action-info p { color: var(--silver-subtle); font-size: 0.75rem; line-height: 1.45; }
         .agent-chat-area { margin-top: 0.6rem; min-height: 110px; max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; padding: 0.9rem; background: rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid rgba(212,175,55,0.08); }
@@ -974,7 +975,7 @@
             </div>
             <div class="live-ticker" aria-live="polite">
                 <span class="lt-badge"><span class="lt-dot"></span>LIVE</span>
-                <div class="lt-viewport" data-tv-live-trades><div class="lt-item"><span class="hl-gold">🔒 VORIAN</span> escrow engine online, monitoring all active service contracts</div></div>
+                <div class="lt-viewport" data-tv-live-trades><div class="lt-item"><span class="hl-gold">VORIAN</span> escrow engine online, monitoring all active service contracts</div></div>
             </div>
             <input type="text" class="market-search" id="marketSearch" placeholder="⌕ Search services, skills, providers…">
             <div class="category-filters" id="categoryFilters">
@@ -1021,7 +1022,7 @@
                 <a href="https://github.com/timevaulttv/timevault" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on GitHub" title="Time Vault source code on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
             </span>
             <div>
-                <a href="#" onclick="event.preventDefault();showToast('💬 Discord opens soon, LYRA will greet you first');">Discord</a><a href="#" onclick="event.preventDefault();showToast('📨 Telegram opens soon');">Telegram</a><a href="/proof">Proof</a><a href="/whitepaper" id="footerWhitepaper">Whitepaper</a>
+                <a href="#" onclick="event.preventDefault();showToast('Discord opens soon, LYRA will greet you first');">Discord</a><a href="#" onclick="event.preventDefault();showToast('Telegram opens soon');">Telegram</a><a href="/proof">Proof</a><a href="/whitepaper" id="footerWhitepaper">Whitepaper</a>
             </div>
         </div>
     </footer>
@@ -1041,7 +1042,7 @@
                 <button id="aiChatSend">Send</button>
             </div>
         </div>
-        <button class="ai-chat-button" id="aiChatToggle">💬</button>
+        <button class="ai-chat-button" id="aiChatToggle" aria-label="Chat with LYRA"><svg viewBox="0 0 16 16" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9.2a2.4 2.4 0 01-2.4 2.4H6.1L2.6 14V4.4A2.4 2.4 0 015 2h6.6A2.4 2.4 0 0114 4.4z"/></svg></button>
     </div>
 
     <!-- AGENT PANEL MODAL -->
@@ -1153,7 +1154,7 @@
             try{
                 const res=await window.tvConnectWallet();
                 walletAddress=res.address;walletConnected=true;setWalletUI();
-                showToast('✅ Connected via '+res.walletName);
+                showToast('Connected via '+res.walletName);
                 window.tvOnAccountsChanged(acc=>{if(!acc.length){walletConnected=false;walletAddress='';}else{walletAddress=acc[0];walletConnected=true;}setWalletUI();});
             }catch(err){
                 if(err&&(err.message==='CANCELLED'||err.message==='NO_WALLET'))return;
@@ -1175,7 +1176,7 @@
         // ============================================
         // LAUNCH APP
         // ============================================
-        function launchApp(){showToast('🚀 Launching Time Vault App…');setTimeout(()=>{window.location.href='/app';},400);}
+        function launchApp(){showToast('Launching Time Vault App…');setTimeout(()=>{window.location.href='/app';},400);}
         document.getElementById('launchAppBtn').addEventListener('click',e=>{e.preventDefault();launchApp();});
         document.getElementById('ctaLaunch').addEventListener('click',e=>{e.preventDefault();launchApp();});
 
@@ -1191,15 +1192,15 @@
             const brain=[
                 {k:['hello','hi','hey','gm'],r:'Hi there! Welcome to Time Vault. I\'m Lyra, your AI concierge. Ask me anything, or tap a suggestion below.'},
                 {k:['price','$tv','token','chart'],r:'✦ SOLON reports: $TV is at 0.042 USD with demand for verified freelancers trending up this quarter. Check the live price inside the app!'},
-                {k:['escrow','dispute','refund','scam','safe'],r:'🛡️ That\'s VORIAN\'s domain: buyer funds lock in an audited smart contract and only release when KAIROS verifies delivery. Disputes get a binding AI verdict in minutes, and you can appeal to the DAO.'},
-                {k:['score','reputation','rating','review'],r:'⭐ NERIS computes your Skill Score from verified deliverables using NLP and computer vision. It\'s tamper-proof, portable, and re-scored after every delivery.'},
-                {k:['job','work','hire','find','talent','freelance'],r:'🎯 ATLAS matches skills as vectors, not keywords. Tell me what you need, or open the app and let ATLAS shortlist the 5 best-fit providers.'},
-                {k:['verify','proof','deliver','quality'],r:'🔍 KAIROS validates every deliverable (code, design, writing) and outputs a Confidence Score. ≥90% releases escrow instantly.'},
-                {k:['dao','treasury','stake','govern','yield'],r:'🏦 CIRION manages protocol-owned liquidity and reports every move to the DAO. Stake $TV to vote and earn platform fees.'},
-                {k:['mint','nft','sell','service','create'],r:'🎨 To mint a Service NFT: open the app → Mint Service NFT → describe your hours, set a rate (SOLON will suggest the optimal band), and list it. Takes 2 minutes!'},
+                {k:['escrow','dispute','refund','scam','safe'],r:'That\'s VORIAN\'s domain: buyer funds lock in an audited smart contract and only release when KAIROS verifies delivery. Disputes get a binding AI verdict in minutes, and you can appeal to the DAO.'},
+                {k:['score','reputation','rating','review'],r:'★ NERIS computes your Skill Score from verified deliverables using NLP and computer vision. It\'s tamper-proof, portable, and re-scored after every delivery.'},
+                {k:['job','work','hire','find','talent','freelance'],r:'ATLAS matches skills as vectors, not keywords. Tell me what you need, or open the app and let ATLAS shortlist the 5 best-fit providers.'},
+                {k:['verify','proof','deliver','quality'],r:'KAIROS validates every deliverable (code, design, writing) and outputs a Confidence Score. ≥90% releases escrow instantly.'},
+                {k:['dao','treasury','stake','govern','yield'],r:'CIRION manages protocol-owned liquidity and reports every move to the DAO. Stake $TV to vote and earn platform fees.'},
+                {k:['mint','nft','sell','service','create'],r:'To mint a Service NFT: open the app → Mint Service NFT → describe your hours, set a rate (SOLON will suggest the optimal band), and list it. Takes 2 minutes!'},
                 {k:['agents','agent','who'],r:'We are 7: me (concierge), VORIAN (escrow), NERIS (reputation), SOLON (pricing), KAIROS (verification), ATLAS (talent scout), and CIRION (treasury). Each of us owns one layer of the protocol.'},
-                {k:['whitepaper','docs','learn','how'],r:'📜 The full whitepaper, with lifecycle diagrams and tokenomics, is one click away in the nav. Short version: mint your hours, escrow locks the funds, AI verifies, settlement is instant.'},
-                {k:['launch','app','start','begin'],r:'🚀 Hit "Launch App" in the nav! You\'ll land on the Vault Overview and watch the agent constellation work in real time.'}
+                {k:['whitepaper','docs','learn','how'],r:'The full whitepaper, with lifecycle diagrams and tokenomics, is one click away in the nav. Short version: mint your hours, escrow locks the funds, AI verifies, settlement is instant.'},
+                {k:['launch','app','start','begin'],r:'Hit "Launch App" in the nav! You\'ll land on the Vault Overview and watch the agent constellation work in real time.'}
             ];
             const q=input.toLowerCase();
             for(const b of brain){if(b.k.some(k=>q.includes(k)))return b.r;}
@@ -1221,7 +1222,7 @@
         function addLyraChips(){
             if(document.querySelector('.ai-chips'))return;
             const row=document.createElement('div');row.className='ai-chips';
-            [['🎨','How do I mint a Service NFT?'],['🛡️','Is escrow safe?'],['💰','What is $TV price?'],['🎯','Find me work']].forEach(([ic,q])=>{
+            [['','How do I mint a Service NFT?'],['','Is escrow safe?'],['','What is $TV price?'],['','Find me work']].forEach(([ic,q])=>{
                 const b=document.createElement('button');b.className='ai-chip';b.textContent=ic+' '+q;
                 b.addEventListener('click',()=>sendMessage(q));
                 row.appendChild(b);
@@ -1276,7 +1277,7 @@
                     <div class="sc-tags">${s.tags.map(t=>`<span class="sc-tag">${t}</span>`).join('')}</div>
                     <div class="rate"><span id="svc-rate-${i}">${s.rate.toFixed(3)}</span> <small>$TV/hr</small><span class="sc-solon">✦ SOLON optimal</span></div>
                     <div class="footer-row">
-                        <span class="skill-score">⭐ <span id="svc-score-${i}">${s.score.toFixed(1)}</span></span>
+                        <span class="skill-score">★ <span id="svc-score-${i}">${s.score.toFixed(1)}</span></span>
                         <span class="hours"><span id="svc-hours-${i}">${s.hours}</span> hours left</span>
                     </div>
                 </div>`).join('')
@@ -1297,7 +1298,7 @@
                     const take=Math.floor(Math.random()*3)+1;s.hours-=take;
                     const el=document.getElementById('svc-hours-'+i);if(el)el.textContent=s.hours;
                     flashCard(i);
-                    pushTicker(`<span class="hl-gold">🔒 VORIAN</span> escrow locked · ${take}h of “${s.name}” by ${s.providerName}`);
+                    pushTicker(`<span class="hl-gold">VORIAN</span> escrow locked · ${take}h of “${s.name}” by ${s.providerName}`);
                     
                 }
             }else if(r<0.54){
@@ -1307,12 +1308,12 @@
             }else if(r<0.70){
                 s.score=Math.min(5,Math.max(4.2,s.score+(Math.random()-0.45)*0.1));
                 const el=document.getElementById('svc-score-'+i);if(el)el.textContent=s.score.toFixed(1);
-                pushTicker(`<span class="hl-green">⭐ NERIS</span> updated ${s.providerName}'s Skill Score → ${s.score.toFixed(1)}`);
+                pushTicker(`<span class="hl-green">★ NERIS</span> updated ${s.providerName}'s Skill Score → ${s.score.toFixed(1)}`);
             }else if(r<0.85){
-                pushTicker(`<span class="hl-green">✅ KAIROS</span> verified delivery · “${s.name}” · confidence ${(92+Math.random()*7).toFixed(1)}%`);
+                pushTicker(`<span class="hl-green">KAIROS</span> verified delivery · “${s.name}” · confidence ${(92+Math.random()*7).toFixed(1)}%`);
             }else{
                 if(Math.random()<0.4){}
-                pushTicker(`<span class="hl-violet">🎯 ATLAS</span> matched ${s.providerName} with a new buyer`);
+                pushTicker(`<span class="hl-violet">ATLAS</span> matched ${s.providerName} with a new buyer`);
             }
         }
         setInterval(liveTick,2600);setTimeout(liveTick,900);
@@ -1325,20 +1326,20 @@
                 <p style="color:var(--silver-dim);line-height:1.7;margin-bottom:0.5rem;">${s.desc}</p>
                 <div class="service-info-grid">
                     <div class="service-info-cell"><div class="lbl">Provider</div><div class="val">${s.provider}</div></div>
-                    <div class="service-info-cell"><div class="lbl">Skill Score · NERIS AI</div><div class="val" style="color:var(--green);">⭐ ${s.score} / 5.0</div></div>
+                    <div class="service-info-cell"><div class="lbl">Skill Score · NERIS AI</div><div class="val" style="color:var(--green);">★ ${s.score} / 5.0</div></div>
                     <div class="service-info-cell"><div class="lbl">Rate · SOLON optimal</div><div class="val" style="color:var(--gold);">${s.rate.toFixed(3)} $TV/hr</div></div>
                     <div class="service-info-cell"><div class="lbl">Available</div><div class="val">${s.hours} hours</div></div>
                 </div>
                 <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="purchaseService(${index})">Purchase · Escrow ${s.rate.toFixed(3)} $TV/hr</button>
-                <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:0.6rem;" onclick="showToast('💬 Provider chat coming soon, LYRA can help you meanwhile!')">Chat with Provider</button>
+                <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:0.6rem;" onclick="showToast('Provider chat coming soon, LYRA can help you meanwhile!')">Chat with Provider</button>
             `;
             document.getElementById('serviceModal').classList.add('active');
         }
         function purchaseService(index){
-            if(!walletConnected){showToast('⚠️ Connect wallet to purchase services');return;}
+            if(!walletConnected){showToast('Connect wallet to purchase services');return;}
             const s=services[index];
-            if(s&&s.hours>1){s.hours-=1;const el=document.getElementById('svc-hours-'+index);if(el)el.textContent=s.hours;flashCard(index);pushTicker(`<span class="hl-gold">🔒 VORIAN</span> escrow locked · 1h of “${s.name}” (your order)`);}
-            showToast('✅ Purchased! Funds escrowed. KAIROS AI will verify delivery.');
+            if(s&&s.hours>1){s.hours-=1;const el=document.getElementById('svc-hours-'+index);if(el)el.textContent=s.hours;flashCard(index);pushTicker(`<span class="hl-gold">VORIAN</span> escrow locked · 1h of “${s.name}” (your order)`);}
+            showToast('Preview only. Escrow ships in Phase 2, nothing was charged.');
             document.getElementById('serviceModal').classList.remove('active');
         }
         document.getElementById('closeServiceModal').addEventListener('click',()=>document.getElementById('serviceModal').classList.remove('active'));
@@ -1354,7 +1355,7 @@
         });
         renderMarketplace();
     </script>
-    <script src="assets/js/agent-menu.js?v=2"></script>
+    <script src="assets/js/agent-menu.js?v=3"></script>
     <script>
     (() => {
         if (!('IntersectionObserver' in window)) return;
@@ -1401,7 +1402,7 @@
     })();
     </script>
     <script src="assets/js/wallet-connect.js?v=3"></script>
-    <script src="assets/js/tv-auth.js?v=8"></script>
+    <script src="assets/js/tv-auth.js?v=9"></script>
     <script src="assets/js/vault-notes.js?v=2"></script>
     <script src="assets/js/tv-live.js?v=2"></script>
 <script>
@@ -1583,9 +1584,9 @@ if(a<0.01)discard;gl_FragColor=vec4(mix(uA,uB,vMix),a);}`;
 <script>
 // ============================================
 // $TV CONTRACT ADDRESS
-// Paste the address into TV_CONTRACT when the token ships. Until then the box
-// says so plainly rather than showing a placeholder that could be mistaken for
-// a real address.
+// The token is live. This is the only address; it is the same one on /proof,
+// in SECURITY.md and in the agents' system prompt, and the explorer link goes
+// to the verified source. If it ever changes, change it in all four places.
 // ============================================
 (() => {
     const TV_CONTRACT = '0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc';

@@ -10,10 +10,10 @@ const agentData = {
         status: 'Online',
         description: 'Your 24/7 holographic assistant. I help new users create Service NFTs, find providers, and navigate Time Vault.',
         actions: [
-            { icon: '🎨', title: 'Create Service NFT', desc: 'I\'ll guide you through minting your first Service NFT step by step.' },
-            { icon: '🔍', title: 'Find a Provider', desc: 'Tell me what you need, I\'ll match you with the best providers.' },
-            { icon: '💰', title: 'Check $TV Price', desc: 'Real-time token price and market insights from SOLON AI.' },
-            { icon: '📚', title: 'Learn Time Vault', desc: 'Quick tutorial on how the platform works.' }
+            { title: 'Create Service NFT', desc: 'I\'ll guide you through minting your first Service NFT step by step.' },
+            { title: 'Find a Provider', desc: 'Tell me what you need, I\'ll match you with the best providers.' },
+            { title: 'Check $TV Price', desc: 'Real-time token price and market insights from SOLON AI.' },
+            { title: 'Learn Time Vault', desc: 'Quick tutorial on how the platform works.' }
         ]
     },
     VORIAN: {
@@ -22,9 +22,9 @@ const agentData = {
         status: 'Standby',
         description: 'I analyze work proofs objectively and resolve disputes in seconds. My decisions are binding and transparent.',
         actions: [
-            { icon: '⚖️', title: 'Open Dispute', desc: 'Submit a dispute with evidence. I\'ll analyze and decide within minutes.' },
-            { icon: '📋', title: 'View Active Cases', desc: 'Check status of your ongoing disputes and resolutions.' },
-            { icon: '📜', title: 'Case History', desc: 'Review past arbitration decisions and precedents.' }
+            { title: 'Open Dispute', desc: 'Submit a dispute with evidence. I\'ll analyze and decide within minutes.' },
+            { title: 'View Active Cases', desc: 'Check status of your ongoing disputes and resolutions.' },
+            { title: 'Case History', desc: 'Review past arbitration decisions and precedents.' }
         ]
     },
     NERIS: {
@@ -33,9 +33,9 @@ const agentData = {
         status: 'Active',
         description: 'I evaluate deliverable quality using NLP and computer vision. Your Skill Score is tamper-proof and portable.',
         actions: [
-            { icon: '⭐', title: 'Check Your Skill Score', desc: 'See your current reputation rating and breakdown by category.' },
-            { icon: '📈', title: 'Improvement Tips', desc: 'Personalized recommendations to boost your reputation score.' },
-            { icon: '🔬', title: 'Analyze Work Quality', desc: 'Submit a deliverable for AI-powered quality assessment.' }
+            { title: 'Check Your Skill Score', desc: 'See your current reputation rating and breakdown by category.' },
+            { title: 'Improvement Tips', desc: 'Personalized recommendations to boost your reputation score.' },
+            { title: 'Analyze Work Quality', desc: 'Submit a deliverable for AI-powered quality assessment.' }
         ]
     },
     SOLON: {
@@ -44,9 +44,9 @@ const agentData = {
         status: 'Active',
         description: 'I analyze real-time market data to recommend optimal pricing. I also predict future demand trends.',
         actions: [
-            { icon: '💹', title: 'Price Recommendation', desc: 'Get the optimal rate for your service based on market data.' },
-            { icon: '🔮', title: 'Demand Forecast', desc: 'See which skills will be in high demand next month.' },
-            { icon: '📉', title: 'Market Overview', desc: 'Full market analysis: volume, trends, top categories.' }
+            { title: 'Price Recommendation', desc: 'Get the optimal rate for your service based on market data.' },
+            { title: 'Demand Forecast', desc: 'See which skills will be in high demand next month.' },
+            { title: 'Market Overview', desc: 'Full market analysis: volume, trends, top categories.' }
         ]
     },
     KAIROS: {
@@ -55,8 +55,8 @@ const agentData = {
         status: 'Coming Soon',
         description: 'I validate code, design, writing, and consulting work. My Confidence Score triggers escrow release.',
         actions: [
-            { icon: '✅', title: 'Verify Deliverable', desc: 'Submit work for instant AI verification and scoring.' },
-            { icon: '📝', title: 'Verification Standards', desc: 'Learn what criteria I use to evaluate different types of work.' }
+            { title: 'Verify Deliverable', desc: 'Submit work for instant AI verification and scoring.' },
+            { title: 'Verification Standards', desc: 'Learn what criteria I use to evaluate different types of work.' }
         ]
     },
     ATLAS: {
@@ -65,9 +65,9 @@ const agentData = {
         status: 'Active',
         description: 'I proactively match providers with jobs and help buyers discover hidden talent using AI embeddings.',
         actions: [
-            { icon: '🎯', title: 'Find Jobs For Me', desc: 'I\'ll scan all open listings and match with your skills.' },
-            { icon: '👥', title: 'Discover Talent', desc: 'Describe your project, I\'ll find the perfect provider.' },
-            { icon: '🔔', title: 'Set Job Alerts', desc: 'Get notified when matching jobs appear on the platform.' }
+            { title: 'Find Jobs For Me', desc: 'I\'ll scan all open listings and match with your skills.' },
+            { title: 'Discover Talent', desc: 'Describe your project, I\'ll find the perfect provider.' },
+            { title: 'Set Job Alerts', desc: 'Get notified when matching jobs appear on the platform.' }
         ]
     },
     CIRION: {
@@ -76,9 +76,9 @@ const agentData = {
         status: 'Coming Soon',
         description: 'I manage protocol-owned liquidity, optimize yield, and ensure the long-term sustainability of Time Vault.',
         actions: [
-            { icon: '🏛️', title: 'Treasury Overview', desc: 'View current treasury assets, allocation, and performance.' },
-            { icon: '📊', title: 'Yield Report', desc: 'See yield farming returns and optimization strategies.' },
-            { icon: '🗳️', title: 'DAO Proposals', desc: 'View active governance proposals and vote with $TV.' }
+            { title: 'Treasury Overview', desc: 'View current treasury assets, allocation, and performance.' },
+            { title: 'Yield Report', desc: 'See yield farming returns and optimization strategies.' },
+            { title: 'DAO Proposals', desc: 'View active governance proposals and vote with $TV.' }
         ]
     }
 };
@@ -106,9 +106,9 @@ function openAgentPanel(agentName) {
         </div>
         <div class="agent-panel-body">
             <p class="agent-panel-desc">${agent.description}</p>
-            ${agent.actions.map(a => `
+            ${agent.actions.map((a, i) => `
                 <div class="agent-action-card" onclick="handleAgentAction('${agentName}', '${a.title.replace(/'/g, "\\'")}')">
-                    <div class="action-icon">${a.icon}</div>
+                    <div class="action-icon">${String(i + 1).padStart(2, '0')}</div>
                     <div class="action-info">
                         <h4>${a.title}</h4>
                         <p>${a.desc}</p>

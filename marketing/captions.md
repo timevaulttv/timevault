@@ -1,4 +1,4 @@
-# Time Vault ($TV) Pre-launch posts
+# Time Vault ($TV) posts
 
 Three-part countdown. Each caption pairs with its banner in `banners/` (`post-1.jpg`,
 `post-2.jpg`, `post-3.jpg`), announced by one of the AI agents. Post a few days apart,

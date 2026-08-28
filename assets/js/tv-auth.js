@@ -163,7 +163,7 @@
             </div>
 
             <div class="tva-foot">By continuing you agree to the Terms &amp; Privacy Policy.</div>
-            <div class="tva-preview">🔒 Encrypted &amp; secured · we never see your email password</div>
+            <div class="tva-preview">Encrypted &amp; secured · we never see your email password</div>
           </div></div>
         </div>`);
         document.body.appendChild(overlay);
@@ -177,7 +177,7 @@
             close(); // close this modal first so the wallet picker isn't hidden behind it
             try {
                 const r = await window.tvConnectWallet();
-                toast('✅ Connected via ' + r.walletName);
+                toast('Connected via ' + r.walletName);
                 currentUser = { email: r.address.slice(0, 6) + '...' + r.address.slice(-4), wallet: true };
                 document.querySelectorAll('.wallet-btn, #walletBtn').forEach(b => {
                     const txt = b.querySelector('#walletText') || b.querySelector('[id$="walletText"]');
@@ -218,18 +218,18 @@
                         overlay.querySelector('#tvaPassInp').focus();
                         return;
                     }
-                    if (data.session) { close(); onAuthed(data.user); toast('🎉 Welcome to Time Vault'); }
+                    if (data.session) { close(); onAuthed(data.user); toast('Welcome to Time Vault'); }
                     else {
                         overlay.querySelector('#tvaSentTo').textContent = email;
                         overlay.querySelector('#tvaForm').style.display = 'none';
                         overlay.querySelector('#tvaCode').style.display = 'block';
                         overlay.querySelector('.tva-code').focus();
-                        toast('📧 Verification code sent to your email');
+                        toast('Verification code sent to your email');
                     }
                 } else {
                     const { data, error } = await client.auth.signInWithPassword({ email, password });
                     if (error) throw error;
-                    close(); onAuthed(data.user); toast('✅ Signed in');
+                    close(); onAuthed(data.user); toast('Signed in');
                 }
             } catch (e) {
                 const msg = (e && e.message) || 'Something went wrong';
@@ -255,7 +255,7 @@
                 const client = await supa();
                 const { data, error } = await client.auth.verifyOtp({ email: pendingEmail, token, type: 'signup' });
                 if (error) throw error;
-                close(); onAuthed(data.user); toast('🎉 Time Vault account created');
+                close(); onAuthed(data.user); toast('Time Vault account created');
             } catch (e) {
                 showErr((e && e.message) || 'That code is invalid or has expired. Check the newest email.');
             } finally { vb.disabled = false; vb.textContent = orig; }
