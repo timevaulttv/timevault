@@ -1,0 +1,50 @@
+[
+ {
+  "name": "desk",
+  "t": 7.32
+ },
+ {
+  "name": "signup",
+  "t": 14.12
+ },
+ {
+  "name": "listing",
+  "t": 23.19
+ },
+ {
+  "name": "rate",
+  "t": 40.05
+ },
+ {
+  "name": "card",
+  "t": 54.61
+ },
+ {
+  "name": "market",
+  "t": 71.06
+ },
+ {
+  "name": "orders",
+  "t": 94.16
+ },
+ {
+  "name": "disputes",
+  "t": 127.73
+ },
+ {
+  "name": "agents",
+  "t": 134.72
+ },
+ {
+  "name": "profile",
+  "t": 142.1
+ },
+ {
+  "name": "close",
+  "t": 148.77
+ },
+ {
+  "name": "end",
+  "t": 152.98
+ }
+]
