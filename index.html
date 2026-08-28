@@ -156,7 +156,56 @@
         .btn-primary:hover { box-shadow: 0 0 60px rgba(192,38,211,0.4), inset 0 0 0 1px rgba(212,175,55,0.55); transform: translateY(-2px); }
         .btn-ghost { background: transparent; color: var(--silver); border: 1px solid rgba(255,255,255,0.1); }
         .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+        .sr-only { position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
         .hero-metrics { display: flex; gap: 3rem; margin-top: 5rem; padding-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        /* ============================================
+           $TV CONTRACT ADDRESS
+           A vault plate: hairline gold, monospace, one job. Reads as an
+           instrument panel rather than a button, and holds an honest waiting
+           state until the contract actually exists.
+           ============================================ */
+        .ca-box { display: inline-flex; align-items: center; gap: 0.9rem;
+            margin-top: 2.25rem; padding: 0.7rem 0.75rem 0.7rem 1.1rem;
+            border: 1px solid var(--gold-line); border-radius: 10px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.05), rgba(212,175,55,0.015));
+            max-width: 100%; transition: border-color 0.35s var(--ease-out),
+            box-shadow 0.35s var(--ease-out); }
+        .ca-box:hover { border-color: rgba(212,175,55,0.5);
+            box-shadow: 0 0 26px rgba(212,175,55,0.12); }
+        .ca-text { min-width: 0; }
+        .ca-label { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+            display: block; margin-bottom: 0.3rem; }
+        .ca-value { font-family: var(--font-mono); font-size: 0.86rem; color: var(--white);
+            letter-spacing: 0.01em; display: block; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis; }
+        .ca-box.pending .ca-value { color: var(--silver-dim); }
+
+        .ca-copy { flex-shrink: 0; display: inline-flex; align-items: center;
+            justify-content: center; gap: 0.4rem; min-width: 44px; height: 40px;
+            padding: 0 0.85rem; border-radius: 8px; cursor: pointer;
+            font-family: var(--font-mono); font-size: 0.66rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--gold); background: rgba(212,175,55,0.09);
+            border: 1px solid rgba(212,175,55,0.22);
+            transition: background 0.28s var(--ease-out), color 0.28s var(--ease-out),
+            border-color 0.28s var(--ease-out); }
+        .ca-copy svg { width: 13px; height: 13px; fill: currentColor; display: block; }
+        .ca-copy:hover:not(:disabled), .ca-copy:focus-visible:not(:disabled) {
+            background: rgba(212,175,55,0.18); border-color: rgba(212,175,55,0.5); }
+        .ca-copy.done { color: var(--green); border-color: rgba(52,211,153,0.45);
+            background: rgba(52,211,153,0.12); }
+        .ca-copy:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        @media (max-width: 640px) {
+            .ca-box { width: 100%; gap: 0.6rem; padding-left: 0.9rem; }
+            .ca-value { font-size: 0.78rem; }
+            .ca-copy { padding: 0 0.6rem; font-size: 0; gap: 0; }
+            .ca-copy svg { width: 15px; height: 15px; }
+        }
+
         .metric-val { font-family: var(--font-mono); font-size: 2rem; font-weight: 600; color: var(--white); }
         .metric-lbl { font-size: 0.75rem; color: var(--silver-subtle); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.3rem; }
 
@@ -635,6 +684,18 @@
                     <a href="#marketplace" class="btn btn-primary">Browse Services <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
                     <a href="/whitepaper" class="btn btn-ghost" id="heroWhitepaper">Whitepaper</a>
                 </div>
+                <div class="ca-box pending" id="caBox">
+                    <span class="ca-text">
+                        <span class="ca-label">$TV Contract Address</span>
+                        <span class="ca-value" id="caValue">Not deployed yet</span>
+                    </span>
+                    <button class="ca-copy" id="caCopy" type="button"
+                            aria-label="Copy the $TV contract address" disabled>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+                        <span id="caCopyLabel">Copy</span>
+                    </button>
+                </div>
+                <span class="sr-only" role="status" aria-live="polite" id="caStatus"></span>
                 <div class="hero-metrics">
                     <div><div class="metric-val">$12.4M</div><div class="metric-lbl">Total Value Locked</div></div>
                     <div><div class="metric-val">8,420</div><div class="metric-lbl">Service NFTs</div></div>
@@ -1474,6 +1535,82 @@ if(a<0.01)discard;gl_FragColor=vec4(mix(uA,uB,vMix),a);}`;
     addEventListener('pagehide', () => { geo.dispose(); mat.dispose(); renderer.dispose(); });
 
     window.__tvHeroField = { U, cfg: CFG, pts, get shown(){ return shown; }, get scroll(){ return sC; } };
+})();
+</script>
+<script>
+// ============================================
+// $TV CONTRACT ADDRESS
+// Paste the address into TV_CONTRACT when the token ships. Until then the box
+// says so plainly rather than showing a placeholder that could be mistaken for
+// a real address.
+// ============================================
+(() => {
+    const TV_CONTRACT = '';          // <-- the only line to edit at launch
+    const EXPLORER    = '';          // optional: block explorer URL for the token
+
+    const box   = document.getElementById('caBox');
+    const value = document.getElementById('caValue');
+    const btn   = document.getElementById('caCopy');
+    const label = document.getElementById('caCopyLabel');
+    const status= document.getElementById('caStatus');
+    if (!box || !value || !btn) return;
+
+    const addr = TV_CONTRACT.trim();
+    if (!addr) {
+        value.textContent = 'Publishing here at launch';
+        value.title = 'The $TV contract has not been deployed yet';
+        return;                       // stays disabled, nothing to copy
+    }
+
+    // Middle-truncate for display; the full value is what gets copied.
+    const short = a => a.length > 22 ? a.slice(0, 10) + '…' + a.slice(-8) : a;
+    const render = () => {
+        value.textContent = innerWidth < 640 ? short(addr) : addr;
+        value.title = addr;
+    };
+    render();
+    addEventListener('resize', render, { passive: true });
+
+    box.classList.remove('pending');
+    btn.disabled = false;
+
+    if (EXPLORER) {
+        value.style.cursor = 'pointer';
+        value.addEventListener('click', () => open(EXPLORER, '_blank', 'noopener'));
+    }
+
+    async function copy() {
+        let ok = false;
+        try {
+            await navigator.clipboard.writeText(addr);
+            ok = true;
+        } catch (e) {
+            // clipboard API needs a secure context; fall back for the rest
+            const ta = document.createElement('textarea');
+            ta.value = addr;
+            ta.setAttribute('readonly', '');
+            ta.style.cssText = 'position:fixed;top:-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+            document.body.removeChild(ta);
+        }
+
+        if (ok) {
+            btn.classList.add('done');
+            if (label) label.textContent = 'Copied';
+            if (status) status.textContent = 'Contract address copied to clipboard';
+            setTimeout(() => {
+                btn.classList.remove('done');
+                if (label) label.textContent = 'Copy';
+                if (status) status.textContent = '';
+            }, 1800);
+        } else if (typeof showToast === 'function') {
+            showToast('Could not copy. Select the address and copy manually.');
+        }
+    }
+
+    btn.addEventListener('click', copy);
 })();
 </script>
 </body>
