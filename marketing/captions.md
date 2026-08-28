@@ -98,3 +98,59 @@ posts, so it stops the scroll by not looking like an ad.
 - No hashtags. They read as reach-chasing and this account is going for credibility.
 - Alt text: "A printed service record on manila paper. Headline: The client can't go quiet.
   A gold rubber stamp reads SEALED ON CHAIN."
+
+---
+
+## WALKTHROUGH VIDEO · How the money actually reaches you
+**Video:** `demo/timevault-walkthrough.mp4` (2:37, 1080p) · script: `walkthrough-script.md`
+
+A dashboard walkthrough, not a trailer. Signup, listing your hours, setting your
+rate, then the escrow states all the way to released. Post it as the pinned
+explainer.
+
+### Hook version (165 chars, fits the 280 limit)
+
+> You list your hours. The buyer's money locks before you start. You get paid when the work checks out.
+>
+> Two and a half minutes, no skipping.
+>
+> $TV live on letscash.fun
+
+### Short version (262 chars, fits the 280 limit)
+
+> Two and a half minutes, start to finish.
+>
+> You list your hours. The buyer's money locks in escrow before you start. Delivery gets checked. The funds release on their own.
+>
+> No invoice. No chasing. No polite follow-up three weeks later.
+>
+> $TV is live on letscash.fun
+
+### Long version (843 chars, needs X Premium)
+
+> Every freelancer knows the silence. You deliver, and the client stops replying.
+>
+> So we built the thing that removes it. This is the whole flow, end to end, nothing skipped.
+>
+> You open an account with a wallet or an email. You list the hours you want to sell and set your own rate, and your card builds as you type. That is exactly what a buyer sees.
+>
+> Then the part that matters. Look at the stamp on every listing: escrow locked. The buyer's money goes in before the work starts. Not after you deliver. Before.
+>
+> From there you just watch it move. Escrowed, in progress, verified, released. The funds land without you asking anyone for them.
+>
+> Straight with you: minting and escrow ship in Phase 2. What you are watching is the interface running ahead of the contracts. The token is live today.
+>
+> $TV on letscash.fun, Robinhood Chain.
+> timevault.tv
+
+**Posting notes**
+- Lead with the video. The first frame is the dashboard with live figures, which
+  is the strongest still in the whole take.
+- No hashtags. This account is building credibility, and hashtag walls read as
+  reach-chasing.
+- The Phase 2 line stays in. Someone will check the contracts, and being the one
+  who said it first is worth more than the extra click.
+- Alt text: "Screen recording of the Time Vault dashboard: opening an account,
+  listing freelance hours as a Service NFT, setting an hourly rate, and tracking
+  an order from escrowed through verified to released."
+- Reply to your own post with the contract address so it sits under the video.
