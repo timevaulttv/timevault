@@ -779,7 +779,7 @@
             <div class="agents-grid" id="agentsGrid">
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">LYRA</span><span class="tcg-stat">ONLINE 24/7</span></div>
+                        <div class="tcg-head"><span class="tcg-name">LYRA</span><span class="tcg-stat">CHAT LIVE</span></div>
                         <div class="tcg-art"><img src="assets/agents/lyra.jpg" alt="LYRA, holographic AI concierge"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">AI Concierge & Onboarding</div>
@@ -790,7 +790,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">VORIAN</span><span class="tcg-stat">VERDICT 3.2s</span></div>
+                        <div class="tcg-head"><span class="tcg-name">VORIAN</span><span class="tcg-stat">PHASE 2</span></div>
                         <div class="tcg-art"><img src="assets/agents/vorian.jpg" alt="VORIAN"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Escrow Arbiter</div>
@@ -801,7 +801,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">NERIS</span><span class="tcg-stat">ACC 99.1%</span></div>
+                        <div class="tcg-head"><span class="tcg-name">NERIS</span><span class="tcg-stat">PHASE 1</span></div>
                         <div class="tcg-art"><img src="assets/agents/neris.jpg" alt="NERIS"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Reputation Engine</div>
@@ -812,7 +812,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">SOLON</span><span class="tcg-stat">Δ ±0.4%</span></div>
+                        <div class="tcg-head"><span class="tcg-name">SOLON</span><span class="tcg-stat">PHASE 2</span></div>
                         <div class="tcg-art"><img src="assets/agents/solon.jpg" alt="SOLON"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Pricing Oracle</div>
@@ -823,7 +823,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">KAIROS</span><span class="tcg-stat">SCORE 0-100</span></div>
+                        <div class="tcg-head"><span class="tcg-name">KAIROS</span><span class="tcg-stat">PHASE 3</span></div>
                         <div class="tcg-art"><img src="assets/agents/kairos.jpg" alt="KAIROS"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Verification Engine</div>
@@ -834,7 +834,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">ATLAS</span><span class="tcg-stat">MATCH 1.2M</span></div>
+                        <div class="tcg-head"><span class="tcg-name">ATLAS</span><span class="tcg-stat">PHASE 2</span></div>
                         <div class="tcg-art"><img src="assets/agents/atlas.jpg" alt="ATLAS"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Talent Scout</div>
@@ -845,7 +845,7 @@
                 </div>
                 <div class="tcg">
                     <div class="tcg-inner">
-                        <div class="tcg-head"><span class="tcg-name">CIRION</span><span class="tcg-stat">TVL $12.4M</span></div>
+                        <div class="tcg-head"><span class="tcg-name">CIRION</span><span class="tcg-stat">PHASE 4</span></div>
                         <div class="tcg-art"><img src="assets/agents/cirion.jpg" alt="CIRION"><div class="tcg-glare"></div></div>
                         <div class="tcg-body">
                             <div class="tcg-role">Treasury Manager</div>
@@ -1282,7 +1282,8 @@
                 </div>`).join('')
                 :'<p style="grid-column:1/-1;text-align:center;color:var(--silver-subtle);padding:3rem 0;">No services match. ATLAS is scouting new providers for this search.</p>';
         }
-        // LIVE DATA ENGINE: simulated on-chain activity
+        // Marketplace card animations. These drive the demonstration listings only.
+        // Real figures and the trade feed come from assets/js/tv-live.js.
         // The LIVE feed shows real trades now, so demo events no longer write to it.
         function pushTicker(){}
         // The counters are fed by assets/js/tv-live.js from the chain now.
