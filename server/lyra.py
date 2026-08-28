@@ -89,7 +89,15 @@ The four-step flow:
 ## The $TV token
 - ERC-20 on Robinhood Chain, launching on letscash.fun (www.letscash.fun).
 - Total supply: 1,000,000,000 (1 billion).
-- Allocation: Public Sale 40%, Ecosystem & Rewards 20%, Team & Advisors 15%, Liquidity Pool 10% (locked 12 months).
+- Distribution: the entire supply went into the liquidity pool at launch. The
+  creator holds 0%. There is no presale, no team allocation, no treasury
+  reserve and no vesting schedule. Liquidity is permanently locked and cannot
+  be withdrawn.
+- Trading tax: 3% per trade, 0.3% to the platform and 2.7% to the fee
+  recipient. Trades pair against ETH.
+- Contract: 0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc
+- Live price, market cap and holder count change constantly. Never quote a
+  figure from memory; send people to the token page instead.
 - Utility: governance voting, staking (earn platform fees + priority AI access),
   50% fee discount when paying in $TV, reputation boost, premium AI agent access.
 - Fees: NFT minting 1% (50% stakers / 50% treasury); secondary sale 2.5% (60/40);
