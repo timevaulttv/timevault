@@ -21,14 +21,18 @@ vhost**, so other projects on the server are never touched.
 
 ## What gets deployed
 
-`timevault-site.tar.gz` (built from the repo root):
-`index.html · app.html · whitepaper.html · robots.txt · sitemap.xml · assets/`, around 5.3 MB total.
+`timevault-site.tar.gz` (built from the repo root): every `*.html` page,
+`robots.txt`, `sitemap.xml` and `assets/`, around 5.3 MB total.
 
 Rebuild it any time with:
 
 ```bash
-mkdir -p ../timevault-deploy && cp index.html app.html whitepaper.html robots.txt sitemap.xml ../timevault-deploy/ && cp -r assets ../timevault-deploy/ && tar -czf timevault-site.tar.gz -C ../timevault-deploy .
+rm -rf ../timevault-deploy && mkdir -p ../timevault-deploy && cp *.html robots.txt sitemap.xml ../timevault-deploy/ && cp -r assets ../timevault-deploy/ && tar -czf timevault-site.tar.gz -C ../timevault-deploy .
 ```
+
+The glob is deliberate. An earlier version of this line named each page, and
+`proof.html` was added to the site without being added here, so a rebuild would
+have shipped without it. Add a page, and it goes out on its own.
 
 ## 1. DNS (Namecheap dashboard)
 
@@ -65,9 +69,18 @@ Certbot auto-renews; verify with `sudo certbot renew --dry-run`.
 ## 4. Post-launch checklist
 
 - [ ] `https://timevault.tv` loads, padlock valid, `www.` redirects to apex
-- [ ] `/app.html` and `/whitepaper.html` load; no console errors
+- [ ] `/app`, `/whitepaper` and `/proof` load; no console errors
+- [ ] Any `/name.html` returns a 301 to `/name`
+- [ ] A wrong URL returns 404 and shows the Time Vault page, not nginx's
+- [ ] `/api/lyra/health` returns 200 with `"upstream": "ok"`
 - [ ] Share preview: paste the URL into X/Discord, gold banner card appears
 - [ ] `https://timevault.tv/sitemap.xml` reachable → submit in Google Search Console
+
+Or all of it at once, from anywhere:
+
+```bash
+bash deploy/smoke.sh
+```
 
 ## If the VPS runs cPanel instead of plain nginx
 
@@ -86,7 +99,57 @@ For a content update, rebuild the tar and extract it. nginx needs no reload for 
 
 ```bash
 scp timevault-site.tar.gz <user>@<vps>:/tmp/
-ssh <user>@<vps> 'tar -xzf /tmp/timevault-site.tar.gz -C /var/www/timevault \n  && chown -R www-data:www-data /var/www/timevault \n  && rm /tmp/timevault-site.tar.gz'
+```
+
+```bash
+ssh <user>@<vps> 'tar -xzf /tmp/timevault-site.tar.gz -C /var/www/timevault && chown -R www-data:www-data /var/www/timevault && rm /tmp/timevault-site.tar.gz'
 ```
 
 Then hard-refresh, and purge the Cloudflare cache if a change does not appear.
+
+## Changing the live vhost
+
+`deploy.sh` installs the vhost wholesale and is first-install only. To change the
+config on a running server, use a patch script: each one edits the file in place,
+backs it up first, runs `nginx -t`, and rolls back on its own if nginx objects.
+Both are safe to run twice.
+
+```bash
+scp deploy/patch-clean-urls.sh deploy/patch-404-and-headers.sh <user>@<vps>:/tmp/
+```
+
+| Script | What it adds |
+|--------|--------------|
+| `patch-clean-urls.sh` | `/app` serves `app.html`; `/name.html` redirects to `/name` |
+| `patch-404-and-headers.sh` | branded 404, HSTS, Permissions-Policy, js/css caching |
+
+Run `patch-clean-urls.sh` first: the 404 patch anchors to the `try_files` line
+that one installs.
+
+## The agent backend
+
+Seven agent personas served by `server/agents.py` on `127.0.0.1:8787`, proxied at
+`/api/lyra`. The API key lives in `/etc/timevault-lyra.env` (root only, mode 600)
+and never enters the repo.
+
+```bash
+scp server/agents.py <user>@<vps>:/tmp/
+```
+
+```bash
+ssh <user>@<vps> 'install -m644 /tmp/agents.py /opt/timevault-lyra/agents.py && systemctl restart timevault-lyra && sleep 2 && curl -s localhost:8787/health'
+```
+
+`/health` answers with `"upstream"`, which is the field that matters:
+
+| `upstream` | HTTP | Meaning |
+|------------|------|---------|
+| `ok` | 200 | the API accepted the key; agents can answer |
+| `unauthorized` | 503 | the key is present but revoked or mistyped |
+| `unreachable` | 503 | the API could not be reached |
+| `unconfigured` | 503 | no key installed |
+
+It is a live probe, cached five minutes, not a check that the variable is set.
+The agents were down for weeks behind a health check that only looked for a
+non-empty string, so this endpoint now answers the question that was actually
+being asked.

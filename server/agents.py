@@ -59,6 +59,68 @@ def configured() -> bool:
     return bool(os.environ.get("ANTHROPIC_API_KEY"))
 
 
+# -------------------------------------------------------------- upstream ----
+# configured() only proves a string is present in the environment. A revoked or
+# mistyped key passes that check, so the service can report itself healthy while
+# every chat returns 502. That is exactly how the agents stayed dead here
+# without anyone noticing. /health therefore asks the API whether the key is
+# actually accepted, and remembers the answer.
+
+UPSTREAM_TTL = 300              # re-probe at most once every five minutes
+_upstream = {"state": "unknown", "detail": "", "checked": 0.0}
+_upstream_lock = threading.Lock()
+
+# Anthropic SDK exception names that mean the key itself was rejected, as
+# opposed to the request being throttled or the network being down.
+_KEY_REJECTED = ("AuthenticationError", "PermissionDeniedError")
+
+
+def note_upstream(state: str, detail: str = ""):
+    """Record what the API last told us.
+
+    Chat failures report here too, so a key that dies mid-shift shows up in
+    /health straight away instead of waiting for the next scheduled probe.
+    """
+    with _upstream_lock:
+        _upstream.update(state=state, detail=detail, checked=time.time())
+
+
+def upstream_state() -> dict:
+    """Return the cached verdict, re-probing when it has gone stale."""
+    if not configured():
+        note_upstream("unconfigured", "ANTHROPIC_API_KEY is not set")
+        return dict(_upstream)
+
+    with _upstream_lock:
+        snapshot = dict(_upstream)
+    if snapshot["state"] != "unknown" and time.time() - snapshot["checked"] < UPSTREAM_TTL:
+        return snapshot
+
+    # One token, no thinking: costs a fraction of a cent and answers the only
+    # question being asked, which is whether the credentials work at all.
+    try:
+        anthropic_client().messages.create(
+            model=MODEL,
+            max_tokens=1,
+            thinking={"type": "disabled"},
+            messages=[{"role": "user", "content": "ping"}],
+        )
+        note_upstream("ok")
+    except Exception as exc:
+        name = type(exc).__name__
+        if name in _KEY_REJECTED:
+            note_upstream("unauthorized", name)
+        elif name == "RateLimitError":
+            # Throttled means the credentials were accepted first.
+            note_upstream("ok", "rate limited, credentials valid")
+        else:
+            note_upstream("unreachable", name)
+        print(f"[agents] upstream probe: {name}: {exc}", flush=True)
+
+    with _upstream_lock:
+        return dict(_upstream)
+
+
 # ------------------------------------------------------------- knowledge ----
 # Drawn from the whitepaper and the live site. Agents must not invent
 # numbers. An agent that makes up tokenomics is worse than no agent.
@@ -358,14 +420,24 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path.rstrip("/") == "/health":
-            self._json(200, {
-                "ok": True,
+            up = upstream_state()
+            healthy = up["state"] == "ok"
+            body = {
+                "ok": healthy,
                 "service": "timevault-agents",
                 "model": MODEL,
                 "agents": sorted(AGENTS),
                 "api_key_configured": configured(),
+                "upstream": up["state"],
                 "supabase_configured": bool(SUPABASE_URL and SUPABASE_KEY),
-            })
+            }
+            if up["detail"]:
+                body["upstream_detail"] = up["detail"]
+            if up["checked"]:
+                body["upstream_checked_ago_s"] = round(time.time() - up["checked"])
+            # 503 when the agents cannot answer, so an uptime check pages
+            # instead of reading a cheerful 200 off a broken service.
+            self._json(200 if healthy else 503, body)
         else:
             self._json(404, {"error": "not found"})
 
@@ -433,10 +505,13 @@ class Handler(BaseHTTPRequestHandler):
                 messages=msgs,
             )
         except Exception as exc:  # never leak the key or a stack trace
-            print(f"[agents] upstream error ({agent}): {type(exc).__name__}: {exc}",
-                  flush=True)
+            name = type(exc).__name__
+            note_upstream("unauthorized" if name in _KEY_REJECTED else "unreachable", name)
+            print(f"[agents] upstream error ({agent}): {name}: {exc}", flush=True)
             self._json(502, {"error": f"{agent} is unavailable right now. Please try again."})
             return
+
+        note_upstream("ok")   # a real reply is the strongest health signal there is
 
         if resp.stop_reason == "refusal":
             self._json(200, {"reply": "I can't help with that one. Ask me about "
@@ -455,6 +530,16 @@ def main():
     if not configured():
         print("[agents] WARNING: ANTHROPIC_API_KEY is not set, serving health "
               "checks only; chat will return 503 until it is installed.", flush=True)
+    else:
+        # Probe off the main thread so a slow or unreachable API cannot hold up
+        # the listener, but do it at boot so the verdict is in the journal from
+        # the first second rather than after somebody thinks to ask.
+        def announce():
+            up = upstream_state()
+            print(f"[agents] upstream {up['state']}"
+                  + (f" ({up['detail']})" if up["detail"] else ""), flush=True)
+        threading.Thread(target=announce, daemon=True).start()
+
     srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"[agents] listening on 127.0.0.1:{PORT} model={MODEL} "
           f"agents={','.join(sorted(AGENTS))}", flush=True)

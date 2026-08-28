@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Vault ($TV) | Page Not Found</title>
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#060309">
+    <meta name="description" content="That page is not part of Time Vault. Head back to the vault, the app, the whitepaper or the proof page.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Everything here is inline and every path is absolute: this page is
+           served from whatever URL the visitor got wrong, including nested
+           ones, so relative asset paths would resolve against the wrong root. */
+        :root {
+            --bg: #060309; --silver: #B9ABCE; --silver-dim: #8C7CA6;
+            --silver-subtle: #665A7E; --white: #FAFAFA;
+            --gold: #D4AF37; --gold-bright: #F0DA9B;
+            --font-display: 'Cinzel', serif; --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg); color: var(--silver);
+            font-family: var(--font-body); line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        /* A single soft pool of light behind the mark, so the page is not a
+           flat black rectangle on a slow connection. */
+        body::before {
+            content: ''; position: fixed; inset: 0; pointer-events: none;
+            background: radial-gradient(ellipse 70% 55% at 50% 34%,
+                rgba(139,92,246,0.16), transparent 70%);
+        }
+        main {
+            position: relative; flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 3rem 1.5rem 4rem;
+        }
+        .mark { height: 84px; width: auto; opacity: 0.92; margin-bottom: 2.2rem; }
+        .code {
+            font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.32em;
+            text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+        }
+        h1 {
+            font-family: var(--font-display); font-weight: 600;
+            font-size: clamp(1.9rem, 6vw, 3rem); color: var(--white);
+            letter-spacing: -0.01em; line-height: 1.2;
+        }
+        .lede {
+            max-width: 46ch; margin: 1.2rem auto 0;
+            color: var(--silver-dim); font-size: 0.98rem;
+        }
+        .asked {
+            margin-top: 1.6rem; font-family: var(--font-mono); font-size: 0.74rem;
+            color: var(--silver-subtle); word-break: break-all; max-width: 90vw;
+        }
+        .asked b { color: var(--silver); font-weight: 500; }
+        .links {
+            display: flex; flex-wrap: wrap; gap: 0.7rem;
+            justify-content: center; margin-top: 2.6rem;
+        }
+        .links a {
+            display: inline-flex; align-items: center; min-height: 44px;
+            padding: 0 1.35rem; border-radius: 2px; text-decoration: none;
+            font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+            font-family: var(--font-mono);
+            border: 1px solid rgba(212,175,55,0.28); color: var(--silver);
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .links a:hover { border-color: var(--gold); color: var(--gold-bright); }
+        .links a.primary {
+            background: linear-gradient(135deg, var(--gold), #B8942C);
+            border-color: transparent; color: #1A1206; font-weight: 500;
+        }
+        .links a.primary:hover { color: #1A1206; filter: brightness(1.08); }
+        footer {
+            position: relative; text-align: center; padding: 1.8rem 1.5rem 2.4rem;
+            font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--silver-subtle);
+        }
+        footer a { color: var(--silver-dim); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+        @media (max-width: 480px) {
+            .mark { height: 64px; margin-bottom: 1.8rem; }
+            .links { flex-direction: column; width: 100%; max-width: 300px; }
+            .links a { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <img class="mark" src="/assets/logo.png" alt="Time Vault">
+        <span class="code">Error 404</span>
+        <h1>Nothing is sealed here</h1>
+        <p class="lede">
+            This address is not part of Time Vault. The page may have been
+            renamed, or the link that brought you here may be wrong.
+        </p>
+        <p class="asked" id="asked"></p>
+
+        <nav class="links">
+            <a class="primary" href="/">Return to the vault</a>
+            <a href="/app">Open the app</a>
+            <a href="/proof">Proof</a>
+            <a href="/whitepaper">Whitepaper</a>
+        </nav>
+    </main>
+
+    <footer>
+        Every hour, sealed on chain &nbsp;&middot;&nbsp;
+        <a href="https://x.com/TimeVaultTV" rel="noopener">X</a> &nbsp;&middot;&nbsp;
+        <a href="https://github.com/timevaulttv/timevault" rel="noopener">GitHub</a>
+    </footer>
+
+    <script>
+        // Show what was actually requested, so a mistyped URL is obvious at a
+        // glance. textContent, never innerHTML: the path is attacker supplied.
+        (function () {
+            var el = document.getElementById('asked');
+            var path = location.pathname + location.search;
+            if (!el || path === '/') return;
+            if (path.length > 120) path = path.slice(0, 117) + '...';
+            el.appendChild(document.createTextNode('You asked for '));
+            var b = document.createElement('b');
+            b.textContent = path;
+            el.appendChild(b);
+        })();
+    </script>
+</body>
+</html>
