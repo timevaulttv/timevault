@@ -20,8 +20,12 @@
     const TOKEN_PAGE = 'https://www.letscash.fun/token/' + CA;
     const REFRESH_MS = 60000;
 
-    const nodes = document.querySelectorAll('[data-tv-live]');
-    if (!nodes.length) return;
+    const targets = () => document.querySelectorAll('[data-tv-live]');
+    if (!targets().length && !document.querySelector('[data-tv-live-trades],[data-tv-live-chart]')) return;
+
+    // Values are kept so a re-rendered section can be filled immediately
+    // rather than waiting for the next poll.
+    let latest = null;
 
     // ---- formatting -------------------------------------------------------
     const usd = n => {
@@ -82,13 +86,8 @@
             launched: tok.launchedAt ? ago(Number(tok.launchedAt)) + ' ago' : null,
         };
 
-        nodes.forEach(el => {
-            const val = v[el.getAttribute('data-tv-live')];
-            if (val == null) return;
-            el.textContent = val;
-            el.classList.add('tv-live-on');
-            if (!el.title) el.title = 'Live from the chain. Verify on the token page.';
-        });
+        latest = v;
+        paint();
 
         document.querySelectorAll('[data-tv-live-stamp]').forEach(el => {
             el.textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB',
@@ -97,11 +96,34 @@
         return ethUsd;
     }
 
+    function paint() {
+        if (!latest) return;
+        targets().forEach(el => {
+            const val = latest[el.getAttribute('data-tv-live')];
+            if (val == null) return;
+            el.textContent = val;
+            el.classList.add('tv-live-on');
+            if (!el.title) el.title = 'Live from the chain. Verify on the token page.';
+        });
+    }
+
+    // Repaint as soon as a section swaps its markup in, so figures never sit
+    // on "Loading" while the poll timer runs down.
+    if ('MutationObserver' in window) {
+        const host = document.getElementById('appContent') || document.body;
+        let queued = false;
+        new MutationObserver(() => {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(() => { queued = false; paint(); });
+        }).observe(host, { childList: true, subtree: true });
+    }
+
     // If the API is unreachable the page keeps whatever the markup already
     // says. A stale number is worse than an honest placeholder, so the
     // fallback text is deliberately non-numeric.
     function degrade() {
-        nodes.forEach(el => {
+        targets().forEach(el => {
             const fb = el.getAttribute('data-tv-live-fallback');
             if (fb) el.textContent = fb;
         });
