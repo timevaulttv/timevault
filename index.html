@@ -1225,7 +1225,7 @@
             grid.innerHTML=list.length?list.map(({s,i})=>`
                 <div class="service-card" id="svc-${i}" onclick="openServiceDetail(${i})">
                     <div class="sc-head">
-                        <span class="sc-avatar" style="--h:${s.hue};"><img src="https://i.pravatar.cc/80?img=${svcPhotos[s.providerName]||30}" alt="${s.providerName}" onerror="this.remove();this.parentElement.textContent='${svcInitials(s.providerName)}';"></span>
+                        <span class="sc-avatar" style="--h:${s.hue};" title="${s.providerName}">${svcInitials(s.providerName)}</span>
                         <div><span class="sc-pname">${s.providerName}${s.verified?'<span class="sc-verified" title="KAIROS verified">✓</span>':''}</span><span class="sc-addr">${s.provider}</span></div>
                     </div>
                     <div class="category">${s.category}</div>

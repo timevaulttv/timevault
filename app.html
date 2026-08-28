@@ -233,6 +233,12 @@
         .service-card .cat-eyebrow::before { content: ''; width: 14px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
         .service-card h4 { font-size: 1.05rem; color: var(--white); font-weight: 600; margin-bottom: 0.3rem; }
         .service-card .provider-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+        /* Leaderboard initials, sized to sit where the old avatar image did. */
+        .lb-avatar { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600;
+            color: var(--white); background: rgba(139,92,246,0.22);
+            border: 1px solid var(--gold-line); }
         .provider-avatar {
             width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; flex-shrink: 0;
@@ -629,18 +635,18 @@
         // MOCK DATA
         // ============================================
         const servicesData = [
-            { name: 'UI Design for Mobile App', cat: 'Design', pName: 'Maya Chen', photo: 'https://i.pravatar.cc/80?img=47', provider: '0x7B4F...C0C0', rate: 0.045, hours: 18, score: 4.9, tags: ['Figma', 'Mobile', 'Prototyping'], verified: true },
-            { name: 'Solidity Smart Contract Audit', cat: 'Development', pName: 'Arjun Patel', photo: 'https://i.pravatar.cc/80?img=12', provider: '0x4A2C...B794', rate: 0.128, hours: 12, score: 4.8, tags: ['Solidity', 'Security', 'EVM'], verified: true },
-            { name: 'SEO Content Writing', cat: 'Writing', pName: 'Sofia Reyes', photo: 'https://i.pravatar.cc/80?img=32', provider: '0xC0C0...7B4F', rate: 0.022, hours: 30, score: 4.7, tags: ['SEO', 'Blog', 'Copywriting'], verified: true },
-            { name: 'Video Editing - YouTube', cat: 'Video', pName: 'Dimas Prasetyo', photo: 'https://i.pravatar.cc/80?img=8', provider: '0x9B6F...3D25', rate: 0.089, hours: 8, score: 4.6, tags: ['Premiere', 'Color Grading', 'YouTube'], verified: false },
-            { name: 'Google Ads Campaign', cat: 'Marketing', pName: 'Lena Novak', photo: 'https://i.pravatar.cc/80?img=26', provider: '0xB794...4A2C', rate: 0.065, hours: 15, score: 4.9, tags: ['PPC', 'Analytics', 'Conversion'], verified: true },
-            { name: 'Tokenomics Consultation', cat: 'Consulting', pName: 'Kenji Watanabe', photo: 'https://i.pravatar.cc/80?img=60', provider: '0x3D25...9B6F', rate: 0.156, hours: 5, score: 5.0, tags: ['Web3', 'DeFi', 'Strategy'], verified: true },
-            { name: 'Logo & Brand Identity', cat: 'Design', pName: 'Amara Diallo', photo: 'https://i.pravatar.cc/80?img=38', provider: '0x1A2B...3C4D', rate: 0.058, hours: 22, score: 4.8, tags: ['Illustrator', 'Branding', 'Logo'], verified: true },
-            { name: 'React Frontend Development', cat: 'Development', pName: 'Viktor Sorin', photo: 'https://i.pravatar.cc/80?img=15', provider: '0x5E6F...7A8B', rate: 0.095, hours: 25, score: 4.7, tags: ['React', 'TypeScript', 'Next.js'], verified: true },
-            { name: 'Whitepaper Writing', cat: 'Writing', pName: 'Priya Sharma', photo: 'https://i.pravatar.cc/80?img=45', provider: '0x9C0D...1E2F', rate: 0.075, hours: 10, score: 4.9, tags: ['Web3', 'Whitepaper', 'Research'], verified: true },
-            { name: 'Social Media Strategy', cat: 'Marketing', pName: 'Nadia Osman', photo: 'https://i.pravatar.cc/80?img=24', provider: '0x3A4B...5C6D', rate: 0.042, hours: 20, score: 4.5, tags: ['Social Media', 'Strategy', 'Content'], verified: false },
-            { name: 'Smart Contract Dev', cat: 'Development', pName: 'Omar Haddad', photo: 'https://i.pravatar.cc/80?img=53', provider: '0x7E8F...9A0B', rate: 0.135, hours: 16, score: 4.9, tags: ['Solidity', 'Hardhat', 'DeFi'], verified: true },
-            { name: 'Motion Graphics', cat: 'Video', pName: 'Tomás Silva', photo: 'https://i.pravatar.cc/80?img=68', provider: '0x1C2D...3E4F', rate: 0.078, hours: 10, score: 4.6, tags: ['After Effects', 'Animation', '3D'], verified: false },
+            { name: 'UI Design for Mobile App', cat: 'Design', pName: 'Maya Chen', provider: '0x7B4F...C0C0', rate: 0.045, hours: 18, score: 4.9, tags: ['Figma', 'Mobile', 'Prototyping'], verified: true },
+            { name: 'Solidity Smart Contract Audit', cat: 'Development', pName: 'Arjun Patel', provider: '0x4A2C...B794', rate: 0.128, hours: 12, score: 4.8, tags: ['Solidity', 'Security', 'EVM'], verified: true },
+            { name: 'SEO Content Writing', cat: 'Writing', pName: 'Sofia Reyes', provider: '0xC0C0...7B4F', rate: 0.022, hours: 30, score: 4.7, tags: ['SEO', 'Blog', 'Copywriting'], verified: true },
+            { name: 'Video Editing - YouTube', cat: 'Video', pName: 'Dimas Prasetyo', provider: '0x9B6F...3D25', rate: 0.089, hours: 8, score: 4.6, tags: ['Premiere', 'Color Grading', 'YouTube'], verified: false },
+            { name: 'Google Ads Campaign', cat: 'Marketing', pName: 'Lena Novak', provider: '0xB794...4A2C', rate: 0.065, hours: 15, score: 4.9, tags: ['PPC', 'Analytics', 'Conversion'], verified: true },
+            { name: 'Tokenomics Consultation', cat: 'Consulting', pName: 'Kenji Watanabe', provider: '0x3D25...9B6F', rate: 0.156, hours: 5, score: 5.0, tags: ['Web3', 'DeFi', 'Strategy'], verified: true },
+            { name: 'Logo & Brand Identity', cat: 'Design', pName: 'Amara Diallo', provider: '0x1A2B...3C4D', rate: 0.058, hours: 22, score: 4.8, tags: ['Illustrator', 'Branding', 'Logo'], verified: true },
+            { name: 'React Frontend Development', cat: 'Development', pName: 'Viktor Sorin', provider: '0x5E6F...7A8B', rate: 0.095, hours: 25, score: 4.7, tags: ['React', 'TypeScript', 'Next.js'], verified: true },
+            { name: 'Whitepaper Writing', cat: 'Writing', pName: 'Priya Sharma', provider: '0x9C0D...1E2F', rate: 0.075, hours: 10, score: 4.9, tags: ['Web3', 'Whitepaper', 'Research'], verified: true },
+            { name: 'Social Media Strategy', cat: 'Marketing', pName: 'Nadia Osman', provider: '0x3A4B...5C6D', rate: 0.042, hours: 20, score: 4.5, tags: ['Social Media', 'Strategy', 'Content'], verified: false },
+            { name: 'Smart Contract Dev', cat: 'Development', pName: 'Omar Haddad', provider: '0x7E8F...9A0B', rate: 0.135, hours: 16, score: 4.9, tags: ['Solidity', 'Hardhat', 'DeFi'], verified: true },
+            { name: 'Motion Graphics', cat: 'Video', pName: 'Tomás Silva', provider: '0x1C2D...3E4F', rate: 0.078, hours: 10, score: 4.6, tags: ['After Effects', 'Animation', '3D'], verified: false },
         ];
         const pInitials = n => n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
@@ -687,7 +693,7 @@
                     <div class="cat-eyebrow">${s.cat}</div>
                     <h4>${s.name}</h4>
                     <div class="provider-row">
-                        <div class="provider-avatar"><img src="${s.photo}" alt="${s.pName}" onerror="this.remove();this.parentElement.textContent='${pInitials(s.pName)}';"></div>
+                        <div class="provider-avatar" title="${s.pName}">${pInitials(s.pName)}</div>
                         <div style="line-height:1.25;"><div class="provider-name">${s.pName} ${s.verified ? '<span class="verified-badge" style="display:inline;">✓ KAIROS</span>' : ''}</div>
                         <span style="font-family:var(--font-mono);font-size:0.62rem;color:var(--silver-subtle);">${s.provider}</span></div>
                     </div>
@@ -781,7 +787,7 @@
                 p.innerHTML = `
                     <div class="service-card" style="pointer-events:none;">
                         <div class="cat-eyebrow">${cat}</div><h4>${name}</h4>
-                        <div class="provider-row"><div class="provider-avatar"><img src="${profilePhoto()}" alt="You" onerror="this.remove();this.parentElement.textContent='YO';"></div><span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--silver-dim);">0xYour...Addr</span></div>
+                        <div class="provider-row"><div class="provider-avatar">${profilePhoto() ? `<img src="${profilePhoto()}" alt="You">` : 'YO'}</div><span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--silver-dim);">0xYour...Addr</span></div>
                         <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.5rem;">${tags.map(t => `<span style="font-family:var(--font-mono);font-size:0.6rem;padding:0.15rem 0.5rem;border-radius:100px;background:rgba(139,92,246,0.08);color:var(--silver-dim);">${t}</span>`).join('')}</div>
                         <div class="rate-row"><span class="rate gold-text">${parseFloat(rate).toFixed(3)}</span><small>$TV/hr</small></div>
                         <div class="footer-row"><span class="skill-score">⭐ NEW</span><span class="hours-left">${hours}h available</span></div>
@@ -1062,14 +1068,14 @@
         // ============================================
         // MY PROFILE
         // ============================================
-        const profilePhoto = () => localStorage.getItem('tvPhoto') || 'https://i.pravatar.cc/144?img=5';
+        const profilePhoto = () => localStorage.getItem('tvPhoto') || '';
         const profileName = () => localStorage.getItem('tvName') || 'Vault Provider';
         function renderProfile() {
             return `
                 <div class="gold-frame" style="margin-bottom:1.5rem;"><div class="gold-frame-inner">
                     <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
                         <div class="avatar-wrap">
-                            <div class="provider-avatar"><img id="profileAvatarImg" src="${profilePhoto()}" alt="Profile photo" onerror="this.remove();this.parentElement.textContent='YO';"></div>
+                            <div class="provider-avatar" id="profileAvatarBox">${profilePhoto() ? `<img id="profileAvatarImg" src="${profilePhoto()}" alt="Profile photo">` : 'YO'}</div>
                             <button class="avatar-edit-btn" id="avatarEditBtn" title="Change profile photo" aria-label="Change profile photo">
                                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h2.2L5.5 3.8h5L11.8 5.5H14v7.5H2z"/><circle cx="8" cy="9" r="2.3"/></svg>
                             </button>
@@ -1136,7 +1142,13 @@
                 rd.onload = () => {
                     try { localStorage.setItem('tvPhoto', rd.result); } catch (e) { showToast('Image too large to save, try a smaller one'); return; }
                     const im = document.getElementById('profileAvatarImg');
-                    if (im) im.src = rd.result;
+                    if (im) { im.src = rd.result; }
+                    else {
+                        // first upload: the box was showing initials, so build the image
+                        const box = document.getElementById('profileAvatarBox');
+                        if (box) box.innerHTML =
+                            '<img id="profileAvatarImg" alt="Profile photo" src="' + rd.result + '">';
+                    }
                     showToast('📸 Profile photo updated');
                 };
                 rd.readAsDataURL(f);
@@ -1174,7 +1186,7 @@
                             ${top5.map((s, i) => `
                                 <div class="lb-row">
                                     <span class="lb-rank">${String(i + 1).padStart(2, '0')}</span>
-                                    <img src="${s.photo}" alt="${s.pName}" onerror="this.style.display='none';">
+                                    <span class="lb-avatar" title="${s.pName}">${pInitials(s.pName)}</span>
                                     <span class="lb-name">${s.pName}</span>
                                     <span class="lb-score">⭐ ${s.score.toFixed(1)}</span>
                                     <span class="lb-earn gold-text">${(s.score * 61 + s.rate * 900).toFixed(0)} $TV</span>
