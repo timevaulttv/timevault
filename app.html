@@ -1042,7 +1042,9 @@
                 });
                 const data = await res.json().catch(() => ({}));
 
-                if (!res.ok) { settle(data.error || 'LYRA is unavailable right now.'); return; }
+                // Name the agent actually being spoken to; a fallback that always
+                // said LYRA was wrong six times out of seven.
+                if (!res.ok) { settle(data.error || (name + ' is unavailable right now.')); return; }
 
                 settle(data.reply);
                 history.push({ role: 'user', content: text }, { role: 'assistant', content: data.reply });
