@@ -18,7 +18,7 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 > let AI check the work so nobody has to take anyone's word for it. Seven agents run
 > the protocol. LYRA's the one who shows you around.
 >
-> Not open yet. Getting close. $TV launches on letscash.fun, on Robinhood Chain.
+> $TV is live on letscash.fun, on Robinhood Chain. The marketplace ships in Phase 2.
 
 ---
 
@@ -31,7 +31,7 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 > work's verified. If someone disputes it, it gets settled on-chain in seconds, and you
 > can take it to the DAO if you disagree. No account manager, no "let me loop in my team."
 >
-> $TV on letscash.fun, built on Robinhood Chain. Almost here.
+> $TV is live on letscash.fun, built on Robinhood Chain.
 
 ---
 
@@ -40,11 +40,14 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 
 > Numbers are my job, so here they are.
 >
-> $TV: one billion supply, 40% to public sale, no insider allocation nonsense. You stake
-> it for a cut of platform fees, pay with it for 50% off, and it's what unlocks the AI
-> agents. Governance too, if that's your thing.
+> $TV: one billion supply. All of it went into the liquidity pool. The creator holds
+> zero, has never sold, and you can check that yourself rather than take my word for it.
+> Three percent trading tax. Liquidity locked.
 >
-> Launching on letscash.fun. Robinhood Chain. The vault opens soon.
+> That is the whole allocation. There is no team bag, no presale, no vesting cliff
+> waiting to land on you.
+>
+> Live on letscash.fun. Robinhood Chain.
 
 ---
 
@@ -53,7 +56,8 @@ hashtag walls, no "Meet our AI agent" template. Copy-paste as-is or tweak the vo
 - Kept hashtags off on purpose. A stack of them is the fastest way to look automated.
   If you want reach, add one or two at most, and only ones people actually search.
 - Add letscash.fun's official X handle once you have it, and tag @TimeVaultTV where it fits.
-- Cadence: Post 1 (T-7), Post 2 (T-4), Post 3 (launch day).
+- Cadence: a few days apart, in order. These were written pre-launch and have
+  been corrected to post-launch wording.
 - Banners are JPG, 2400x1350, crisp for X, LinkedIn, Discord.
 
 ---
@@ -89,7 +93,7 @@ posts, so it stops the scroll by not looking like an ad.
 >
 > Seven AI agents run the protocol. This is what one of its records looks like.
 >
-> Not open yet. Close. $TV launches on letscash.fun, on Robinhood Chain.
+> $TV is live on letscash.fun, on Robinhood Chain. Escrow ships in Phase 2.
 >
 > timevault.tv
 
