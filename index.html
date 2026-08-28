@@ -463,6 +463,17 @@
         .lt-viewport { flex: 1; min-width: 0; }
         .lt-item { font-family: var(--font-mono); font-size: 0.7rem; color: var(--silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: ltIn 0.5s ease; }
         .lt-item .hl-gold { color: var(--gold); } .lt-item .hl-green { color: var(--green); } .lt-item .hl-violet { color: var(--violet); }
+        /* Real trades. Each row is a link to the transaction on the explorer. */
+        .lt-viewport[data-tv-live-trades] { display: flex; gap: 1.6rem; overflow-x: auto;
+            scrollbar-width: none; }
+        .lt-viewport[data-tv-live-trades]::-webkit-scrollbar { display: none; }
+        a.lt-item { text-decoration: none; display: inline-flex; align-items: center;
+            gap: 0.4rem; flex-shrink: 0; transition: color 0.25s; }
+        a.lt-item:hover { color: var(--white); }
+        .lt-side { font-weight: 600; letter-spacing: 0.08em; }
+        .lt-side.buy { color: var(--green); }
+        .lt-side.sell { color: var(--red); }
+        [data-tv-live] { transition: opacity 0.3s; }
         @keyframes ltIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         .sc-head { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.9rem; }
         .sc-avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; color: #fff; background: linear-gradient(135deg, hsl(var(--h), 60%, 48%), hsl(calc(var(--h) + 45), 60%, 30%)); border: 1px solid var(--gold-line); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
@@ -697,10 +708,10 @@
                 </div>
                 <span class="sr-only" role="status" aria-live="polite" id="caStatus"></span>
                 <div class="hero-metrics">
-                    <div><div class="metric-val">$12.4M</div><div class="metric-lbl">Total Value Locked</div></div>
-                    <div><div class="metric-val">8,420</div><div class="metric-lbl">Service NFTs</div></div>
+                    <div><div class="metric-val" data-tv-live="mcap" data-tv-live-fallback="n/a">Loading</div><div class="metric-lbl">$TV Market Cap</div></div>
+                    <div><div class="metric-val" data-tv-live="holders" data-tv-live-fallback="n/a">Loading</div><div class="metric-lbl">Token Holders</div></div>
                     <div><div class="metric-val">7 AI</div><div class="metric-lbl">Agents Live</div></div>
-                    <div><div class="metric-val">3,247</div><div class="metric-lbl">Providers</div></div>
+                    <div><div class="metric-val" data-tv-live="vol24" data-tv-live-fallback="n/a">Loading</div><div class="metric-lbl">24h Volume</div></div>
                 </div>
                 <a href="#agents" class="hero-agents">
                     <span class="ha-faces">
@@ -922,16 +933,16 @@
         <div class="container">
             <span class="section-eyebrow">Marketplace</span>
             <h2 class="section-title">Service <span class="hl">Marketplace</span></h2>
-            <p class="section-desc">Browse tokenized freelance services. Purchase hours, funds go to escrow, AI verifies delivery. Every transaction sealed on chain.</p>
+            <p class="section-desc">Browse tokenized freelance services. Purchase hours, funds go to escrow, AI verifies delivery. <strong style="color:var(--gold);">The listings below are a product demonstration.</strong> Minting and escrow go live in Phase 2; the figures above are live from the chain. Every transaction sealed on chain.</p>
             <div class="token-info" style="margin-top:2rem;margin-bottom:0.5rem;">
-                <div><div class="val" id="statNFTs">847</div><div class="lbl">Service NFTs</div></div>
-                <div><div class="val" id="statProviders">3,247</div><div class="lbl">Active Providers</div></div>
-                <div><div class="val" id="statVol">$12.4M</div><div class="lbl">Total Volume</div></div>
-                <div><div class="val">⭐ 4.7</div><div class="lbl">Avg Skill Score</div></div>
+                <div><div class="val" data-tv-live="price" data-tv-live-fallback="n/a">Loading</div><div class="lbl">$TV Price</div></div>
+                <div><div class="val" data-tv-live="supply" data-tv-live-fallback="1B">1B</div><div class="lbl">Circulating Supply</div></div>
+                <div><div class="val" data-tv-live="top10" data-tv-live-fallback="n/a">Loading</div><div class="lbl">Top 10 Hold</div></div>
+                <div><div class="val" data-tv-live="tax" data-tv-live-fallback="3%">3%</div><div class="lbl">Trading Tax</div></div>
             </div>
             <div class="live-ticker" aria-live="polite">
                 <span class="lt-badge"><span class="lt-dot"></span>LIVE</span>
-                <div class="lt-viewport"><div class="lt-item"><span class="hl-gold">🔒 VORIAN</span> escrow engine online, monitoring all active service contracts</div></div>
+                <div class="lt-viewport" data-tv-live-trades><div class="lt-item"><span class="hl-gold">🔒 VORIAN</span> escrow engine online, monitoring all active service contracts</div></div>
             </div>
             <input type="text" class="market-search" id="marketSearch" placeholder="⌕ Search services, skills, providers…">
             <div class="category-filters" id="categoryFilters">
@@ -1240,13 +1251,11 @@
                 :'<p style="grid-column:1/-1;text-align:center;color:var(--silver-subtle);padding:3rem 0;">No services match. ATLAS is scouting new providers for this search.</p>';
         }
         // LIVE DATA ENGINE: simulated on-chain activity
-        function pushTicker(html){const v=document.querySelector('.lt-viewport');if(v)v.innerHTML=`<div class="lt-item">${html}</div>`;}
-        let statNFTs=847,statVol=12.4,statProv=3247;
-        function bumpStats(){
-            document.getElementById('statNFTs').textContent=statNFTs;
-            document.getElementById('statVol').textContent='$'+statVol.toFixed(1)+'M';
-            document.getElementById('statProviders').textContent=statProv.toLocaleString('en-US');
-        }
+        // The LIVE feed shows real trades now, so demo events no longer write to it.
+        function pushTicker(){}
+        // The counters are fed by assets/js/tv-live.js from the chain now.
+        // This stays a no-op so the card animations below keep working.
+        function bumpStats(){}
         function flashCard(i){const el=document.getElementById('svc-'+i);if(!el)return;el.classList.add('booked');setTimeout(()=>el.classList.remove('booked'),1800);}
         function liveTick(){
             const i=Math.floor(Math.random()*services.length),s=services[i],r=Math.random();
@@ -1256,7 +1265,7 @@
                     const el=document.getElementById('svc-hours-'+i);if(el)el.textContent=s.hours;
                     flashCard(i);
                     pushTicker(`<span class="hl-gold">🔒 VORIAN</span> escrow locked · ${take}h of “${s.name}” by ${s.providerName}`);
-                    statVol+=0.1;if(Math.random()<0.35)statNFTs++;bumpStats();
+                    
                 }
             }else if(r<0.54){
                 s.rate=Math.max(0.01,s.rate+(Math.random()-0.5)*0.004);
@@ -1269,7 +1278,7 @@
             }else if(r<0.85){
                 pushTicker(`<span class="hl-green">✅ KAIROS</span> verified delivery · “${s.name}” · confidence ${(92+Math.random()*7).toFixed(1)}%`);
             }else{
-                if(Math.random()<0.4){statProv++;bumpStats();}
+                if(Math.random()<0.4){}
                 pushTicker(`<span class="hl-violet">🎯 ATLAS</span> matched ${s.providerName} with a new buyer`);
             }
         }
@@ -1361,6 +1370,7 @@
     <script src="assets/js/wallet-connect.js?v=3"></script>
     <script src="assets/js/tv-auth.js?v=8"></script>
     <script src="assets/js/vault-notes.js?v=2"></script>
+    <script src="assets/js/tv-live.js?v=1"></script>
 <script>
 // ============================================
 // HERO PARTICLE FIELD
