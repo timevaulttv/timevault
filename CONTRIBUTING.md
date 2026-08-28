@@ -29,6 +29,26 @@ finished than it is will be closed.
 If you need a placeholder while building, label it, or read it from
 `assets/js/tv-live.js`, which is already wired to the chain.
 
+## Voice
+
+The site should not read as though a machine wrote it. Two rules, both enforced
+by hand because no linter catches them:
+
+- **No em dashes.** Use a comma, a colon, or a full stop. They were stripped
+  site-wide once already, including from a systemd unit description.
+- **No decorative emoji in anything a visitor reads.** Toasts, chat replies,
+  headings, buttons, diagram labels, README bullets. Sixty-three of them were
+  removed in one pass.
+
+Monochrome typographic glyphs are not emoji and are welcome, because they are
+the design system: `✓` `★` `✦` `◆` `●` `→` `⌕`. The test is whether it renders
+as text in the page's own colour or as a coloured picture. `★` stays, `⭐` does
+not. Where an icon slot needs filling, use a two-digit index in
+`var(--font-mono)` and `var(--gold)`, the way the agent action cards and the
+leaderboard ranks already do.
+
+Copy that would survive being pasted onto any other product is not finished.
+
 ## Project conventions
 
 - **Design system first.** Colors, typography, and effects are defined as CSS variables in each page's `:root`. Use them, and never introduce new accent colors. Gold (`--gold`) is trim, not paint.
