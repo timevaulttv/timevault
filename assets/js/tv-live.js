@@ -151,8 +151,57 @@
         viewport.classList.add('tv-live-on');
     }
 
+    // ---- price chart ------------------------------------------------------
+    // Drawn straight into SVG from the candle endpoint. No chart library: this
+    // is one path and two labels, and pulling in a dependency for that would
+    // cost more than the feature.
+    const chart = document.querySelector('[data-tv-live-chart]');
+
+    async function loadChart(ethUsd) {
+        if (!chart) return;
+        const d = await get('/tokens/' + CA + '/chart?window=86400&step=300&surface=current');
+        const rows = (d && d.candles) || [];
+        if (rows.length < 2) return;
+
+        const closes = rows.map(c => Number(c.close)).filter(isFinite);
+        if (closes.length < 2) return;
+
+        const W = 1000, H = 200, PAD = 6;
+        const lo = Math.min(...closes), hi = Math.max(...closes);
+        const span = (hi - lo) || hi || 1;
+        const x = i => (i / (closes.length - 1)) * W;
+        const y = v => PAD + (1 - (v - lo) / span) * (H - PAD * 2);
+
+        const line = closes.map((v, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+        const area = line + ' L' + W + ' ' + H + ' L0 ' + H + ' Z';
+        const up = closes[closes.length - 1] >= closes[0];
+        const stroke = up ? '#34D399' : '#F87171';
+        const change = closes[0] > 0 ? ((closes[closes.length - 1] / closes[0] - 1) * 100) : 0;
+
+        chart.innerHTML =
+            '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">'
+          + '<defs><linearGradient id="tvChartFill" x1="0" y1="0" x2="0" y2="1">'
+          + '<stop offset="0%" stop-color="' + stroke + '" stop-opacity="0.28"/>'
+          + '<stop offset="100%" stop-color="' + stroke + '" stop-opacity="0"/>'
+          + '</linearGradient></defs>'
+          + '<path d="' + area + '" fill="url(#tvChartFill)"/>'
+          + '<path d="' + line + '" fill="none" stroke="' + stroke + '" stroke-width="2.5"'
+          + ' vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>';
+
+        const meta = document.querySelector('[data-tv-live-chart-meta]');
+        if (meta) {
+            meta.textContent = (change >= 0 ? '+' : '') + change.toFixed(1) + '% over 24h';
+            meta.style.color = stroke;
+        }
+        const lowEl  = document.querySelector('[data-tv-live-chart-low]');
+        const highEl = document.querySelector('[data-tv-live-chart-high]');
+        if (lowEl && ethUsd)  lowEl.textContent  = usdPrice(lo * ethUsd) || '';
+        if (highEl && ethUsd) highEl.textContent = usdPrice(hi * ethUsd) || '';
+    }
+
     let failures = 0;
-    const tick = () => load().then(ethUsd => { failures = 0; return loadTrades(ethUsd); })
+    const tick = () => load()
+        .then(ethUsd => { failures = 0; return Promise.all([loadTrades(ethUsd), loadChart(ethUsd)]); })
         .catch(() => { if (++failures === 1) degrade(); });
 
     tick();

@@ -474,6 +474,26 @@
         .lt-side.buy { color: var(--green); }
         .lt-side.sell { color: var(--red); }
         [data-tv-live] { transition: opacity 0.3s; }
+
+        /* Live price chart. One SVG path, no chart library. */
+        .tv-chart-card { margin-top: 2rem; border: 1px solid var(--gold-line); border-radius: 14px;
+            background: linear-gradient(180deg, rgba(212,175,55,0.04), transparent); overflow: hidden; }
+        .tv-chart-head { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap;
+            padding: 1rem 1.2rem 0.5rem; }
+        .tv-chart-head .lbl { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--silver-subtle); }
+        .tv-chart-head .now { font-family: var(--font-mono); font-size: 1.15rem; color: var(--white); }
+        .tv-chart-head .chg { font-family: var(--font-mono); font-size: 0.75rem; color: var(--silver-dim); }
+        .tv-chart-head a { margin-left: auto; font-family: var(--font-mono); font-size: 0.65rem;
+            letter-spacing: 0.1em; color: var(--gold); text-decoration: none; padding: 0.5rem 0; }
+        .tv-chart-head a:hover { color: var(--gold-bright); }
+        .tv-chart-plot { position: relative; height: 170px; }
+        .tv-chart-plot svg { width: 100%; height: 100%; display: block; }
+        .tv-chart-plot .empty { position: absolute; inset: 0; display: grid; place-items: center;
+            font-family: var(--font-mono); font-size: 0.7rem; color: var(--silver-subtle); }
+        .tv-chart-foot { display: flex; justify-content: space-between; padding: 0.5rem 1.2rem 1rem;
+            font-family: var(--font-mono); font-size: 0.62rem; color: var(--silver-subtle); }
+        @media (max-width: 640px) { .tv-chart-plot { height: 130px; } }
         @keyframes ltIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         .sc-head { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.9rem; }
         .sc-avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; color: #fff; background: linear-gradient(135deg, hsl(var(--h), 60%, 48%), hsl(calc(var(--h) + 45), 60%, 30%)); border: 1px solid var(--gold-line); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
@@ -664,6 +684,7 @@
             <li><a href="#agents" class="nav-link">AI Agents</a></li>
             <li><a href="#tokenomics" class="nav-link">$TV Token</a></li>
             <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
+            <li><a href="/proof" class="nav-link">Proof</a></li>
             <li class="nav-social-item">
                 <span class="tv-social">
                     <a href="https://x.com/TimeVaultTV" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on X" title="Follow @TimeVaultTV on X"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
@@ -867,6 +888,17 @@
                 <div class="token-item"><div class="pct">0%</div><div class="lbl">Presale</div></div>
                 <div class="token-item"><div class="pct">3%</div><div class="lbl">Trading Tax</div></div>
             </div>
+            <div class="tv-chart-card">
+                <div class="tv-chart-head">
+                    <span class="lbl">$TV / USD</span>
+                    <span class="now" data-tv-live="price" data-tv-live-fallback="n/a">Loading</span>
+                    <span class="chg" data-tv-live-chart-meta>last 24 hours</span>
+                    <a href="https://www.letscash.fun/token/0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc" target="_blank" rel="noopener">Trade on letscash.fun</a>
+                </div>
+                <div class="tv-chart-plot" data-tv-live-chart><div class="empty">Loading chart</div></div>
+                <div class="tv-chart-foot"><span data-tv-live-chart-low></span><span data-tv-live-chart-high></span></div>
+            </div>
+
             <div class="token-info">
                 <div><div class="val">$TV</div><div class="lbl">Ticker</div></div>
                 <div><div class="val">1B</div><div class="lbl">Total Supply</div></div>
@@ -989,7 +1021,7 @@
                 <a href="https://github.com/timevaulttv/timevault" target="_blank" rel="noopener noreferrer" aria-label="Time Vault on GitHub" title="Time Vault source code on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
             </span>
             <div>
-                <a href="#" onclick="event.preventDefault();showToast('💬 Discord opens soon, LYRA will greet you first');">Discord</a><a href="#" onclick="event.preventDefault();showToast('📨 Telegram opens soon');">Telegram</a><a href="/whitepaper" id="footerWhitepaper">Whitepaper</a>
+                <a href="#" onclick="event.preventDefault();showToast('💬 Discord opens soon, LYRA will greet you first');">Discord</a><a href="#" onclick="event.preventDefault();showToast('📨 Telegram opens soon');">Telegram</a><a href="/proof">Proof</a><a href="/whitepaper" id="footerWhitepaper">Whitepaper</a>
             </div>
         </div>
     </footer>
