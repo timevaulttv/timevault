@@ -71,7 +71,7 @@ emblem turns and catches light.
 
 SUMMARY
 A gold hourglass forms out of a storm of violet particles inside a vast dark
-vault, seven luminous figures rise around it in a ring, and the mark resolves
+vault, seven luminous figures rise behind it in an arc, and the mark resolves
 into the Time Vault wordmark. Cinematic brand film, deep blacks and gold rim
 light, slow push in and then a wide pull back.
 
@@ -85,14 +85,17 @@ ignites with gold rim light. Sand inside the glass begins to fall and every
 grain glows. The camera continues its slow push in. A single deep bass hit
 lands the moment the mark ignites.
 
-8-14s: The camera pulls back and orbits slowly to the left. Seven tall
-luminous figures fade up in an evenly spaced ring around the hourglass, facing
-inward, standing still. Clockwise from the left of frame they are @Image3,
-@Image4, @Image5, @Image6, @Image7, @Image8, @Image9. Each carries a thin gold
-rim light and a violet fill from below. Strings rise underneath.
+8-14s: The camera stops orbiting and holds a slow, straight pull back. Seven
+tall luminous figures fade up standing in a shallow arc behind the hourglass,
+all facing the camera, all standing still. Three of them stand to the left of
+the hourglass and four stand to the right. All seven are fully visible inside
+the frame at the same time, none cropped by the edges, none hidden behind the
+hourglass. Left group, left to right: @Image3, @Image4, @Image5. Right group,
+left to right: @Image6, @Image7, @Image8, @Image9. Each carries a thin gold rim
+light and a violet fill from below. Strings rise underneath.
 
-14-18s: Still pulling back, the ring dims to silhouette while the hourglass
-brightens. Gold light spreads outward from the glass across the vault floor.
+14-18s: Still pulling back, the arc of figures dims to silhouette while the
+hourglass brightens. Gold light spreads outward from the glass across the vault floor.
 
 18-20s: The hourglass lifts slightly and the wordmark from @Image2 resolves
 beneath it in clean gold letterforms. The particles settle. The score
@@ -104,9 +107,25 @@ haze catching every beam. Palette strictly deep black, violet and gold, no
 other hues. Cinematic anamorphic look, shallow depth of field, fine film
 grain. The hourglass stays centred in frame for the entire shot. Agent
 appearances strictly match @Image3 to @Image9 and stay consistent, no face
-changes. All camera moves slow and smooth, no handheld shake. Orchestral
-score with a low bass pulse and rising strings. No dialogue. No subtitles.
+changes. Once the figures appear, all seven stay in frame together until they
+dim. All camera moves slow and smooth, no handheld shake. Orchestral score with
+a low bass pulse and rising strings. No dialogue. No subtitles. --wm false
 ```
+
+### Why the arc, and why the groups
+
+The first version put the figures in a ring with the camera orbiting, and the
+model returned six. It had not lost an agent: a ring means some figures sit
+behind the hourglass or leave frame, and an orbiting camera guarantees it.
+
+Video models are also weak at exact counts. Asking for seven reliably returns
+six or eight. Asking for three on one side and four on the other does not,
+because small groups are countable. That substitution is the actual fix; the
+arc and the stilled camera just stop anything hiding.
+
+`--wm false` at the end turns the watermark off. It is a documented parameter
+under the legacy syntax, and loose validation means it is ignored rather than
+fatal if the account does not allow it.
 
 ## Do not let the model draw your text
 
