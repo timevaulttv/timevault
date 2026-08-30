@@ -194,6 +194,8 @@ def main():
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", os.path.join(RAW, src[0]),
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20",
                     "-pix_fmt", "yuv420p", "-r", "30", "-an", mp4], check=True)
+    shutil.rmtree(RAW, ignore_errors=True)   # the webm has been transcoded; drop it
+
     dur = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                           "-of", "default=nw=1:nk=1", mp4],
                          capture_output=True, text=True).stdout.strip()
