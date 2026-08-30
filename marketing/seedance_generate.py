@@ -31,64 +31,68 @@ RATIO = "16:9"
 DURATION = 30              # the model's maximum for a single generation
 WATERMARK = False
 
-# Only the two brand assets. Seven agent portraits in one 30 second shot is
-# what produced six figures instead of seven in the console, and every extra
-# reference costs stability.
+# All nine, in the order the prompt numbers them. The console run used the same
+# set and rendered the agents beautifully, so the look is worth keeping; what
+# needed fixing was the count, and that is handled in the prompt.
 REFS = [
     ("01-hourglass.png", "the Time Vault emblem, a gold and violet hourglass"),
     ("02-wordmark.png",  "the Time Vault wordmark"),
+    ("03-lyra.png",      "LYRA"),
+    ("04-vorian.png",    "VORIAN"),
+    ("05-kairos.png",    "KAIROS"),
+    ("06-solon.png",     "SOLON"),
+    ("07-neris.png",     "NERIS"),
+    ("08-atlas.png",     "ATLAS"),
+    ("09-cirion.png",    "CIRION"),
 ]
 
 PROMPT = """ASSET BINDINGS
 @Image1 is the Time Vault emblem, a gold and violet hourglass. @Image2 is the
-Time Vault wordmark.
+Time Vault wordmark. The seven agents are @Image3 LYRA, @Image4 VORIAN,
+@Image5 KAIROS, @Image6 SOLON, @Image7 NERIS, @Image8 ATLAS, @Image9 CIRION.
 
 SUMMARY
-A freelancer works alone at night and is met with silence after delivering,
-then the same moment replays with the payment already sealed in gold before
-the work begins, and the film resolves on the Time Vault mark. Cinematic
-realistic short film, cold blue night turning to warm gold, locked-off camera
-with two slow push ins.
+A gold hourglass forms out of a storm of violet particles inside a vast dark
+vault, seven luminous figures rise behind it, and the mark resolves into the
+Time Vault wordmark. Cinematic brand film, deep blacks, gold rim light, slow
+push in and then a wide pull back.
 
 PLOT
-0-5s: Night. A freelancer sits at a cluttered desk in a small flat, face lit
-only by a monitor. They click once to send a delivery, lean back, and let out
-a small satisfied breath. A soft click, then room tone.
+0-5s: Total darkness. Fine violet and white particles drift in from every edge
+of frame and spiral toward the centre, gathering speed. Slow push in. A low
+ambient hum rises.
 
-5-11s: The camera holds the identical framing while time passes around them.
-Light from the window cycles from night to day to night twice. Coffee cups
-gather on the desk. Their posture sinks lower with each cycle and the
-satisfaction drains out of their face. The monitor glow stays cold and
-constant.
+5-10s: The particles collapse into the hourglass emblem from @Image1, which
+ignites with gold rim light. Sand inside the glass begins to fall and every
+grain glows. The push in continues. A single deep bass hit lands as the mark
+ignites.
 
-11-15s: Close on their hand lifting a phone, thumb hovering over an unanswered
-message thread, then setting the phone face down without sending anything.
-They rub their eyes. Silence apart from a clock.
+10-18s: The camera holds still and then begins a slow straight pull back.
+Behind the hourglass, seven tall luminous figures fade up one after another,
+all facing the camera, all standing still, spread evenly across the full width
+of frame. Count them as they arrive: @Image3 furthest left, then @Image4, then
+@Image5, then @Image6 standing one pace forward of the rest and closest to
+camera, then @Image7, then @Image8, then @Image9 furthest right. That is seven
+figures in total and every one of them is fully inside the frame, none cropped
+by the left or right edge, none hidden behind the hourglass. Strings rise.
 
-15-17s: Cut to black. One thin horizontal line of gold light draws itself
-across the centre of the darkness and holds.
+18-24s: Still pulling back, the seven dim to silhouette while the hourglass
+brightens. Gold light spreads outward across the floor of the vault.
 
-17-24s: The same desk and the same person, but the order is reversed. Before
-they begin working, a warm gold seal of light closes over a shape on the desk
-and locks with a solid mechanical sound. They work, then click once to
-deliver. The gold light immediately releases and flows across the desk toward
-them. They look up, caught off guard, and a real smile arrives. The room is
-now lit gold rather than cold blue.
-
-24-30s: The desk falls away into darkness. The hourglass emblem from @Image1
-resolves at the centre in gold, sand falling inside the glass, with the
-wordmark from @Image2 beneath it. The score lands on one sustained low note.
+24-30s: The hourglass lifts slightly and the wordmark from @Image2 resolves
+beneath it in clean gold letterforms, holding steady to the end. The particles
+settle. The score lands on one sustained low note.
 
 NOTES
-Cinematic realistic short film throughout, 35mm cinema lens, shallow depth of
-field, fine film grain, authentic skin texture, natural performance, no
-beautification. The first half is cold blue and grey and the second half is
-warm gold; that colour turn is the point of the film and must be obvious.
-Camera locked off apart from one very slow push in during 17-24s and another
-during 24-30s. Keep the same person, the same desk and the same framing across
-both halves so the reversal reads. Score is sparse piano and low strings,
-patient in the first half, opening up at the 17 second mark. Room tone and
-small practical sounds only. No dialogue. No subtitles."""
+A vast dark vault interior throughout, near black, deep shadows, volumetric
+haze catching every beam. Palette deep black, violet, magenta and gold.
+Cinematic anamorphic look, shallow depth of field, fine film grain. The
+hourglass stays centred in frame for the entire shot. Agent appearances
+strictly match @Image3 to @Image9 and stay consistent, no face changes. The
+group is deliberately uneven, not a symmetrical arrangement: four figures
+stand left of the hourglass and three stand right of it. All camera moves slow
+and smooth, no handheld shake. Orchestral score with a low bass pulse and
+rising strings. No dialogue. No subtitles."""
 
 
 def key():
