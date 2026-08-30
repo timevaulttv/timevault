@@ -51,7 +51,12 @@
 
         /* NAV */
         .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.75rem 2.5rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.6s var(--ease-out); }
-        .nav.scrolled { background: transparent; padding: 0.6rem 2.5rem; }
+        .nav.scrolled { padding: 0.6rem 2.5rem;
+            /* The bar is fixed over the page, so a transparent background
+               let the hero buttons collide with the logo and nav links on
+               the way past. Same treatment the proof page already uses. */
+            background: rgba(6,3,9,0.82); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212,175,55,0.10); }
         .nav-brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
         .nav-logo { height: 126px; width: auto; filter: drop-shadow(0 4px 20px rgba(139,92,246,0.5)); transition: height 0.4s var(--ease-out); }
         .nav-wordmark { height: 66px; width: auto; transition: height 0.4s var(--ease-out); }
