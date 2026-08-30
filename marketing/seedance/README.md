@@ -162,3 +162,123 @@ watermark before building anything else on top of it.
 The console quoted 0.0107 USD per thousand tokens. A single 720P run of this
 length is small money, so generate three or four and pick. First attempts from
 video models are rarely the best one.
+
+---
+
+# Concept 2: "The Silence"
+
+The film above sells the mark. This one sells the platform, and it is the one
+to make first.
+
+A video model cannot draw a working interface. Asked for a dashboard it returns
+warped buttons and broken lettering, which is why the screen recordings in
+`marketing/demo/` will always beat it at showing how Time Vault is used. What a
+video model is genuinely better at is the thing a screen recording cannot do:
+making an audience feel the problem before the product is mentioned.
+
+So the split is: recordings show the how, this shows the why.
+
+Twenty two seconds. The argument from the investor memo, told as pictures.
+
+## Upload order
+
+Far fewer assets than the brand film, because the human scene is generated
+rather than referenced.
+
+| # | File | Becomes |
+|---|------|---------|
+| 1 | `marketing/seedance/ref-hourglass.png` | `@Image1` |
+| 2 | `marketing/seedance/ref-wordmark.png` | `@Image2` |
+
+## Settings
+
+    Mode        Ref-to-video
+    Ratio       16:9
+    Resolution  720P
+    Duration    22s if settable, otherwise Smart length
+    Sound       on
+
+## The prompt
+
+```
+ASSET BINDINGS
+@Image1 is the Time Vault emblem, a gold and violet hourglass. @Image2 is the
+Time Vault wordmark. Both appear only in the final beat.
+
+SUMMARY
+A freelancer delivers work at night and is met with silence for days, then the
+same moment replays with the payment already locked before the work begins.
+Cinematic realistic short film, warm practical light against cold blue night,
+locked-off camera with one slow push in.
+
+PLOT
+0-4s: Night. A freelancer sits at a cluttered desk in a small flat, face lit
+only by a monitor. They click once to send a delivery, lean back, and let out a
+small satisfied breath. Warm screen light on their face. A soft click, then room
+tone.
+
+4-9s: The camera holds the identical framing while time passes around them. Light
+from the window cycles from night to day to night twice, coffee cups gather on
+the desk, the room grows messier. Their posture sinks lower each cycle and the
+satisfaction drains out of their face. The monitor glow stays constant and cold.
+
+9-13s: Close on their hand picking up a phone, thumb hovering over an unanswered
+message thread, then setting the phone face down without sending anything. They
+rub their eyes. The room is silent apart from a clock.
+
+13-15s: Hard cut to black. One thin horizontal line of gold light draws itself
+across the centre of the darkness and holds.
+
+15-20s: The same desk, the same person, but the order is reversed. Before they
+begin working, a warm gold seal of light closes over a shape on the desk and
+locks with a solid mechanical sound. They work, then click once to deliver.
+Immediately the gold light releases and flows across the desk toward them. They
+look up, caught off guard, and a real smile arrives. The room is warmer now, lit
+gold rather than cold blue.
+
+20-22s: The desk falls away into darkness. The hourglass emblem from @Image1
+resolves at the centre with the wordmark from @Image2 beneath it, both in gold.
+The score lands on one sustained low note.
+
+NOTES
+Cinematic realistic short film throughout, shot on a 35mm cinema lens, shallow
+depth of field, fine film grain, authentic skin texture and natural performance,
+no beautification. The first half is cold blue and grey, the second half is warm
+gold; that colour turn is the point of the film and must be obvious. Camera is
+locked off for the whole piece apart from one very slow push in during 15-20s.
+Keep the same person, the same desk and the same framing across both halves so
+the reversal reads. Score is sparse piano and low strings, quiet and patient in
+the first half, opening up at the 15 second mark. Room tone and small practical
+sounds only, no dialogue. No subtitles.
+```
+
+## Text to burn on afterwards
+
+Timed to the turn, so the words land on the cut rather than over it:
+
+| Time | Line |
+|------|------|
+| 5.0 to 8.5s | You delivered. |
+| 9.5 to 12.5s | Then nothing. |
+| 15.5 to 19.0s | Time Vault locks their money first. |
+| 20.0 to end | timevault.tv |
+
+Edit the `LINES` table at the top of `marketing/burn_text.py` to those values,
+then:
+
+```bash
+python marketing/burn_text.py marketing/seedance/the-silence.mp4
+```
+
+## Why this one sells and the brand film does not
+
+The brand film shows a logo and seven figures. A stranger finishes it knowing
+Time Vault looks expensive and still not knowing what it does.
+
+This one names the enemy in the first nine seconds, and every freelancer
+watching has lived it. The reversal at 15 seconds is the product, shown rather
+than claimed, and the only sentence needed is the one burned over it. Nothing
+in it depends on rendering an interface, so nothing in it can come back warped.
+
+Make this first. Make the brand film later, as a pinned header or an intro
+sting, where atmosphere is the whole job.
