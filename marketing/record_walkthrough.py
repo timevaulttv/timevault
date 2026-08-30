@@ -53,6 +53,11 @@ def fill(page, sel, text, delay=70, settle=900):
     if b:
         glide(page, W * 0.3, b["y"] + 240, b["x"] + 50, b["y"] + b["height"] / 2, 800, steps=26)
     el.click()
+    # The mint form ships with default values, so typing straight in appends and
+    # the rate reads 0.0500.085 on camera. Select the existing text first, then
+    # type over it, which also looks like what a person actually does.
+    page.keyboard.press("Control+A")
+    page.wait_for_timeout(220)
     el.type(text, delay=delay)
     page.wait_for_timeout(settle)
 
