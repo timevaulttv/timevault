@@ -1,81 +1,105 @@
 # Investor post
 
-A long form post for the Time Vault X account, aimed at investors and serious
-observers. The account is a verified organisation, so there is no 280 character
-limit. The constraint that remains is the fold: the first paragraph has to carry
-the argument on its own, because most readers never press Show more.
+A long form post for the Time Vault X account. The account is a verified
+organisation, so there is no 280 character limit.
 
-Do not give it a title when posting. A heading like "Investment Thesis" reads as
-corporate and costs reach. Open straight into the first sentence.
+## Do not give it a title on X
 
-Every figure below was read from the letscash API on 30 August 2026. They move.
-Re-read them before posting and correct any that have changed:
+X long form has no title field, so any heading becomes the first line of the
+post and eats the most valuable part of it: the 280 characters that show before
+Show more. Trading a working opening sentence for a label costs twice, because
+a heading like "Investment Thesis" also reads as corporate and loses reach.
+Open straight into the first sentence.
 
-```
-python -c "import json,urllib.request as u; CA='0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc'; h={'User-Agent':'Mozilla/5.0'}; t=json.load(u.urlopen(u.Request('https://api.letscash.fun/api/tokens/'+CA,headers=h))); c=json.load(u.urlopen(u.Request('https://api.letscash.fun/api/config',headers=h))); print('mcap $%s holders %d' % (format(round(t['marketCapEth']*c['ethUsd']),','), t['holders']))"
+Where a title is needed anyway, in a file, a PDF sent to someone, or a page on
+the site, use:
+
+    Escrow for the jobs too small to protect
+
+That carries the argument rather than the company name. The project name means
+nothing to a reader who has not heard of it; the sentence above is understood
+by anyone.
+
+## What this piece is
+
+The genre is an investment memo. It runs roughly seventy percent on the platform
+and the opportunity and thirty percent on credibility and chain facts. An
+earlier draft inverted that and read as a transparency disclosure: credible,
+and no reason to care. A reader should finish this one wanting in.
+
+The argument it turns on: escrow has never reached small freelance jobs because
+human arbitration costs more than the job is worth, so every marketplace sets a
+floor and leaves everything beneath it unprotected. Machine verification against
+a written scope drops that floor. That is the whole thesis and it sits in the
+first paragraph.
+
+Every figure was read from the letscash API on 30 August 2026. They move fast:
+market cap went 2.4x and holders rose 82 percent in the twenty four hours before
+this was written. Re-read them before posting.
+
+```bash
+python -c "import json,urllib.request as u; CA='0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc'; h={'User-Agent':'Mozilla/5.0'}; t=json.load(u.urlopen(u.Request('https://api.letscash.fun/api/tokens/'+CA,headers=h))); c=json.load(u.urlopen(u.Request('https://api.letscash.fun/api/config',headers=h))); print('mcap $%s  holders %d  top10 n/a' % (format(round(t['marketCapEth']*c['ethUsd']),','), t['holders']))"
 ```
 
 ## The post
 
-> The creator of Time Vault holds 0 percent of supply, made one buy, has never sold. All 1,000,000,000 tokens sit in a locked pool. The escrow contract is not deployed, and the project publishes that itself on a permanent page. Two days old, seven AI agents answer right now.
+> Escrow has never worked for small freelance jobs. A dispute over a two hundred dollar deliverable cannot pay a human to read the brief, read the files and make a call, so platforms set a floor and leave everything under it unprotected. Time Vault puts an AI in that seat.
 >
-> Start with the part that is not built, because you will check the contracts within minutes anyway.
+> Here is what breaks today. A freelancer delivers, and at that exact moment the client holds both the work and the money. That is the last point of leverage and it sits on the wrong side. What follows is familiar to anyone who has done this for a living: the polite follow-up, the less polite one, and eventually the arithmetic on whether chasing costs more than the job paid.
 >
-> Escrow is not live, so no user funds move anywhere today. Service NFT minting is not live: the listing form builds a card preview and stops there. Settlement, verification and dispute resolution are not live. Escrow, minting and all three ship in Phase 2. The marketplace you can click through is the interface, and the Skill Scores and order history inside it are demonstration data, labelled where they appear. Every line of that sits on timevault.tv/proof, a page the project keeps up.
+> Marketplaces solve that by becoming the middleman. They hold the money, they arbitrate, and they charge for the privilege. It works, it is expensive, and it only works above a certain size, because human arbitration cannot pay for itself on a small job. So the protection stops exactly where most freelance work happens, and exactly where a silent client does the most damage.
 >
-> Here is what those contracts do when they land. A provider mints an hour of work as a Service NFT. The buyer's funds lock in escrow before the work starts, and the scope is fixed at that same moment. On delivery, agents check the work against that scope, and settlement releases on the check. The invention is the order: payment stops sitting after the last point of leverage, which is where freelance work fails. Not fraud, sequencing.
+> Comparing a written scope against a delivered file is a task a model does at a price no human arbitrator can match. That is the unlock. Escrow with real verification becomes economic on the small job, not just the twenty thousand dollar one, and a whole tier of work that has never had payment protection can have it.
 >
-> Human arbitration is why escrow has never reached the bottom of the market. A dispute over a small deliverable cannot pay a person to read the brief, read the files and make a call, so platforms price arbitration into every transaction or set a floor and leave everything under it unprotected. Small jobs are where a silent client does the most damage. Comparing a written scope to a delivered file at a price a human cannot match is the job the agents exist to do.
+> So on Time Vault a provider lists hours as a Service NFT. The buyer funds escrow before the work starts, and the scope is fixed at that same moment. On delivery, KAIROS checks the work against that scope, and settlement releases on the check. Payment stops sitting after the point of leverage. Not fraud, sequencing.
 >
-> That constrains what can be sold here. Verification runs against a written scope, never against taste. Make it pop is not checkable by anything, machine or human. A named list of deliverables is, so the seller fixes that list before money moves.
+> Verification runs only against what was written down. Make it pop is not checkable by anyone, machine or human. A named list of deliverables is. The scope gets fixed before money moves, and a vague brief stops being the freelancer's problem.
 >
-> Seven agents answer today. LYRA, VORIAN, NERIS, SOLON, KAIROS, ATLAS and CIRION run on a hosted model, with no wallet, no signup and no email between you and them. The key stays server side and never reaches the browser. Every figure on the site, market cap, holders, volume, trade feed, price chart, is read from the chain at page load rather than typed into the HTML. The interface runs end to end: browse, listing form with live card preview, orders, dispute centre, agent console, profile. The repository is public at github.com/timevaulttv/timevault.
+> Seven agents run the protocol, each owning a function a marketplace normally staffs with a department. SOLON prices. ATLAS matches. KAIROS verifies. VORIAN arbitrates. NERIS scores reputation. CIRION holds treasury. LYRA gets people in the door. A marketplace whose pricing desk, matching team, quality control and arbitration panel are all agents carries a cost structure an incumbent cannot copy without dismantling its own payroll.
 >
-> We put a question to VORIAN on camera while recording a promotional clip: what happens when a buyer and a freelancer both have a fair case. It answered, then added, unprompted, "Worth noting the escrow contracts aren't live yet, so no real dispute has run through this. Anything I describe here is how the process is designed to work."
+> All seven answer right now. No wallet, no signup, no email. Ask VORIAN what happens when both sides of a dispute have a fair case, and read what comes back about a job it has never seen.
 >
-> Nobody scripted that sentence. The rule that produced it is in the repo at server/agents.py, where VORIAN is told that no real dispute has ever been filed and the escrow contracts are not live. Read the rule, then ask the agent the same question.
+> One thing about what comes back. While a promotional clip was being recorded, VORIAN answered that exact question and then added, unprompted, that the escrow contracts are not live yet and no real dispute has run through them. Nobody scripted that. The rule that produced it sits in the public repo at server/agents.py. Read the rule, then ask the agent yourself.
 >
-> The chain is open to the same test, two days in. Contract 0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc on Robinhood Chain, launched 28 August 2026 at 14:35 UTC. Supply 1,000,000,000, one hundred percent in the pool, locked. Nothing burned. Tax 3 percent. Top 10 wallets hold 24.79 percent, down from 26.09 percent a day earlier. The 102 sniper wallets hold 1.59 percent between them, and falling. Holders 352 against 193 twenty four hours before, market cap USD 69,400 against USD 28,500. The last hundred trades were 37 buys and 63 sells.
+> Which is the right moment to say what is not deployed. Escrow, Service NFT minting, settlement, verification and dispute resolution all ship in Phase 2. The marketplace you can click through today is the interface, and the order history inside it is demonstration data, labelled where it appears. Every line of that is on timevault.tv/proof, permanently.
 >
-> Of that 3 percent tax, 0.3 goes to the platform and 2.7 to 0xf861d8A1e2aC98c74E4c4Aed261aa0e8E2Aa3dE3, which is the creator wallet: the same address holding zero supply. That is the whole arrangement. There is no allocation to sell, and the builder is paid only while the thing keeps being traded. Both halves of that are on the explorer, and both are on the proof page.
+> What is deployed is the token, two days old. Contract 0xEAe2a144A3C7CFd4Ea50b9F5513124048Fed8bcc on Robinhood Chain. One billion supply, all of it in a locked pool. The creator holds zero, made one buy, has never sold. Of the 3 percent trading tax, 0.3 goes to the platform and 2.7 to the creator wallet, the same address holding no supply. There is no allocation to sell, and the builder is paid only while the thing keeps being used. Holders went from 193 to 352 in twenty four hours, and market cap from 28,500 to 69,400. Top ten wallets hold 24.79 percent, down from 26.09. The last hundred trades were 37 buys and 63 sells.
 >
-> Phase 2 deploys the contracts named on the proof page. Until each one is deployed, that page keeps naming them.
+> Phase 2 puts the contracts under an interface that already runs. Until each one is deployed, the proof page keeps naming it.
 
-## Alternate opening
-
-Same body, different hook. Worth testing against the one above.
-
-> Asked on camera what happens when a buyer and a freelancer both have a fair case, Time Vault's agent answered, then volunteered that the escrow contracts are not live and no real dispute has run through them. Nobody scripted that. The rule that produced it is in the public repo.
-
-## What it deliberately does
-
-**Leads with the disclosure.** The unbuilt contracts are named in the second
-paragraph rather than the last. A reader checks the contracts within minutes
-whatever you write, and being the one who said it first is worth more than the
-click it costs.
-
-**Names the fee recipient.** The 2.7 percent goes to the same wallet that holds
-zero supply. Stating that turns the obvious sceptical question, how does a
-founder with no allocation get paid, into the alignment argument: there is no
-bag to sell, and the builder earns only while the thing is used. Leaving it out
-would have been the one genuine ambush in the piece.
-
-**Makes the best story falsifiable.** The VORIAN anecdote used to rest on "nobody
-wrote that line", which nobody can check. It now names `server/agents.py`, where
-the rule sits at line 263 in VORIAN's block. A sceptic can read the rule and then
-reproduce the behaviour, which converts a claim about our own honesty into a two
-step test.
-
-**Carries no hedging.** No sentence in it creates doubt through weak
-construction. Facts about what is unbuilt are stated with control, in the
-present or the definite future, never as apology.
-
-## Before posting
+## Checks before posting
 
 - Re-read the chain figures with the snippet above. Holders and market cap move
-  fastest.
-- The liquidity lock is stated flatly, as the API reports it. If a lock expiry
-  and locker contract are available on chain, add them. "Locked" without a
-  duration is the first thing a burned investor questions.
-- Reply to your own post with the contract address so it sits under the text.
+  fastest, and the top ten share needs the holders endpoint.
+- The liquidity lock is stated as the API reports it, with no duration and no
+  locker named. That is the first thing an investor who has been rugged will
+  question. If a lock expiry and locker contract are readable on chain, add them.
+- Both external references were verified on 30 August 2026: `timevault.tv/proof`
+  returns 200, and `server/agents.py` is public on the default branch with the
+  rule at line 263 reading "No real dispute has ever been filed. The escrow
+  contracts are not live." Re-check both if the repo is restructured, because
+  the post invites readers to go and look.
+- Reply to your own post with the contract address so it sits underneath.
 - No hashtags.
+
+## Why it is built this way
+
+**The insight leads, not the tokenomics.** A reader who understands why escrow
+could not reach small jobs, and why a model changes that arithmetic, works out
+the size of it themselves. Nothing has to be promised about price.
+
+**The agents are framed as cost structure, not as a feature.** A marketplace
+whose pricing desk, matching team, quality control and arbitration panel are all
+agents cannot be copied by an incumbent without that incumbent dismantling its
+own payroll. That is a moat and it should be read as one.
+
+**The unbuilt contracts are one paragraph, placed after the argument is won.**
+Stated as command rather than confession. A reader checks the contracts within
+minutes whatever is written, so saying it first costs nothing and buys the right
+to be believed on everything else.
+
+**The fee arrangement is named.** The creator wallet and the fee recipient are
+the same address. Left unstated, that is the one genuine ambush in the piece.
+Stated, it answers the question every sceptic asks about a founder holding zero:
+there is no allocation to sell, and the builder is paid only while the thing
+keeps being used.
