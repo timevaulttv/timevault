@@ -18,10 +18,12 @@ import sys
 
 # (start, end, text, emphasis)  emphasis picks gold over white.
 LINES = [
-    (5.0,  8.5,  "Your hours, minted.",          False),
-    (9.5,  13.0, "Their money, locked first.",   False),
-    (14.0, 17.5, "Seven agents. One protocol.",  False),
-    (18.0, 99.0, "timevault.tv",                 True),
+    (2.0,  6.2,  "Freelance work has one broken moment.",  False),
+    (7.0,  11.5, "You deliver. Then the client goes quiet.", False),
+    (12.0, 16.0, "Time Vault locks their money first.",    False),
+    # 16 to 21 is left clear: the wordmark resolves there and nothing should
+    # sit on top of it.
+    (21.5, 99.0, "timevault.tv",                           True),
 ]
 
 GOLD = "#F0DA9B"
