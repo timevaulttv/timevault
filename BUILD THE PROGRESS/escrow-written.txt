@@ -1,10 +1,13 @@
-JUDUL
-The escrow is written.
+JUDUL     The escrow is written.
+BANNER    escrow-written.jpg  (lampirkan, jangan diketik)
 
-BANNER
-escrow-written.jpg
 
-CAPTION (siap copy-paste ke X)
+###########################################################################
+##                                                                       ##
+##   MULAI SALIN DARI SINI                                               ##
+##   Semua di antara dua pagar ini masuk ke X. Termasuk tautannya.        ##
+##                                                                       ##
+###########################################################################
 
 The escrow contract is written.
 
@@ -18,9 +21,16 @@ Testnet next.
 
 github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
 
+###########################################################################
+##                                                                       ##
+##   SELESAI SALIN.                                                      ##
+##   SEMUA DI BAWAH INI TIDAK DIPOSTING. Ini catatan buat kamu.           ##
+##                                                                       ##
+###########################################################################
+
 
 ===========================================================================
-MEKANISMENYA (buat kamu, jangan diposting)
+MEKANISMENYA
 ===========================================================================
 
 APA YANG DIBUAT
@@ -78,9 +88,8 @@ APA YANG TIDAK BISA DILAKUKAN OWNER
   escrow aman karena hitungan matematika, bukan karena janji
 
 STATUS JUJUR
-Sudah ditulis. Belum di-deploy. Belum diaudit. Tulisan di halaman proof.html
-tetap menaruh escrow di bagian "belum dibangun", cuma sekarang ada tautan ke
-sumbernya.
+Sudah ditulis. Belum di-deploy. Belum diaudit. Halaman proof.html tetap menaruh
+escrow di bagian "belum dibangun", cuma sekarang ada tautan ke sumbernya.
 
 BUKTI YANG BISA DICEK ORANG LAIN
 Kode      github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
@@ -93,3 +102,30 @@ kali ada perubahan, jadi centang hijaunya bukan klaim kita.
 BERIKUTNYA
 Deploy ke testnet. Perlu RPC dan chain id testnet Robinhood Chain, plus dompet
 deployer yang sudah ada gas-nya.
+
+
+===========================================================================
+KALAU ADA YANG BERTANYA DI KOLOM BALASAN
+===========================================================================
+
+"Sudah live belum?"
+Belum. Kontraknya ditulis, belum di-deploy. Testnet berikutnya. Jangan pernah
+jawab seolah sudah jalan.
+
+"Sudah diaudit?"
+Belum, dan itu tertulis di README kontraknya. Jangan disembunyikan, tapi juga
+tidak perlu ditulis di caption. Tempat sebuah peringatan itu di dokumentasi,
+bukan di iklan.
+
+"Kalau owner-nya kabur bawa uang?"
+Tidak bisa. Tidak ada fungsi yang mengizinkannya. Suruh dia buka file-nya dan
+cari sendiri, memang tidak ada.
+
+"Kenapa VORIAN dipercaya?"
+VORIAN bukan tidak bisa dipercaya, dia dibatasi. Cuma order yang disengketakan,
+cuma 14 hari, tidak ambil potongan. Kalau dia diam, uangnya dibelah 50/50 oleh
+siapa pun. Batasannya ada di kode, bukan di janji.
+
+"Ini cuma kode, siapa saja bisa nulis"
+Betul. Makanya ada tes dan CI. Tesnya dinamai sesuai janji yang diperiksanya,
+dan CI menjalankannya di komputer GitHub, bukan di laptop kita.

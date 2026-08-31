@@ -6,11 +6,18 @@ Setiap hal yang selesai dibangun ditaruh di sini. Dua berkas, nama sama:
     <nama>.jpg    banner persegi 1080x1080
     <nama>.txt    judul, caption siap posting, lalu penjelasan mekanismenya
 
-Tinggal buka .txt-nya, salin bagian caption, lampirkan .jpg-nya. Selesai.
+Di dalam .txt ada dua pagar pembatas:
 
-Bagian bawah .txt bukan untuk diposting. Itu penjelasan cara kerjanya dalam
-bahasa Indonesia, supaya kalau ada yang bertanya di kolom balasan, jawabannya
-sudah ada dan tidak perlu menebak.
+    ###  MULAI SALIN DARI SINI  ###
+    ...caption...
+    ###  SELESAI SALIN          ###
+
+Salin persis semua yang ada di antara dua pagar itu, termasuk tautannya, lalu
+lampirkan .jpg-nya. Selesai. Jangan menambah atau mengurangi apa pun.
+
+Semua yang ada di bawah pagar kedua TIDAK diposting. Isinya dua hal:
+penjelasan cara kerjanya dalam bahasa Indonesia, dan jawaban siap pakai untuk
+pertanyaan yang biasanya muncul di kolom balasan.
 
 Aturan yang berlaku untuk semuanya
 ----------------------------------
