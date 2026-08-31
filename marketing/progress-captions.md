@@ -16,8 +16,47 @@ No day counters, in the banner or in the post. "Day 4 of 10" turns a run of good
 work into a debt the moment a day slips, and it invites people to count the gaps
 instead of reading the work. The shipping is the point, not the streak.
 
-Same voice as `captions.md`: short lines, plain words, no hashtag wall, no press
-release. No "I" and no "we". Time Vault is the subject, the reader is "you".
+## Voice
+
+`BUILD THE PROGRESS/README.txt` carries this in Indonesian for the user. The
+short version, because the first draft of every one of these comes out sounding
+like a machine wrote it:
+
+**Never open with a status report.** "The escrow contract is written" is a
+changelog entry. "Spent today writing a contract that makes it impossible for
+us to touch the money. On purpose." is a post. The first sentence has one job:
+earn the second.
+
+**Say "we".** The earlier rule here banned it, and that was wrong. Avoiding
+"we" is exactly what makes a post read as a press release. The no-first-person
+rule belongs to the agents answering in the app, not to the account posting.
+
+**Cut the signposting.** "Here is the part worth reading", "A few of the
+details:", "It is worth noting". People do not announce that they are about to
+explain something. Delete the announcement and keep the explanation.
+
+**Fragments are good.** "Not the buyer, not us." is not a sentence, and that is
+why it sounds like speech.
+
+**One idea in the main post.** No bullet lists there. Detail goes in the reply,
+which also gives people a second thing to click.
+
+**Numbers dropped, not displayed.** "562 lines, 31 tests, zero warnings, all of
+it public" beats a tidy line per statistic.
+
+**Close with an invitation.** "Go break it." Not a summary of what was just
+said.
+
+**Never write "not yet" or "still".** Those read as apologising. Write what
+comes next instead: "Testnet next." This is a rule about tone and nothing else.
+Unbuilt things still may not be described as running, and the caveats still
+live in the README and on `proof.html`.
+
+**Read it aloud.** Any sentence you would not say to a friend gets rewritten.
+
+Tells to hunt for and kill: three parallel items per sentence over and over,
+every sentence the same length, repeated "not X but Y", relentless politeness
+with no attitude anywhere, explaining something the reader already understood.
 
 The rule that governs the series: **nothing goes in a post that a reader cannot
 check.** Not one number, not one claim. It is what the account is for.
@@ -28,63 +67,44 @@ check.** Not one number, not one claim. It is what the account is for.
 
 **Banner:** `BUILD THE PROGRESS/escrow-written.jpg`
 
-> The escrow contract is written, and it is in the repo right now.
+> Spent today writing a contract that makes it impossible for us to touch the
+> money. On purpose.
 >
-> Here is the part worth reading.
+> Here's how it pays out. Buyer funds the job before you start. You deliver.
+> Three days later the money is yours, and nobody has to press a button for
+> that to happen. Not the buyer, not us. The clock does it, and once the clock
+> runs out anyone on earth can trigger the payout.
 >
-> When an order settles, the money does not pass through Time Vault. Either the
-> buyer accepts, or the review window runs out and anyone at all can call
-> settle(). There is no function anywhere in that file that lets Time Vault take
-> a token out of an order. Not the owner. Not the agents.
+> No approval queue. No "let me check with finance." No polite follow-up email
+> three weeks later.
 >
-> That is not a line in a pitch deck. It is a file you can open.
->
-> A few of the details:
->
-> The fee is stamped into an order the moment it is funded. Changing it later
-> cannot reach backwards into money that is already escrowed.
->
-> Dispute an order and VORIAN can split it. Only that order, only inside
-> fourteen days, and it takes no cut. If VORIAN never answers, anyone can
-> trigger a fifty-fifty split. Nobody gets paid for staying quiet.
->
-> The owner's rescue function is capped at the balance nobody is owed. Escrowed
-> funds sit out of reach by arithmetic instead of by promise.
->
-> 31 tests, all passing. solc 0.8.24, zero warnings. CI compiles it and runs the
-> suite on every push, so none of this needs taking on trust.
+> 562 lines, 31 tests, zero warnings, all of it public. Go break it.
 >
 > Testnet next.
 >
 > github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
 
-### Short version, if the long one is too much for the slot
+### First reply, hung under it
 
-> The escrow contract is written.
+> The part people always ask about: what happens when a buyer just claims the
+> work is bad.
 >
-> No function in it lets Time Vault take a token out of an order. Not the owner,
-> not the agents. The buyer accepts, or the window runs out and anyone can
-> settle it.
+> VORIAN rules on it. But it only ever gets that one order, only for 14 days,
+> and it takes zero cut either way. Go quiet past 14 days and anyone can split
+> the escrow 50/50, and we get nothing.
 >
-> 31 tests. Zero warnings. Read it yourself.
->
-> Testnet next.
->
-> github.com/timevaulttv/timevault
+> So we lose money by ignoring your dispute. Seemed like the right incentive.
 
-### Reply to hang under it
+### Second reply, if it is running
 
-Post this as the first reply, not in the main body. It gives people a second
-thing to click and it keeps the main post clean.
-
-> The tests are the interesting read, honestly. Each one is named after the
-> promise it checks, so the output is a list of things the contract will not let
-> you do.
+> The tests read like a list of things the contract won't let you do.
 >
 > "gives the owner no way to take escrowed money"
 > "gives KAIROS no power beyond writing a number"
 > "cannot freeze money that is already escrowed by pausing"
-> "splits down the middle when VORIAN never answers, and charges nothing for it"
+>
+> Named that way on purpose. If something on the site can't be traced back to
+> one of these, one of the two is wrong.
 >
 > github.com/timevaulttv/timevault/blob/main/contracts/test/escrow.test.js
 

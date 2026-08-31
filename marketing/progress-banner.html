@@ -181,9 +181,11 @@ const POST = {
     slug: 'escrow-written',
     eyebrow: 'Phase 2 &middot; The Contracts',
     // <span class="g"> paints a phrase gold. Keep it to one phrase.
-    headline: 'The escrow is <span class="g">written</span>.',
-    sub: 'A buyer’s payment goes in before the work starts, and it comes out only ' +
-         'the ways written into the contract. <b>None of them run through Time Vault.</b>',
+    // A headline is a hook, not a changelog line. "The escrow is written" says
+    // what happened; this says why anyone should care.
+    headline: '<span class="g">Nobody</span> presses a button.',
+    sub: 'Money in before the work starts. Three days after delivery, the clock ' +
+         'pays it out. Not us. <b>We can’t.</b>',
     facts: [
         { text: '31 tests passing', kind: 'pass' },
         { text: 'solc 0.8.24 &middot; 0 warnings', kind: '' },

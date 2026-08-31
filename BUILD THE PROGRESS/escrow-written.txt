@@ -1,4 +1,4 @@
-JUDUL     The escrow is written.
+JUDUL     Nobody presses a button.    (judul di banner)
 BANNER    escrow-written.jpg  (lampirkan, jangan diketik)
 
 
@@ -9,13 +9,18 @@ BANNER    escrow-written.jpg  (lampirkan, jangan diketik)
 ##                                                                       ##
 ###########################################################################
 
-The escrow contract is written.
+Spent today writing a contract that makes it impossible for us to touch the
+money. On purpose.
 
-No function in it lets Time Vault take a token out of an order. Not the owner,
-not the agents. The buyer accepts, or the review window runs out and anyone can
-settle it.
+Here's how it pays out. Buyer funds the job before you start. You deliver.
+Three days later the money is yours, and nobody has to press a button for that
+to happen. Not the buyer, not us. The clock does it, and once the clock runs
+out anyone on earth can trigger the payout.
 
-31 tests. Zero warnings. Read it yourself.
+No approval queue. No "let me check with finance." No polite follow-up email
+three weeks later.
+
+562 lines, 31 tests, zero warnings, all of it public. Go break it.
 
 Testnet next.
 
@@ -27,6 +32,38 @@ github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
 ##   SEMUA DI BAWAH INI TIDAK DIPOSTING. Ini catatan buat kamu.           ##
 ##                                                                       ##
 ###########################################################################
+
+
+===========================================================================
+BALASAN, GANTUNG DI BAWAH POSTINGAN UTAMA
+===========================================================================
+
+Postingan utama dibiarkan bersih. Detailnya masuk ke balasan, dan itu memberi
+orang alasan kedua untuk mengklik.
+
+--- BALASAN 1, salin persis ---
+
+The part people always ask about: what happens when a buyer just claims the
+work is bad.
+
+VORIAN rules on it. But it only ever gets that one order, only for 14 days, and
+it takes zero cut either way. Go quiet past 14 days and anyone can split the
+escrow 50/50, and we get nothing.
+
+So we lose money by ignoring your dispute. Seemed like the right incentive.
+
+--- BALASAN 2, kalau mau lanjut ---
+
+The tests read like a list of things the contract won't let you do.
+
+"gives the owner no way to take escrowed money"
+"gives KAIROS no power beyond writing a number"
+"cannot freeze money that is already escrowed by pausing"
+
+Named that way on purpose. If something on the site can't be traced back to one
+of these, one of the two is wrong.
+
+github.com/timevaulttv/timevault/blob/main/contracts/test/escrow.test.js
 
 
 ===========================================================================
@@ -87,17 +124,17 @@ APA YANG TIDAK BISA DILAKUKAN OWNER
 - fungsi rescue dibatasi pada saldo yang bukan milik siapa-siapa, jadi uang
   escrow aman karena hitungan matematika, bukan karena janji
 
-STATUS JUJUR
-Sudah ditulis. Belum di-deploy. Belum diaudit. Halaman proof.html tetap menaruh
-escrow di bagian "belum dibangun", cuma sekarang ada tautan ke sumbernya.
+ANGKA YANG DIPAKAI DI CAPTION
+562 lines   panjang berkas TimeVaultEscrow.sol
+31 tests    jumlah tes yang lulus
+0 warnings  hasil compile solc 0.8.24
+
+Semuanya bisa dihitung ulang siapa pun. Jangan pernah membulatkan ke atas.
 
 BUKTI YANG BISA DICEK ORANG LAIN
 Kode      github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
 Tes       github.com/timevaulttv/timevault/blob/main/contracts/test/escrow.test.js
 CI        github.com/timevaulttv/timevault/actions/workflows/contracts.yml
-
-31 tes lulus, compile tanpa satu pun warning. CI menjalankan semuanya setiap
-kali ada perubahan, jadi centang hijaunya bukan klaim kita.
 
 BERIKUTNYA
 Deploy ke testnet. Perlu RPC dan chain id testnet Robinhood Chain, plus dompet
@@ -108,24 +145,25 @@ deployer yang sudah ada gas-nya.
 KALAU ADA YANG BERTANYA DI KOLOM BALASAN
 ===========================================================================
 
-"Sudah live belum?"
-Belum. Kontraknya ditulis, belum di-deploy. Testnet berikutnya. Jangan pernah
-jawab seolah sudah jalan.
+Jawab santai, jangan defensif. Nada yang benar itu percaya diri, bukan minta
+maaf.
 
-"Sudah diaudit?"
-Belum, dan itu tertulis di README kontraknya. Jangan disembunyikan, tapi juga
-tidak perlu ditulis di caption. Tempat sebuah peringatan itu di dokumentasi,
-bukan di iklan.
+"Sudah live belum?"
+Testnet next. Kalau dia mendesak: kontraknya selesai, deploy-nya berikutnya.
+Jangan pernah menjawab seolah sudah jalan.
 
 "Kalau owner-nya kabur bawa uang?"
-Tidak bisa. Tidak ada fungsi yang mengizinkannya. Suruh dia buka file-nya dan
-cari sendiri, memang tidak ada.
+Tidak ada fungsinya. Suruh dia buka filenya dan cari sendiri, memang tidak ada.
 
 "Kenapa VORIAN dipercaya?"
-VORIAN bukan tidak bisa dipercaya, dia dibatasi. Cuma order yang disengketakan,
-cuma 14 hari, tidak ambil potongan. Kalau dia diam, uangnya dibelah 50/50 oleh
-siapa pun. Batasannya ada di kode, bukan di janji.
+Bukan dipercaya, dibatasi. Satu order, 14 hari, nol potongan. Diam pun tidak
+menguntungkan, karena siapa pun boleh membelah 50/50.
 
 "Ini cuma kode, siapa saja bisa nulis"
-Betul. Makanya ada tes dan CI. Tesnya dinamai sesuai janji yang diperiksanya,
-dan CI menjalankannya di komputer GitHub, bukan di laptop kita.
+Betul. Makanya ada 31 tes dan CI yang menjalankannya di komputer GitHub, bukan
+di laptop kita.
+
+"Sudah diaudit?"
+Belum, dan itu tertulis di README kontraknya. Jangan disembunyikan kalau
+ditanya, tapi jangan pula ditulis di caption. Peringatan tempatnya di
+dokumentasi, bukan di iklan.
