@@ -73,5 +73,27 @@ anywhere square. Generated from the repo's brand values so it never drifts.
 
 ## Log
 
-Nothing yet. Each entry: date, what shipped, the link, and the post that went
-out.
+Each entry: date, what shipped, the link, and the post that went out.
+
+### Day 1, 31 August 2026. The escrow contract is written.
+
+`contracts/src/TimeVaultEscrow.sol`. 9,980 bytes deployed, compiles clean with
+solc 0.8.24 and zero warnings, 31 tests passing. CI runs the compile and the
+suite on every push, so the green check is the proof rather than a claim.
+
+The design decision worth pointing at: in the normal path no address Time Vault
+controls can move a token. Release happens because the buyer accepted, or
+because the review window ran out and anyone at all called `settle`. The owner
+has no function that touches an existing order, and `rescue` is capped at the
+balance nobody is owed, so escrowed money is out of reach by arithmetic instead
+of by promise.
+
+Links: [the source](https://github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol),
+[the tests](https://github.com/timevaulttv/timevault/blob/main/contracts/test/escrow.test.js),
+[CI](https://github.com/timevaulttv/timevault/actions/workflows/contracts.yml).
+
+`proof.html` updated: escrow still sits under "what is not built yet", now with
+the source linked. Written is not deployed, and the site says so.
+
+Next: deploy it to a testnet. That needs the Robinhood Chain testnet RPC and
+chain id, and a funded deployer key.

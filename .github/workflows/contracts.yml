@@ -1,0 +1,36 @@
+# Compile and test the escrow contract on every push.
+#
+# The point of this file is that nobody has to take our word for it. The badge
+# on the contracts README links here, and anyone can open a run and read what
+# actually passed.
+name: contracts
+
+on:
+  push:
+    paths: ['contracts/**', '.github/workflows/contracts.yml']
+  pull_request:
+    paths: ['contracts/**', '.github/workflows/contracts.yml']
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install --no-audit --no-fund
+
+      # solc directly, with the settings a verifier will need. This is the
+      # bytecode that gets deployed, so it is the one that has to build.
+      - name: Compile with solc 0.8.24
+        run: node build.js
+
+      - name: Test
+        run: npx hardhat test
