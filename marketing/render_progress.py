@@ -3,7 +3,12 @@
 
     python marketing/render_progress.py [slug]
 
-Writes marketing/banners/<slug>.jpg, 1080x1080 at 2x.
+Writes "BUILD THE PROGRESS/<slug>.jpg", 1080x1080 at 2x.
+
+That folder is where every shipped thing lands: the square banner and a .txt
+next to it holding the title, the caption, and a plain explanation of how the
+thing works. One copy of each banner, so there is never a second version of an
+announcement drifting away from the first.
 
 Square only. It is the format that wins on a phone timeline, which is where
 nearly all of this gets read, and one render means there can never be a wide
@@ -23,7 +28,7 @@ from playwright.sync_api import sync_playwright
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PAGE = "file:///" + os.path.join(HERE, "progress-banner.html").replace("\\", "/")
-OUT = os.path.join(HERE, "banners")
+OUT = os.path.join(os.path.dirname(HERE), "BUILD THE PROGRESS")
 
 SIZE = 1080
 
@@ -59,6 +64,7 @@ def main():
     print("  %s   %dx%d at 2x   %d KB"
           % (os.path.relpath(path, os.path.dirname(HERE)), SIZE, SIZE,
              os.path.getsize(path) // 1024))
+    print("  Write %s.txt next to it: title, caption, and how it works." % slug)
     print("\n  2x on purpose, so it stays sharp after X recompresses it.")
 
 

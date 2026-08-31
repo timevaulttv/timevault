@@ -1,7 +1,12 @@
 # Phase 2 posts
 
-One post per thing shipped, each carrying a link a stranger can open. The
-banner is `banners/<slug>.jpg`, made by `render_progress.py`.
+One post per thing shipped, each carrying a link a stranger can open.
+
+Everything ready to post lives in `BUILD THE PROGRESS/` at the repo root: the
+banner as `<slug>.jpg` and a `<slug>.txt` next to it holding the title, the
+caption, and a plain-Indonesian explanation of how the thing works. That folder
+is the one to open when it is time to post. This file is the working archive
+and keeps the longer variants.
 
 Square, 1080x1080, one format only. It is what wins on a phone timeline, which
 is where nearly all of this gets read, and a single render means there is never
@@ -21,7 +26,7 @@ check.** Not one number, not one claim. It is what the account is for.
 
 ## The escrow contract is written
 
-**Banner:** `banners/escrow-written.jpg`
+**Banner:** `BUILD THE PROGRESS/escrow-written.jpg`
 
 > The escrow contract is written, and it is in the repo right now.
 >

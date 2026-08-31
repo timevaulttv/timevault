@@ -64,6 +64,10 @@ beyond what is already on the roadmap.
 values so it never drifts, and from real source so the code on it is the code
 that shipped.
 
+All three land in `BUILD THE PROGRESS/`: `<slug>.jpg` and a `<slug>.txt` with
+the title, the caption, and how it works written out in Indonesian. Open that
+folder to post; nothing else needs reading first.
+
 ## Rules carried over
 
 - No number that cannot be checked against the chain. This applies to progress
@@ -98,8 +102,7 @@ Links: [the source](https://github.com/timevaulttv/timevault/blob/main/contracts
 `proof.html` updated: escrow still sits under "what is not built yet", now with
 the source linked. Written is not deployed, and the site says so.
 
-Banner `marketing/banners/escrow-written.jpg`, post in
-`marketing/progress-captions.md`.
+Ready to post in `BUILD THE PROGRESS/escrow-written.{jpg,txt}`.
 
 Next: deploy it to a testnet. That needs the Robinhood Chain testnet RPC and
 chain id, and a funded deployer key.

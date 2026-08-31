@@ -1,0 +1,95 @@
+JUDUL
+The escrow is written.
+
+BANNER
+escrow-written.jpg
+
+CAPTION (siap copy-paste ke X)
+
+The escrow contract is written.
+
+No function in it lets Time Vault take a token out of an order. Not the owner,
+not the agents. The buyer accepts, or the review window runs out and anyone can
+settle it.
+
+31 tests. Zero warnings. Read it yourself.
+
+Testnet next.
+
+github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
+
+
+===========================================================================
+MEKANISMENYA (buat kamu, jangan diposting)
+===========================================================================
+
+APA YANG DIBUAT
+Kontrak escrow. Isinya aturan siapa boleh memindahkan uang sebuah order, kapan,
+dan berapa. Sekali dipasang di blockchain, aturan itu tidak bisa diubah, bahkan
+oleh kita.
+
+ALUR SATU ORDER
+1. Pembeli bayar di muka. Uangnya masuk ke kontrak, bukan ke dompet kita.
+   Pembeli sendiri yang menentukan tenggat pengerjaan.
+2. Freelancer menerima order. Sebelum diterima, pembeli boleh batal gratis.
+3. Freelancer mengirim hasil kerja.
+4. Masa tinjau 3 hari berjalan.
+5. Pembeli setuju, atau 3 hari lewat tanpa keberatan. Uang cair ke freelancer,
+   potong 0,5%.
+
+KENAPA INI YANG DIPOSTING
+Di alur normal, tidak ada satu pun alamat milik Time Vault yang bisa
+memindahkan uang. Yang mencairkan cuma dua: pembeli yang setuju, atau waktu
+yang habis. Setelah 3 hari lewat, siapa pun di dunia boleh memanggil settle()
+dan freelancer langsung dibayar. Kita tidak perlu ikut campur, dan tidak bisa
+menahan.
+
+Itulah janji "tidak perlu menagih" yang selama ini cuma kalimat di website,
+sekarang jadi kode.
+
+KALAU ADA MASALAH
+Pembeli tidak dikirim apa-apa sampai tenggat lewat  ->  tarik uangnya sendiri
+Freelancer merasa salah                             ->  boleh kembalikan kapan saja
+Pembeli keberatan atas hasil kerja                  ->  buka sengketa
+
+Sengketa ditangani VORIAN. Batasannya keras:
+- cuma order yang disengketakan itu, tidak bisa menyentuh order lain
+- cuma dalam 14 hari
+- tidak ambil potongan sepeser pun
+- kalau VORIAN diam sampai 14 hari lewat, siapa pun boleh membelah 50/50,
+  tanpa potongan
+
+Poin terakhir itu penting. Artinya kita tidak untung dari diam. Kalau kita
+malas mengurus sengketa, kita justru kehilangan fee-nya.
+
+SOAL BIAYA
+0,5% saat pencairan, sesuai yang tertulis di whitepaper. Tarifnya dikunci ke
+order saat uang masuk, jadi kalau besok tarifnya dinaikkan, order lama tetap
+kena 0,5%. Di dalam kode ada batas keras 2%, jadi siapa pun pemegang kunci
+owner nanti, dia tidak bisa menaikkan lebih dari itu.
+
+Refund tidak kena biaya sama sekali.
+
+APA YANG TIDAK BISA DILAKUKAN OWNER
+- tidak ada fungsi yang menyentuh order yang sudah jalan
+- tombol pause cuma menghentikan order baru; order yang sudah ada tetap bisa
+  cair dan tetap bisa direfund
+- fungsi rescue dibatasi pada saldo yang bukan milik siapa-siapa, jadi uang
+  escrow aman karena hitungan matematika, bukan karena janji
+
+STATUS JUJUR
+Sudah ditulis. Belum di-deploy. Belum diaudit. Tulisan di halaman proof.html
+tetap menaruh escrow di bagian "belum dibangun", cuma sekarang ada tautan ke
+sumbernya.
+
+BUKTI YANG BISA DICEK ORANG LAIN
+Kode      github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
+Tes       github.com/timevaulttv/timevault/blob/main/contracts/test/escrow.test.js
+CI        github.com/timevaulttv/timevault/actions/workflows/contracts.yml
+
+31 tes lulus, compile tanpa satu pun warning. CI menjalankan semuanya setiap
+kali ada perubahan, jadi centang hijaunya bukan klaim kita.
+
+BERIKUTNYA
+Deploy ke testnet. Perlu RPC dan chain id testnet Robinhood Chain, plus dompet
+deployer yang sudah ada gas-nya.
