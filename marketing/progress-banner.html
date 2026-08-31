@@ -7,10 +7,14 @@
 <!--
     The banner for one day of the Phase 2 run.
 
-    Everything that changes day to day is in the DAY object at the bottom of
-    this file. The code card holds real source, lifted from the thing that
-    actually shipped that day, because a screenshot of code nobody wrote is
-    the exact kind of thing this project does not do.
+    Everything that changes is in the POST object at the bottom of this file.
+    The code card holds real source, lifted from the thing that actually
+    shipped, because a screenshot of code nobody wrote is the exact kind of
+    thing this project does not do.
+
+    There is deliberately no day counter. "Day 4 of 10" turns a run of good
+    work into a debt the moment a day slips, and the shipping is the point,
+    not the streak.
 
     Render with: python marketing/render_progress.py
 -->
@@ -194,11 +198,12 @@
 
 <script>
 // ---------------------------------------------------------------------------
-// Everything below the line changes day to day. Nothing above it should need
-// to.
+// Everything below the line changes per post. Nothing above it should need to.
 // ---------------------------------------------------------------------------
-const DAY = {
-    eyebrow: 'Phase 2 &middot; Day 01 of 10',
+const POST = {
+    // Names the output files. Keep it short and specific to what shipped.
+    slug: 'escrow-written',
+    eyebrow: 'Phase 2 &middot; The Contracts',
     // <span class="g"> paints a phrase gold. Keep it to one phrase.
     headline: 'The escrow is <span class="g">written</span>.',
     sub: 'A buyer’s payment goes in before the work starts, and it comes out only ' +
@@ -255,8 +260,8 @@ const card = d => `
         </div>` : ''}
     </div>`;
 
-document.querySelectorAll('[data-say]').forEach(el => { el.innerHTML = html(DAY); });
-document.querySelectorAll('[data-card]').forEach(el => { el.innerHTML = card(DAY); });
+document.querySelectorAll('[data-say]').forEach(el => { el.innerHTML = html(POST); });
+document.querySelectorAll('[data-card]').forEach(el => { el.innerHTML = card(POST); });
 </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
-# Daily progress
+# Progress
 
-One shipped thing a day, each with a post and a banner. The rule that makes it
-work: **every day's post links to something a stranger can check.** A verified
+One shipped thing at a time, each with a post and a banner. The rule that makes
+it work: **every post links to something a stranger can check.** A verified
 contract, a transaction hash, a page that loads, a commit. Progress nobody can
 verify is just an announcement, and the account already has a reputation for
 not making those.
@@ -28,10 +28,10 @@ summary so a session can start without reading the HTML.
 4. ATLAS matching against real listings
 5. VORIAN arbitration binding on escrow
 
-## Turning that into daily units
+## Turning that into shippable units
 
-The five items above are not day-sized. Broken down, each becomes a sequence
-where every step ends in something checkable:
+The five items above are too big to ship in one go. Broken down, each becomes a
+sequence where every step ends in something checkable:
 
 | # | Ship | What the post links to |
 |---|------|------------------------|
@@ -46,11 +46,13 @@ where every step ends in something checkable:
 | 9 | First Service NFT minted | the token on the explorer |
 | 10 | Mint form wired to the contract | the app, working against testnet |
 
-Ten days, and at the end of it Phase 2 is genuinely half deployed rather than
-half announced. Every one of those has a link. None of them requires trusting
-anyone.
+Work through those and Phase 2 is genuinely half deployed rather than half
+announced. Every one of them has a link. None of them requires trusting anyone.
 
-## What each day produces
+The order is a plan, not a schedule. Nothing public counts the days, because a
+day counter turns a good run into a debt the first time one slips.
+
+## What each one produces
 
 **The thing itself.** Shipped, deployed, verified.
 
@@ -75,7 +77,7 @@ anywhere square. Generated from the repo's brand values so it never drifts.
 
 Each entry: date, what shipped, the link, and the post that went out.
 
-### Day 1, 31 August 2026. The escrow contract is written.
+### 31 August 2026. The escrow contract is written.
 
 `contracts/src/TimeVaultEscrow.sol`. 9,980 bytes deployed, compiles clean with
 solc 0.8.24 and zero warnings, 31 tests passing. CI runs the compile and the
@@ -94,6 +96,9 @@ Links: [the source](https://github.com/timevaulttv/timevault/blob/main/contracts
 
 `proof.html` updated: escrow still sits under "what is not built yet", now with
 the source linked. Written is not deployed, and the site says so.
+
+Banner `marketing/banners/escrow-written-*.jpg`, post in
+`marketing/progress-captions.md`.
 
 Next: deploy it to a testnet. That needs the Robinhood Chain testnet RPC and
 chain id, and a funded deployer key.

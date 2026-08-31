@@ -1,24 +1,26 @@
-# Phase 2 daily posts
+# Phase 2 posts
 
-One post a day for ten days, each one carrying a link a stranger can open.
-Banners are in `banners/day-NN-wide.jpg` and `banners/day-NN-square.jpg`, made
-by `render_progress.py`.
+One post per thing shipped, each carrying a link a stranger can open. Banners
+are in `banners/<slug>-wide.jpg` and `banners/<slug>-square.jpg`, made by
+`render_progress.py`.
 
-Same voice as `captions.md`: short lines, plain words, no hashtag wall, no
-press release. No "I" and no "we". Time Vault is the subject, the reader is
-"you".
+No day counters, in the banner or in the post. "Day 4 of 10" turns a run of good
+work into a debt the moment a day slips, and it invites people to count the gaps
+instead of reading the work. The shipping is the point, not the streak.
+
+Same voice as `captions.md`: short lines, plain words, no hashtag wall, no press
+release. No "I" and no "we". Time Vault is the subject, the reader is "you".
 
 The rule that governs the series: **nothing goes in a post that a reader cannot
 check.** Not one number, not one claim. It is what the account is for.
 
 ---
 
-## Day 1 · The escrow contract is written
+## The escrow contract is written
 
-**Banner:** `banners/day-01-wide.jpg` (timeline) or `day-01-square.jpg`
+**Banner:** `banners/escrow-written-wide.jpg` (timeline) or
+`escrow-written-square.jpg`
 
-> Day 1 of 10.
->
 > The escrow contract is written, and it is in the repo right now.
 >
 > Here is the part worth reading.
@@ -45,7 +47,7 @@ check.** Not one number, not one claim. It is what the account is for.
 > 31 tests, all passing. solc 0.8.24, zero warnings. CI compiles it and runs the
 > suite on every push, so none of this needs taking on trust.
 >
-> Day 2 puts it on a testnet.
+> Testnet next.
 >
 > github.com/timevaulttv/timevault/blob/main/contracts/src/TimeVaultEscrow.sol
 
@@ -59,7 +61,7 @@ check.** Not one number, not one claim. It is what the account is for.
 >
 > 31 tests. Zero warnings. Read it yourself.
 >
-> Day 1 of 10. Testnet next.
+> Testnet next.
 >
 > github.com/timevaulttv/timevault
 
@@ -82,10 +84,9 @@ thing to click and it keeps the main post clean.
 ### Notes on posting this one
 
 - The main post has a URL in it. That is fine for an organic post. It is a hard
-  blocker for a promoted one, so if this is going into an ad, strip the URL out
-  of the text and attach the destination as a website card instead.
+  blocker for a promoted one, so this is not ad material. See `x-ads.md`.
 - Do not add "not audited" as a caveat in the post. It is already on the
-  contracts README and on proof.html, which is where a caveat belongs. Saying
-  it twice reads as nerves rather than as care.
+  contracts README and on proof.html, which is where a caveat belongs. Saying it
+  twice reads as nerves rather than as care.
 - Best time to post is when the US wakes up, since that is where most of the
   crypto timeline is.
