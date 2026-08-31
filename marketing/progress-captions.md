@@ -1,8 +1,11 @@
 # Phase 2 posts
 
-One post per thing shipped, each carrying a link a stranger can open. Banners
-are in `banners/<slug>-wide.jpg` and `banners/<slug>-square.jpg`, made by
-`render_progress.py`.
+One post per thing shipped, each carrying a link a stranger can open. The
+banner is `banners/<slug>.jpg`, made by `render_progress.py`.
+
+Square, 1080x1080, one format only. It is what wins on a phone timeline, which
+is where nearly all of this gets read, and a single render means there is never
+a second version saying something slightly different.
 
 No day counters, in the banner or in the post. "Day 4 of 10" turns a run of good
 work into a debt the moment a day slips, and it invites people to count the gaps
@@ -18,8 +21,7 @@ check.** Not one number, not one claim. It is what the account is for.
 
 ## The escrow contract is written
 
-**Banner:** `banners/escrow-written-wide.jpg` (timeline) or
-`escrow-written-square.jpg`
+**Banner:** `banners/escrow-written.jpg`
 
 > The escrow contract is written, and it is in the repo right now.
 >

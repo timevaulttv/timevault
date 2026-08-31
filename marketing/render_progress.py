@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Render the progress banners from marketing/progress-banner.html.
+"""Render the progress banner from marketing/progress-banner.html.
 
     python marketing/render_progress.py [slug]
 
-Writes marketing/banners/<slug>-wide.jpg   (1600x900, for the timeline)
-   and marketing/banners/<slug>-square.jpg (1080x1080, for anywhere square)
+Writes marketing/banners/<slug>.jpg, 1080x1080 at 2x.
 
-The slug comes from the POST object in the page, so the banner and its
-filenames stay in step without being told twice. Pass one on the command line
-to override it.
+Square only. It is the format that wins on a phone timeline, which is where
+nearly all of this gets read, and one render means there can never be a wide
+version saying something slightly different.
+
+The slug comes from the POST object in the page, so the banner and its filename
+stay in step without being told twice. Pass one on the command line to override.
 
 Loaded straight off disk with file://, so nothing needs to be served. Google
 Fonts still come over the network, and the run waits for them, because a banner
@@ -23,7 +25,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PAGE = "file:///" + os.path.join(HERE, "progress-banner.html").replace("\\", "/")
 OUT = os.path.join(HERE, "banners")
 
-FRAMES = [("wide", 1600, 900), ("square", 1080, 1080)]
+SIZE = 1080
 
 
 def main():
@@ -32,13 +34,14 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(
-            viewport={"width": 1700, "height": 1200}, device_scale_factor=2)
+            viewport={"width": SIZE + 120, "height": SIZE + 120},
+            device_scale_factor=2)
         page.goto(PAGE, wait_until="networkidle")
 
         # Cinzel is the whole identity. If it did not arrive, stop rather than
         # ship a banner set in the fallback serif.
         page.wait_for_function("document.fonts.ready.then(() => true)")
-        if not page.evaluate("document.fonts.check('700 64px Cinzel')"):
+        if not page.evaluate("document.fonts.check('700 58px Cinzel')"):
             browser.close()
             sys.exit("FAIL: Cinzel did not load. Check the network and run again.")
 
@@ -49,16 +52,14 @@ def main():
 
         page.wait_for_timeout(600)
 
-        for name, w, h in FRAMES:
-            el = page.query_selector("#" + name)
-            path = os.path.join(OUT, "%s-%s.jpg" % (slug, name))
-            el.screenshot(path=path, type="jpeg", quality=94)
-            print("  %-40s %4dx%-4d  %d KB"
-                  % (os.path.relpath(path, os.path.dirname(HERE)), w, h,
-                     os.path.getsize(path) // 1024))
-
+        path = os.path.join(OUT, slug + ".jpg")
+        page.query_selector("#frame").screenshot(path=path, type="jpeg", quality=94)
         browser.close()
-    print("\n  Done. Both are 2x, so they stay sharp when X recompresses them.")
+
+    print("  %s   %dx%d at 2x   %d KB"
+          % (os.path.relpath(path, os.path.dirname(HERE)), SIZE, SIZE,
+             os.path.getsize(path) // 1024))
+    print("\n  2x on purpose, so it stays sharp after X recompresses it.")
 
 
 if __name__ == "__main__":

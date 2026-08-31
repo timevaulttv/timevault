@@ -60,8 +60,9 @@ day counter turns a good run into a debt the first time one slips.
 that proves it. No hype, no price talk, no promises about what comes next
 beyond what is already on the roadmap.
 
-**A banner.** 1600x900 for the timeline, and a 1080x1080 if the post is going
-anywhere square. Generated from the repo's brand values so it never drifts.
+**A banner.** Square, 1080x1080, one format. Generated from the repo's brand
+values so it never drifts, and from real source so the code on it is the code
+that shipped.
 
 ## Rules carried over
 
@@ -97,7 +98,7 @@ Links: [the source](https://github.com/timevaulttv/timevault/blob/main/contracts
 `proof.html` updated: escrow still sits under "what is not built yet", now with
 the source linked. Written is not deployed, and the site says so.
 
-Banner `marketing/banners/escrow-written-*.jpg`, post in
+Banner `marketing/banners/escrow-written.jpg`, post in
 `marketing/progress-captions.md`.
 
 Next: deploy it to a testnet. That needs the Robinhood Chain testnet RPC and

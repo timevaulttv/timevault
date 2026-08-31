@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Time Vault | Daily progress banner</title>
+<title>Time Vault | Progress banner</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
 <!--
-    The banner for one day of the Phase 2 run.
+    The banner for one shipped thing in the Phase 2 run.
 
     Everything that changes is in the POST object at the bottom of this file.
     The code card holds real source, lifted from the thing that actually
     shipped, because a screenshot of code nobody wrote is the exact kind of
     thing this project does not do.
+
+    Square only, 1080x1080. It is the format that wins on a phone timeline,
+    which is where nearly all of this gets read, and keeping one render means
+    there is never a wide version saying something slightly different.
 
     There is deliberately no day counter. "Day 4 of 10" turns a run of good
     work into a debt the moment a day slips, and the shipping is the point,
@@ -29,19 +33,18 @@
         --fm:'JetBrains Mono',ui-monospace,monospace;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:#131017;display:flex;flex-direction:column;align-items:center;
-         gap:34px;padding:34px;font-family:var(--fb);}
+    body{background:#131017;display:flex;justify-content:center;
+         padding:34px;font-family:var(--fb);}
 
-    .frame{
-        position:relative;overflow:hidden;flex-shrink:0;color:var(--white);
+    #frame{
+        position:relative;width:1080px;height:1080px;overflow:hidden;flex-shrink:0;
+        color:var(--white);
         background:
             radial-gradient(ellipse 50% 55% at 92% 8%, rgba(192,38,211,0.13), transparent 62%),
             radial-gradient(ellipse 58% 65% at 8% 0%, rgba(139,92,246,0.17), transparent 66%),
             radial-gradient(ellipse 70% 50% at 50% 108%, rgba(212,175,55,0.07), transparent 60%),
             linear-gradient(180deg,#0A0512,#060309 62%);
     }
-    #wide{width:1600px;height:900px;}
-    #square{width:1080px;height:1080px;}
 
     /* Faint hairline grid, so the ground reads as engineering rather than as a
        gradient poster. */
@@ -61,13 +64,10 @@
     .c3{bottom:19px;left:19px;border-right:0;border-top:0;border-radius:0 0 0 14px;}
     .c4{bottom:19px;right:19px;border-left:0;border-top:0;border-radius:0 0 14px 0;}
 
-    .body{position:absolute;inset:0;z-index:4;display:flex;}
+    .body{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;
+        justify-content:center;gap:38px;padding:0 82px;}
 
-    /* ---------------------------------------------------------- left column */
-    .say{display:flex;flex-direction:column;justify-content:center;}
-    #wide .say{width:770px;padding:0 0 0 100px;}
-    #square .say{width:100%;padding:0 82px;}
-
+    /* -------------------------------------------------------------- the claim */
     .brandrow{display:flex;align-items:center;gap:13px;margin-bottom:30px;}
     .brandrow img{height:40px;width:auto;filter:drop-shadow(0 2px 12px rgba(139,92,246,0.55));}
     .brandrow .wm{font-family:var(--fd);font-size:1.02rem;font-weight:700;
@@ -82,11 +82,9 @@
     .live{width:7px;height:7px;border-radius:50%;background:var(--green);
         box-shadow:0 0 9px rgba(52,211,153,0.85);}
 
-    h1{position:relative;font-family:var(--fd);font-weight:700;line-height:1.06;
-        letter-spacing:0.005em;margin-bottom:24px;
+    h1{position:relative;font-family:var(--fd);font-weight:700;font-size:3.6rem;
+        line-height:1.06;letter-spacing:0.005em;margin-bottom:24px;
         text-shadow:0 0 40px rgba(139,92,246,0.5),0 0 4px rgba(139,92,246,0.3);}
-    #wide h1{font-size:4.35rem;}
-    #square h1{font-size:3.6rem;}
     h1::before{content:'';position:absolute;left:-8%;top:-16%;width:118%;height:132%;
         z-index:-1;filter:blur(30px);
         background:radial-gradient(ellipse 52% 58% at 32% 46%,rgba(139,92,246,0.3),transparent 72%);}
@@ -95,9 +93,7 @@
         text-shadow:none;filter:drop-shadow(0 0 22px rgba(212,175,55,0.42));}
 
     .sub{font-size:1.2rem;line-height:1.62;color:var(--silver);font-weight:350;
-        margin-bottom:32px;}
-    #wide .sub{max-width:600px;}
-    #square .sub{max-width:790px;}
+        max-width:790px;margin-bottom:32px;}
     .sub b{color:var(--white);font-weight:600;}
 
     /* Facts, each one a thing a stranger can go and check. */
@@ -120,14 +116,7 @@
     .where b{color:var(--gold);font-weight:600;}
 
     /* ------------------------------------------------------------ code card */
-    .cardwrap{display:flex;align-items:center;justify-content:center;}
-    /* The card holder is a flex item, so it shrinks to its content and the
-       card's own width:100% resolves against nothing. Stretch it. */
-    .cardwrap > div{width:100%;}
-    #wide .cardwrap{flex:1;padding:0 96px 0 24px;}
-    #square .cardwrap{width:100%;padding:0 82px;}
-
-    .card{width:100%;border-radius:13px;overflow:hidden;
+    .card{border-radius:13px;overflow:hidden;
         background:linear-gradient(180deg,rgba(16,9,26,0.97),rgba(9,5,16,0.99));
         border:1px solid rgba(139,92,246,0.3);
         box-shadow:0 34px 80px rgba(0,0,0,0.62),0 0 70px rgba(139,92,246,0.16),
@@ -140,14 +129,12 @@
         letter-spacing:0.04em;margin-left:5px;}
     .path b{color:var(--silver);font-weight:500;}
 
-    pre{padding:1.25rem 1.35rem;font-family:var(--fm);line-height:1.66;
-        color:#CFC4E4;overflow:hidden;
+    pre{padding:1.25rem 1.35rem;font-family:var(--fm);font-size:1.05rem;
+        line-height:1.66;color:#CFC4E4;overflow:hidden;
         /* JetBrains Mono turns != into a single glyph. On a banner about
            reading the actual file, the characters should be the ones in the
            file. */
         font-variant-ligatures:none;}
-    #wide pre{font-size:1.02rem;}
-    #square pre{font-size:1.05rem;}
     pre .row{display:block;margin:0 -1.35rem;padding:0 1.35rem;}
     pre .ln{display:inline-block;width:2.2em;color:var(--silver-subtle);
         user-select:none;}
@@ -174,25 +161,14 @@
 </head>
 <body>
 
-<div class="frame" id="wide">
+<div id="frame">
     <div class="grid"></div>
     <div class="rule"></div>
     <i class="corner c1"></i><i class="corner c2"></i>
     <i class="corner c3"></i><i class="corner c4"></i>
     <div class="body">
-        <div class="say" data-say></div>
-        <div class="cardwrap"><div data-card></div></div>
-    </div>
-</div>
-
-<div class="frame" id="square">
-    <div class="grid"></div>
-    <div class="rule"></div>
-    <i class="corner c1"></i><i class="corner c2"></i>
-    <i class="corner c3"></i><i class="corner c4"></i>
-    <div class="body" style="flex-direction:column;justify-content:center;gap:38px;">
-        <div class="say" data-say></div>
-        <div class="cardwrap"><div data-card></div></div>
+        <div data-say></div>
+        <div data-card></div>
     </div>
 </div>
 
@@ -201,7 +177,7 @@
 // Everything below the line changes per post. Nothing above it should need to.
 // ---------------------------------------------------------------------------
 const POST = {
-    // Names the output files. Keep it short and specific to what shipped.
+    // Names the output file. Keep it short and specific to what shipped.
     slug: 'escrow-written',
     eyebrow: 'Phase 2 &middot; The Contracts',
     // <span class="g"> paints a phrase gold. Keep it to one phrase.
@@ -229,7 +205,7 @@ const POST = {
     footNote: 'Read it &middot; <b>github.com/timevaulttv</b>',
 };
 
-const html = (d, wide) => `
+const say = d => `
     <div class="brandrow">
         <img src="../source/brand/logo.png" alt="">
         <span class="wm">TIME <b>VAULT</b></span>
@@ -260,8 +236,8 @@ const card = d => `
         </div>` : ''}
     </div>`;
 
-document.querySelectorAll('[data-say]').forEach(el => { el.innerHTML = html(POST); });
-document.querySelectorAll('[data-card]').forEach(el => { el.innerHTML = card(POST); });
+document.querySelector('[data-say]').innerHTML = say(POST);
+document.querySelector('[data-card]').innerHTML = card(POST);
 </script>
 </body>
 </html>
